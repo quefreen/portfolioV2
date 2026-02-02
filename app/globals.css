@@ -34,3 +34,24 @@ body {
     font-family: var(--font-display);
   }
 }
+
+/* Infinite carousel (variable width items) */
+@keyframes marquee-x {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-20%);
+  }
+}
+
+/* Use CSS vars pra controlar velocidade */
+.marquee-track {
+  animation: marquee-x var(--marquee-duration, 160s) linear infinite;
+  will-change: transform;
+}
+
+/* Pause on hover */
+.marquee:hover .marquee-track {
+  animation-play-state: paused;
+}

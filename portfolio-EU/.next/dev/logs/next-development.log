@@ -1,0 +1,56 @@
+[00:00:49.527] Server  ERROR   Error: ENOENT: no such file or directory, scandir '/Users/quef/quefreen-portfolio-v2/portfolio-EU/app'
+[00:00:49.529] Server  ERROR    ⨯ "unhandledRejection:" Error: ENOENT: no such file or directory, scandir '/Users/quef/quefreen-portfolio-v2/portfolio-EU/app'
+[00:00:49.531] Server  ERROR    ⨯ "unhandledRejection: " Error: ENOENT: no such file or directory, scandir '/Users/quef/quefreen-portfolio-v2/portfolio-EU/app'
+[00:00:49.600] Server  ERROR    ⨯ PageNotFoundError: Cannot find module for page: route not found /_not-found/page
+[00:00:49.970] Server  ERROR   TurbopackInternalError: Failed to write page endpoint /_app
+
+Caused by:
+- Expected file content at [project]/node_modules/next/dist/lib/server-external-packages.json
+
+Debug info:
+- Execution of get_written_endpoint_with_issues_operation failed
+- Execution of endpoint_write_to_disk failed
+- Execution of <PageEndpoint as Endpoint>::output failed
+- Failed to write page endpoint /_app
+- Execution of PageEndpoint::output failed
+- Execution of PageEndpoint::internal_ssr_chunk failed
+- Execution of PageEndpoint::internal_ssr_chunk_module failed
+- Execution of *ProcessResult::module failed
+- Execution of *<ModuleAssetContext as AssetContext>::process failed
+- Execution of PagesProject::ssr_module_context failed
+- Execution of *ModuleAssetContext::new failed
+- Execution of get_server_resolve_options_context failed
+- Expected file content at [project]/node_modules/next/dist/lib/server-external-packages.json
+[00:00:49.973] Server  ERROR   Error: ENOENT: no such file or directory, scandir '/Users/quef/quefreen-portfolio-v2/portfolio-EU/app'
+[00:00:50.008] Server  ERROR   Error: ENOENT: no such file or directory, scandir '/Users/quef/quefreen-portfolio-v2/portfolio-EU/app'
+[00:00:50.010] Server  ERROR   Error: ENOENT: no such file or directory, scandir '/Users/quef/quefreen-portfolio-v2/portfolio-EU/app'
+[00:00:50.019] Server  ERROR   Error: ENOENT: no such file or directory, scandir '/Users/quef/quefreen-portfolio-v2/portfolio-EU/app'
+[00:00:50.022] Server  ERROR   Error: ENOENT: no such file or directory, scandir '/Users/quef/quefreen-portfolio-v2/portfolio-EU/app'
+[00:00:50.036] Server  ERROR   Error: ENOENT: no such file or directory, scandir '/Users/quef/quefreen-portfolio-v2/portfolio-EU/app'
+[00:00:50.038] Server  ERROR   Error: ENOENT: no such file or directory, scandir '/Users/quef/quefreen-portfolio-v2/portfolio-EU/app'
+[00:00:50.048] Server  ERROR   Error: ENOENT: no such file or directory, scandir '/Users/quef/quefreen-portfolio-v2/portfolio-EU/app'
+[00:00:50.049] Server  ERROR   Error: ENOENT: no such file or directory, scandir '/Users/quef/quefreen-portfolio-v2/portfolio-EU/app'
+[00:00:50.055] Server  ERROR   Error: ENOENT: no such file or directory, scandir '/Users/quef/quefreen-portfolio-v2/portfolio-EU/app'
+[00:00:50.056] Server  ERROR   Error: ENOENT: no such file or directory, scandir '/Users/quef/quefreen-portfolio-v2/portfolio-EU/app'
+[00:00:50.065] Server  ERROR   Error: ENOENT: no such file or directory, scandir '/Users/quef/quefreen-portfolio-v2/portfolio-EU/app'
+[00:00:50.065] Server  ERROR   Error: ENOENT: no such file or directory, scandir '/Users/quef/quefreen-portfolio-v2/portfolio-EU/app'
+[00:00:50.072] Server  ERROR   Error: ENOENT: no such file or directory, scandir '/Users/quef/quefreen-portfolio-v2/portfolio-EU/app'
+[00:00:50.073] Server  ERROR   Error: ENOENT: no such file or directory, scandir '/Users/quef/quefreen-portfolio-v2/portfolio-EU/app'
+[00:00:50.081] Server  ERROR   Error: ENOENT: no such file or directory, scandir '/Users/quef/quefreen-portfolio-v2/portfolio-EU/app'
+[00:00:50.082] Server  ERROR   Error: ENOENT: no such file or directory, scandir '/Users/quef/quefreen-portfolio-v2/portfolio-EU/app'
+[00:00:50.089] Server  ERROR   Error: ENOENT: no such file or directory, scandir '/Users/quef/quefreen-portfolio-v2/portfolio-EU/app'
+[00:00:50.089] Server  ERROR   Error: ENOENT: no such file or directory, scandir '/Users/quef/quefreen-portfolio-v2/portfolio-EU/app'
+[00:00:50.105] Server  ERROR   Error: ENOENT: no such file or directory, scandir '/Users/quef/quefreen-portfolio-v2/portfolio-EU/app'
+[00:00:50.106] Server  ERROR   Error: ENOENT: no such file or directory, scandir '/Users/quef/quefreen-portfolio-v2/portfolio-EU/app'
+[00:00:50.113] Server  ERROR   Error: ENOENT: no such file or directory, scandir '/Users/quef/quefreen-portfolio-v2/portfolio-EU/app'
+[00:00:50.114] Server  ERROR   Error: ENOENT: no such file or directory, scandir '/Users/quef/quefreen-portfolio-v2/portfolio-EU/app'
+[00:00:50.121] Server  ERROR   Error: ENOENT: no such file or directory, scandir '/Users/quef/quefreen-portfolio-v2/portfolio-EU/app'
+[00:00:50.122] Server  ERROR   Error: ENOENT: no such file or directory, scandir '/Users/quef/quefreen-portfolio-v2/portfolio-EU/app'
+[00:00:50.128] Server  ERROR   Error: ENOENT: no such file or directory, scandir '/Users/quef/quefreen-portfolio-v2/portfolio-EU/app'
+[00:00:50.129] Server  ERROR   Error: ENOENT: no such file or directory, scandir '/Users/quef/quefreen-portfolio-v2/portfolio-EU/app'
+[00:00:50.134] Server  ERROR   Error: ENOENT: no such file or directory, scandir '/Users/quef/quefreen-portfolio-v2/portfolio-EU/app'
+[00:00:50.135] Server  ERROR   Error: ENOENT: no such file or directory, scandir '/Users/quef/quefreen-portfolio-v2/portfolio-EU/app'
+[00:00:50.141] Server  ERROR   Error: ENOENT: no such file or directory, scandir '/Users/quef/quefreen-portfolio-v2/portfolio-EU/app'
+[00:00:50.141] Server  ERROR   Error: ENOENT: no such file or directory, scandir '/Users/quef/quefreen-portfolio-v2/portfolio-EU/app'
+[00:00:50.167] Server  ERROR   Error: ENOENT: no such file or directory, scandir '/Users/quef/quefreen-portfolio-v2/portfolio-EU/app'
+[00:00:50.168] Server  ERROR   Error: ENOENT: no such file or directory, scandir '/Users/quef/quefreen-portfolio-v2/portfolio-EU/app'
