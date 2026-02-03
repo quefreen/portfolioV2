@@ -31,9 +31,10 @@ export default function TitleCaseHeader() {
           "linear-gradient(180deg, rgba(225, 225, 225, 0) 50%, rgba(0, 143, 190 , 0.2) 100%), #F7F7F7",
       }}
     >
-      <div className="mx-auto w-full max-w-screen-xl px-6">
+      {/* ✅ Container padronizado com o Bento */}
+      <div className="mx-auto w-full max-w-[1400px] px-4 sm:px-4 md:px-8 lg:px-12">
         <div className="grid grid-cols-4 gap-6 lg:grid-cols-12">
-          {/* TEXTO: 10 col centralizado (padrão do projeto) */}
+          {/* TEXTO: 10 col centralizado (regra do projeto) */}
           <div className="col-span-4 lg:col-span-10 lg:col-start-2">
             <div className="flex w-full items-start pt-16 sm:pt-20 lg:pt-24">
               <div className="flex w-full flex-col gap-12">
@@ -61,7 +62,7 @@ export default function TitleCaseHeader() {
 
                   <p className="text-lg font-semibold leading-[1.35] text-black sm:text-xl">
                     Uma nova arquitetura para{" "}
-                    <span className="text-[#0731BA]">
+                    <span className="text-[#FF4C2C]">
                       reduzir a incerteza de investidores e jornalistas.
                     </span>{" "}
                   </p>
@@ -80,44 +81,41 @@ export default function TitleCaseHeader() {
 
           {/* MÍDIA (col-12) */}
           <div className="col-span-4 lg:col-span-12">
-            {/* Espaço controlado entre texto e vídeo (sem empurrar grid interno) */}
             <div className="relative mt-10 h-[620px] w-full sm:mt-12">
-              
-              {/* --- ALTERAÇÃO AQUI --- */}
               {/* BASE BRANCA (z-10) com MÁSCARA */}
-<div className="pointer-events-none absolute bottom-0 left-0 right-0 z-10">
-  <div 
-    className="relative -mx-6 h-[128px] bg-white lg:-mx-12"
-    style={{
-      // 1. Definimos as 3 camadas: SVG Esq, SVG Dir, e o Fundo Sólido (gradiente preto serve como "tudo preenchido")
-      maskImage: `
-        url(/esqtb.svg), 
-        url(/dirtb.svg), 
-        linear-gradient(#000, #000)
-      `,
-      
-      // 2. Posicionamos cada camada (Esq Top, Dir Top, Centro)
-      maskPosition: "left top, right top, center",
-      
-      // 3. Dizemos para não repetir
-      maskRepeat: "no-repeat",
-      
-      // 4. O tamanho. Note que mantivemos o seu 'clamp' aqui para responsividade
-      maskSize: "clamp(56px, 9vw, 140px) auto, clamp(56px, 9vw, 140px) auto, 100% 100%",
-      
-      // 5. A MÁGICA: 'exclude' (ou xor) remove a interseção entre o SVG e o fundo
-      maskComposite: "exclude",
-      WebkitMaskComposite: "xor", // Necessário para Chrome/Safari/iOS
-    }}
-  />
-</div>
-              {/* --- FIM DA ALTERAÇÃO --- */}
+              <div className="pointer-events-none absolute bottom-0 left-0 right-0 z-10">
+                <div
+                  className="relative h-[128px] bg-white
+                             -mx-4 md:-mx-8 lg:-mx-12"
+                  style={{
+                    maskImage: `
+                      url(/esqtb.svg),
+                      url(/dirtb.svg),
+                      linear-gradient(#000, #000)
+                    `,
+                    maskPosition: "left top, right top, center",
+                    maskRepeat: "no-repeat",
+                    maskSize:
+                      "clamp(56px, 9vw, 140px) auto, clamp(56px, 9vw, 140px) auto, 100% 100%",
+                    maskComposite: "exclude",
+                    WebkitMaskImage: `
+                      url(/esqtb.svg),
+                      url(/dirtb.svg),
+                      linear-gradient(#000, #000)
+                    `,
+                    WebkitMaskPosition: "left top, right top, center",
+                    WebkitMaskRepeat: "no-repeat",
+                    WebkitMaskSize:
+                      "clamp(56px, 9vw, 140px) auto, clamp(56px, 9vw, 140px) auto, 100% 100%",
+                    WebkitMaskComposite: "xor",
+                  }}
+                />
+              </div>
 
               {/* THUMB (z-20): 10 col centralizado */}
               <div className="relative z-20 grid h-full grid-cols-4 gap-6 lg:grid-cols-12">
                 <div className="col-span-4 h-full lg:col-span-10 lg:col-start-2">
                   <div className="relative h-full w-full overflow-hidden bg-black">
-                    {/* Vídeo */}
                     <video
                       className="absolute inset-0 h-full w-full object-cover"
                       src="/hero.mp4"
@@ -128,7 +126,7 @@ export default function TitleCaseHeader() {
                       preload="metadata"
                     />
 
-                    {/* SVGs nos cantos do Vídeo (Já existiam) */}
+                    {/* SVGs nos cantos do Vídeo */}
                     <img
                       src="/esqtb.svg"
                       alt=""
@@ -136,7 +134,6 @@ export default function TitleCaseHeader() {
                       className="pointer-events-none absolute left-0 top-0 z-30 h-auto"
                       style={{ width: "clamp(56px, 9vw, 140px)" }}
                     />
-
                     <img
                       src="/dirtb.svg"
                       alt=""

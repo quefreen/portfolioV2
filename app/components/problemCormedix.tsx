@@ -1,13 +1,18 @@
 // src/components/problem_cormedix.tsx
 
 export default function ProblemCormedix() {
+  // --- CONSTANTES DO LAYOUT (MESMAS DO BENTO) ---
+  const SITE_CONTAINER =
+    "mx-auto w-full max-w-[1400px] px-4 sm:px-4 md:px-8 lg:px-12";
+  const GRID_12 = "grid grid-cols-4 gap-6 lg:grid-cols-12";
+  const TEXT_10 = "col-span-4 lg:col-span-10 lg:col-start-2";
+
   return (
-    <section className="w-full">
-        <div className="mt-48"></div>
-      <div className="mx-auto w-full max-w-screen-xl px-6">
-        <div className="grid grid-cols-4 gap-6 lg:grid-cols-12">
+    <section className="w-full mt-24 sm:mt-32 lg:mt-48">
+      <div className={SITE_CONTAINER}>
+        <div className={GRID_12}>
           {/* BLOCO TEXTO: 10 col, centralizado */}
-          <div className="col-span-4 lg:col-span-10 lg:col-start-2">
+          <div className={TEXT_10}>
             <div className="flex w-full flex-col gap-12">
               {/* Header */}
               <div className="flex flex-col gap-4">

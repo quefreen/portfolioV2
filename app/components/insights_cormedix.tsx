@@ -19,7 +19,6 @@ const CARD_MASK_STYLE: React.CSSProperties = {
     center
   `,
   maskRepeat: "no-repeat",
-  // Tamanho do recorte (clamp para responsividade)
   maskSize: `
     clamp(32px, 6vw, 80px) auto, 
     clamp(32px, 6vw, 80px) auto, 
@@ -33,14 +32,8 @@ const CARD_MASK_STYLE: React.CSSProperties = {
 
 // --- COMPONENTE INTERNO DO CARD ---
 function InsightCard({ children }: { children: React.ReactNode }) {
-  // Removi a borda (border-[#F1F9E8]) pois a máscara cortaria ela de forma reta,
-  // e geralmente shapes recortados funcionam melhor sem border ou com drop-shadow aplicado num wrapper.
-  // Mantive o padding e bg-white.
   return (
-    <div
-      className="w-full bg-white p-10 sm:p-12"
-      style={CARD_MASK_STYLE}
-    >
+    <div className="w-full bg-white p-10 sm:p-12" style={CARD_MASK_STYLE}>
       {children}
     </div>
   );
@@ -48,14 +41,19 @@ function InsightCard({ children }: { children: React.ReactNode }) {
 
 // --- COMPONENTE PRINCIPAL ---
 export default function InsightsCormedix() {
+  // --- PADRÃO DO SITE (IGUAL AO BENTO) ---
+  const SITE_CONTAINER =
+    "mx-auto w-full max-w-[1400px] px-4 sm:px-4 md:px-8 lg:px-12";
+  const GRID_12 = "grid grid-cols-4 gap-6 lg:grid-cols-12";
+  const TEXT_10 = "col-span-4 lg:col-span-10 lg:col-start-2";
+
   return (
-    <section className="w-full">
-      <div className="mt-48"></div>
-      {/* Container GLOBAL */}
-      <div className="mx-auto w-full max-w-screen-xl px-6">
-        <div className="grid grid-cols-4 gap-6 lg:grid-cols-12">
+    <section className="w-full mt-24 sm:mt-32 lg:mt-48">
+      {/* Container GLOBAL (PADRONIZADO) */}
+      <div className={SITE_CONTAINER}>
+        <div className={GRID_12}>
           {/* 10 col centralizado */}
-          <div className="col-span-4 lg:col-span-10 lg:col-start-2">
+          <div className={TEXT_10}>
             <div className="flex w-full flex-col gap-6">
               <p className="text-xl font-semibold leading-none text-[#FF4C2C]">
                 Entendendo os padrões de mercado
@@ -121,9 +119,7 @@ export default function InsightsCormedix() {
                 />
               </div>
 
-              {/* --- APLICAÇÃO DOS CARDS COM MÁSCARA --- */}
-
-              {/* Card 1 */}
+              {/* Cards com máscara */}
               <InsightCard>
                 <p className="text-xl font-semibold leading-[1.4] text-black">
                   Aprendizados absorvidos na solução
@@ -149,7 +145,6 @@ export default function InsightsCormedix() {
                 </div>
               </InsightCard>
 
-              {/* Card 2 */}
               <InsightCard>
                 <p className="text-xl font-semibold leading-[1.4] text-black">
                   Aprendizados que não foram seguidos
@@ -170,10 +165,9 @@ export default function InsightsCormedix() {
                   </button>
                 </div>
               </InsightCard>
-              {/* /Card 2 */}
-
             </div>
           </div>
+          {/* /TEXT_10 */}
         </div>
       </div>
     </section>

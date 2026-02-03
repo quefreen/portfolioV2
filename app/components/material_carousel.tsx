@@ -1,4 +1,5 @@
 // src/components/material_carousel.tsx
+import React from "react";
 import Image from "next/image";
 
 type CarouselItem = {
@@ -25,43 +26,60 @@ export default function MaterialCarousel() {
   // duplica para loop perfeito
   const loop = [...items, ...items];
 
-  return (
-    
-    <div
-      className="marquee relative w-full overflow-hidden"
-      style={
-        {
-          // velocidade “lenta”
-          ["--marquee-duration" as any]: "90s",
-        } as React.CSSProperties
-      }
-    >
-      {/* fade nas laterais (opcional, dá vibe Material) */}
-      <div className="mt-24"></div>
-      <div className="pointer-events-none absolute left-0 top-0 z-10 h-full w-16 bg-gradient-to-r from-[#F7F7F7] to-transparent" />
-      <div className="pointer-events-none absolute right-0 top-0 z-10 h-full w-16 bg-gradient-to-l from-[#F7F7F7] to-transparent" />
+  // --- CONSTANTES DO LAYOUT (MESMAS DO BENTO) ---
+  const SITE_CONTAINER =
+    "mx-auto w-full max-w-[1400px] px-4 sm:px-4 md:px-8 lg:px-12";
+  const GRID_12 = "grid grid-cols-4 gap-6 lg:grid-cols-12";
+  const TEXT_10 = "col-span-4 lg:col-span-10 lg:col-start-2";
 
-      <div className="marquee-track flex w-max items-center gap-6 py-6">
-        {loop.map((it, idx) => (
-          <div
-            key={`${it.src}-${idx}`}
-            className="relative shrink-0 overflow-hidden bg-white"
-            style={{
-              width: it.w,
-              height: it.h,
-            }}
-          >
-            <Image
-              src={it.src}
-              alt={it.alt}
-              fill
-              className="object-cover"
-              sizes={`${it.w}px`}
-              priority={idx < 6} // opcional: prioriza os primeiros
-            />
+  return (
+    <section className="w-full mt-24 sm:mt-32 lg:mt-48">
+      <div className={SITE_CONTAINER}>
+        <div className={GRID_12}>
+          {/* Asset na MESMA largura dos blocos de texto (10 col centralizado) */}
+          <div className={TEXT_10}>
+            <div
+              className="marquee relative w-full overflow-hidden"
+              style={
+                {
+                  // velocidade “lenta”
+                  ["--marquee-duration" as any]: "90s",
+                } as React.CSSProperties
+              }
+            >
+              {/* fades laterais (vibe Material) */}
+              <div
+                aria-hidden="true"
+                className="pointer-events-none absolute left-0 top-0 z-10 h-full w-12 bg-gradient-to-r from-[#F7F7F7] to-transparent sm:w-16"
+              />
+              <div
+                aria-hidden="true"
+                className="pointer-events-none absolute right-0 top-0 z-10 h-full w-12 bg-gradient-to-l from-[#F7F7F7] to-transparent sm:w-16"
+              />
+
+              <div className="marquee-track flex w-max items-center gap-4 py-4 sm:gap-6 sm:py-6">
+                {loop.map((it, idx) => (
+                  <div
+                    key={`${it.src}-${idx}`}
+                    className="relative shrink-0 overflow-hidden bg-white"
+                    style={{ width: it.w, height: it.h }}
+                  >
+                    <Image
+                      src={it.src}
+                      alt={it.alt}
+                      fill
+                      className="object-cover"
+                      sizes={`${it.w}px`}
+                      priority={idx < 6}
+                    />
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
-        ))}
-      </div><div className="mb-24"></div>
-    </div>
+          {/* /TEXT_10 */}
+        </div>
+      </div>
+    </section>
   );
 }

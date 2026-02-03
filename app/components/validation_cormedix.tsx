@@ -1,13 +1,19 @@
 // src/components/validation_cormedix.tsx
 
 export default function ValidationCormedix() {
+  // --- PADRÃO DO SITE (IGUAL AO BENTO) ---
+  const SITE_CONTAINER =
+    "mx-auto w-full max-w-[1400px] px-4 sm:px-4 md:px-8 lg:px-12";
+  const GRID_12 = "grid grid-cols-4 gap-6 lg:grid-cols-12";
+  const TEXT_10 = "col-span-4 lg:col-span-10 lg:col-start-2";
+
   return (
-    <section className="w-full">
-      {/* Container GLOBAL */}
-      <div className="mx-auto w-full max-w-screen-xl px-6">
-        <div className="grid grid-cols-4 gap-6 lg:grid-cols-12">
+    <section className="w-full mt-24 sm:mt-32 lg:mt-48">
+      {/* Container GLOBAL (PADRONIZADO) */}
+      <div className={SITE_CONTAINER}>
+        <div className={GRID_12}>
           {/* Conteúdo: 10 col centralizado */}
-          <div className="col-span-4 lg:col-span-10 lg:col-start-2">
+          <div className={TEXT_10}>
             <div className="flex w-full flex-col gap-6">
               {/* Header: chip + título */}
               <div className="flex flex-col gap-4">
@@ -49,6 +55,7 @@ export default function ValidationCormedix() {
               </p>
             </div>
           </div>
+          {/* /TEXT_10 */}
         </div>
       </div>
     </section>
