@@ -12,7 +12,7 @@ const SHAPE_BLEED = "-mx-4 md:-mx-8 lg:-mx-12 xl:mx-0"
 // padding interno: reaplica enquanto bleed está ativo; no xl+ vira 0 para não duplicar
 const SHAPE_INNER_PAD = "px-4 sm:px-4 md:px-8 lg:px-12 xl:px-0"
 
-export default function OneMinute() {
+export default function HepatiteOneMinute() {
   return (
     <section
       className="w-full"
@@ -50,12 +50,8 @@ export default function OneMinute() {
                                   Contexto
                                 </p>
                                 <p className="text-lg leading-[1.4] text-[#131415]">
-                                  Em 2023, na re-submissão do DefenCath à FDA, o
-                                  site legado (+10 anos) virou um risco:
-                                  investidores tinham dificuldade para encontrar
-                                  filings/relatórios com confiança e Mídia &amp;
-                                  Comunidade científica precisavam “caçar PDFs”
-                                  para validar evidências clínicas.
+                                Hepatite C é tratável. O problema é chegar até o primeiro passo.
+                                A jornada trava cedo por desinformação, medo e estigma e por fricções estruturais do SUS (fila, acesso, burocracia, disponibilidade de especialistas).
                                 </p>
                               </div>
 
@@ -69,42 +65,33 @@ export default function OneMinute() {
                                   {/* Item 1 */}
                                   <div className="flex flex-col gap-3">
                                     <p className="text-lg font-semibold leading-none text-[#F54900]">
-                                      Investors-first
+                                      Entreguei um framework que transformou pesquisa em produto: 
+                                    </p>
+                                    <p className="text-lg mt-2 leading-[1.4] text-[#131415]">
+                                      5 entradas/funcionalidades mapeadas por estados emocionais (negação, medo, incerteza, mitos e apoio familiar).
                                     </p>
                                     <p className="text-lg leading-[1.4] text-[#131415]">
-                                      Acesso a informações críticas (SEC Filings,
-                                      resultados, stock e apresentações)
-                                      reorganizado por “hubs de tarefa”, reduzindo
-                                      atrito e aumentando previsibilidade.
-                                    </p>
-                                    <p className="text-lg leading-[1.4] text-[#131415]">
-                                      −62% no tempo médio (74,9s → 28,2s), +30pp de
-                                      sucesso (58% → 88%) e SEQ +0,79 (1–7).
+                                      Este projeto com a Gilead mapeou onde as pessoas desistem antes mesmo do agendamento e definiu uma direção de experiência que transforma “não sei o que fazer” em próximo passo claro: WhatsApp/0800/locais de testagem.
                                     </p>
                                   </div>
 
                                   {/* Item 2 */}
                                   <div className="flex flex-col gap-3">
                                     <p className="text-lg font-semibold leading-[1.4] text-[#F54900]">
-                                      Credibilidade e governança
+                                      
                                     </p>
                                     <p className="text-lg leading-[1.4] text-[#131415]">
-                                      Diferenciação clara entre conteúdo regulatório
-                                      vs. notícias, com melhor scent e menor erro de
-                                      navegação (misclicks médios −82%, 0,56 → 0,10).
+                                      
                                     </p>
                                   </div>
 
                                   {/* Item 3 */}
                                   <div className="flex flex-col gap-3">
                                     <p className="text-lg font-semibold leading-[1.4] text-[#F54900]">
-                                      Escalabilidade
+                                      
                                     </p>
                                     <p className="text-lg leading-[1.4] text-[#131415]">
-                                      Estrutura entregue em WordPress com handoff e
-                                      treinamento para autonomia do time interno com
-                                      regras de conteúdo e bases para evolução sem
-                                      degradação do hub.
+                                      
                                     </p>
                                   </div>
                                 </div>

@@ -56,7 +56,7 @@ const BASE_WHITE_MASK_STYLE: CSSProperties = {
   WebkitMaskComposite: "xor",
 };
 
-export default function TitleCaseHeader() {
+export default function HepatiteTitleCase() {
   return (
     <section
       className="w-full"
@@ -75,29 +75,29 @@ export default function TitleCaseHeader() {
                 {/* topo */}
                 <div className="flex flex-col gap-4">
                   <p className="text-sm font-semibold tracking-wide text-neutral-400">
-                    CORMEDIX
+                    GILLEAD
                   </p>
 
                   <div className="flex flex-wrap gap-2">
                     <span className="inline-flex items-center rounded-full bg-white px-6 py-3 text-sm leading-none text-black">
-                      B2B
+                      Content + Product
                     </span>
                     <span className="inline-flex items-center rounded-full bg-white px-6 py-3 text-sm leading-none text-black">
-                      Regulated Industry
+                      0→1 Discovery
                     </span>
                     <span className="inline-flex items-center rounded-full bg-white px-6 py-3 text-sm leading-none text-black">
-                      Investor Relations
+                      UX Strategy
                     </span>
                   </div>
 
                   <h1 className="font-display text-[44px] font-semibold leading-[1.15] text-black sm:text-[52px] lg:text-[56px] lg:leading-[1.2]">
-                    Prescrevendo dados para decisões.
+                    A epidemia de mitos sobre Hepatite C.
                   </h1>
 
                   <p className="text-lg font-semibold leading-[1.35] text-black sm:text-xl">
-                    Uma nova arquitetura para{" "}
+                    Um {" "}
                     <span className="text-[#FF4C2C]">
-                      reduzir a incerteza de investidores e jornalistas.
+                      sistema mobile-first que guia e direciona para canais de agendamento.
                     </span>{" "}
                   </p>
                 </div>

@@ -62,7 +62,7 @@ function ImpactCard({ children, className = "" }: ImpactCardProps) {
 }
 
 // --- COMPONENTE PRINCIPAL ---
-export default function Impact() {
+export default function HepatiteImpact() {
   return (
     <section className="w-full">
       {/* Container GLOBAL do site (mesmo do Bento) */}
@@ -92,76 +92,63 @@ export default function Impact() {
                   <div className={GRID_12}>
                     {/* TEXTO/CONTEÚDO: 10 col centralizado (regra do projeto) */}
                     <div className={TEXT_10}>
-                      <div className="flex flex-col gap-12">
+                      <div className="flex flex-col gap-5">
                         {/* Parte 1 */}
                         <div className="flex flex-col gap-4">
                           <p className="text-lg font-semibold leading-none text-[#131415]">
                             Impact
                           </p>
                           <p className="text-[32px] font-medium leading-[1.2] text-[#131415] sm:text-[40px]">
-                            Melhoria mensurável nas jornadas críticas.
+                            O que mudou na prática
                           </p>
                         </div>
 
                         {/* Cards (3) */}
-                        <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
-                          <ImpactCard className="border-2 border-white">
-                            <p className="text-[56px] font-semibold leading-[1.1] text-[#131415] sm:text-[64px]">
-                              −61%
-                            </p>
-                            <p className="text-lg font-semibold leading-[1.4] text-[#131415] sm:text-xl">
-                              no tempo médio para concluir em 6 tarefas (64s → 24,2s).
-                            </p>
-                          </ImpactCard>
+                        <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
+                          <ImpactCard>
+                              <p className="text-[28px] font-semibold leading-[1.2] text-[#131415] sm:text-[32px]">
+                                Auto-segmentação (Lead Quality)
+                              </p>
+                              <p className="text-lg font-medium leading-[1.4] text-[#131415] sm:text-xl">
+                                5 entradas por estado emocional para qualificar a demanda antes do canalde agendamento..
+                              </p>
+                            </ImpactCard>
 
                           <ImpactCard>
-                            <p className="text-[56px] font-semibold leading-[1.1] text-[#131415] sm:text-[64px]">
-                              +30pp
-                            </p>
-                            <p className="text-lg font-semibold leading-[1.4] text-[#131415] sm:text-xl">
-                              de sucesso na conclusão das tarefas (63% → 93%).
-                            </p>
-                          </ImpactCard>
+                              <p className="text-[28px] font-semibold leading-[1.2] text-[#131415] sm:text-[32px]">
+                                Health Literacy (Confiança)
+                              </p>
+                              <p className="text-lg font-medium leading-[1.4] text-[#131415] sm:text-xl">
+                                Tom humano + heurísticas de credibilidade para reduzir ansiedade e barreiras ao tratamento.
+                              </p>
+                            </ImpactCard>
 
-                          <ImpactCard>
-                            <p className="text-[56px] font-semibold leading-[1.1] text-[#131415] sm:text-[64px]">
-                              −82%
-                            </p>
-                            <p className="text-lg font-semibold leading-[1.4] text-[#131415] sm:text-xl">
-                              de misclicks (0,56 → 0,10), reduzindo tentativa-e-erro.
-                            </p>
-                          </ImpactCard>
+                          
                         </div>
 
-                        <div className="h-2 sm:h-6" />
+                        
 
                         {/* Parte 2 */}
-                        <div className="flex flex-col gap-12">
-                          <div className="flex flex-col gap-4">
-                            <p className="text-[32px] font-medium leading-[1.2] text-[#131415] sm:text-[40px]">
-                              Entrega sustentável para o time interno.
-                            </p>
-                          </div>
+                        <div className="flex flex-col gap-4">
+                          
 
                           {/* Cards (2) */}
                           <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
                             <ImpactCard>
                               <p className="text-[28px] font-semibold leading-[1.2] text-[#131415] sm:text-[32px]">
-                                WordPress + documentação
+                                Modularidade (Escala)
                               </p>
                               <p className="text-lg font-medium leading-[1.4] text-[#131415] sm:text-xl">
-                                permitindo que o time publique/atualize conteúdo e escale páginas
-                                sem depender de design/dev a cada ajuste.
+                                Arquitetura reutilizável e agnóstica ao conteúdo — pronta para novas entradas e regionalização.
                               </p>
                             </ImpactCard>
 
                             <ImpactCard>
                               <p className="whitespace-pre-line text-[28px] font-semibold leading-[1.2] text-[#131415] sm:text-[32px]">
-                                Roadmap{"\n"}pós-lançamento
+                                Analytics Blueprint
                               </p>
                               <p className="text-lg font-medium leading-[1.4] text-[#131415] sm:text-xl">
-                                Entregamos um backlog priorizado para a fase pós-DefenCath e expansão
-                                do hub científico.
+                                Design entregue com taxonomia de eventos + funis por entrada para otimização imediata pós-lançamento.
                               </p>
                             </ImpactCard>
                           </div>
