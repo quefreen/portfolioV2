@@ -34,31 +34,24 @@ export default function ProblemCormedix() {
               <div className="flex flex-col gap-12">
                 {/* Ótica do negócio */}
                 <div className="flex flex-col gap-4">
-                  <p className="text-xl font-semibold leading-[1.4] text-[#FF4C2C]">
-                    Negócio
-                  </p>
                   <p className="text-xl leading-[1.4] text-black">
-                    Em 2023, às vésperas da re-submissão do DefenCath à FDA, o
-                    site institucional virou um risco reputacional: a presença
-                    digital não transmitia previsibilidade nem governança para
-                    públicos externos (mercado e imprensa), justamente no momento
-                    em que a empresa precisava reduzir ruído e aumentar confiança.
+                Pouco antes da re-submissão do DefenCath à FDA (2023), o site institucional começou a virar um risco: para quem estava de fora, ele não passava a clareza e a organização que a empresa precisava mostrar e tarefas importantes viravam um caminho de tentativa e erro.                </p>
+                  <p className="text-xl font-semibold leading-[1.4] text-[#FF4C2C]">
+                    Investidores
                   </p>
+                  
+                  <p className="text-xl leading-[1.4] text-black">
+                Achar relatórios e materiais de apoio (apresentações e projeções) exigia navegar demais e “ir testando” até dar certo.                  </p>
                 </div>
 
                 {/* Ótica dos usuários */}
                 <div className="flex flex-col gap-4">
                   <p className="text-xl font-semibold leading-[1.4] text-[#FF4C2C]">
-                    Usuários
+                    Mídia & comunidade científica
                   </p>
                   <p className="text-xl leading-[1.4] text-black">
-                    Para Investidores e Mídia &amp; Comunidade científica, o
-                    legado gerava baixa encontrabilidade: acessar
-                    filings/relatórios exigia navegação profunda e
-                    tentativa-e-erro; validar evidência clínica e baixar assets
-                    de mídia dependia de “caça ao PDF” (ou Google), aumentando
-                    esforço e incerteza.
-                  </p>
+                Validar evidências clínicas e baixar assets de mídia muitas vezes dependia de “caça ao PDF” (ou do Google), com mais esforço e mais dúvida sobre qual era a fonte certa.                  </p>
+                 
                 </div>
 
                 {/* Conflito central */}
@@ -67,9 +60,7 @@ export default function ProblemCormedix() {
                     Conflito central:
                   </p>
                   <p className="text-xl leading-[1.4] text-black">
-                    Melhorar acesso e transparência sem prometer demais
-                    (compliance) e sem quebrar a capacidade do time interno de
-                    manter o conteúdo (governança).
+                  Melhorar acesso e transparência sem extrapolar compliance e sem comprometer a manutenção do conteúdo pelo time interno (governança).
                   </p>
                 </div>
               </div>

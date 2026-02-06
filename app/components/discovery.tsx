@@ -88,46 +88,44 @@ export default function Discovery() {
                 </div>
 
                 <p className="text-[32px] font-medium leading-[1.2] text-black sm:text-[40px]">
-                  Arquitetura guiada por tarefas.
+                  Aprendendo com o mercado.
                 </p>
               </div>
 
               {/* Textos */}
+              
+
+              <p className="text-xl font-medium leading-[1.3] text-[#131415]">
+                Para reduzir achismos, analisei 8 sites de empresas listadas na Nasdaq. O objetivo foi identificar padrões recorrentes em Investor Relations e transformar esses padrões em decisões práticas de arquitetura.
+              </p>
               <p className="text-xl font-semibold leading-none text-[#FF4C2C]">
-                Validando o problema
+                Critérios
               </p>
-
-              <p className="text-xl font-medium leading-[1.3] text-[#131415]">
-                Em um momento de alta pressão (re-submissão à FDA), o site legado
-                aumentava incerteza.
-              </p>
-
-              <p className="text-xl font-medium leading-[1.3] text-[#131415]">
-                As duas dores abaixo mostram como tarefas básicas exigiam esforço
-                excessivo para públicos que precisam de precisão e rapidez.
-              </p>
+             
+              
 
               {/* Cards (ALINHADOS COM O TEXTO — SEM BLEED) */}
-              <div className="mt-12 w-full">
+              <div className="mt-1 w-full">
                 <div className="grid w-full grid-cols-1 gap-6 lg:grid-cols-2 lg:items-stretch">
                   <DiscoveryCard>
                     <p className="text-xl font-semibold leading-[1.4] text-black">
-                      Investidores
+                      
                     </p>
                     <p className="text-xl leading-[1.4] text-black">
-                      Relatórios e projeções exigiam tentativa e erro e isso
-                      aumentava a incerteza do investidor.
+                    Referências amplamente reconhecidas por investidores (padrões “base” de IR) 
                     </p>
+                                      <p className="text-xl leading-[1.4] text-black">
+                    
+                    </p>
+
                   </DiscoveryCard>
 
                   <DiscoveryCard>
                     <p className="text-xl font-semibold leading-[1.4] text-black">
-                      Jornalistas
+                      
                     </p>
                     <p className="text-xl leading-[1.4] text-black">
-                      Encontrar press releases antigos ou dados regulatórios era
-                      um processo fragmentado.
-                    </p>
+Empresas do ecossistema health/pharma (padrões específicos do setor)                    </p>
                   </DiscoveryCard>
                 </div>
               </div>

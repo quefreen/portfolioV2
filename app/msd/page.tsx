@@ -1,7 +1,7 @@
 // app/hepatite/page.tsx
-import HepatiteTitleCase from "../components/HepatiteTitleCase"
-import HepatiteOneMinute from "../components/HepatiteOneMinute"
-import HepatiteImpact from "../components/HepatiteImpact"
+import MSDTitleCase from "../components/MSDTitleCase"
+import MSDOneMinute from "../components/MSDoneminute"
+import MSDImpact from "../components/MSDImpacto"
 
 import ProblemCormedix from "../components/problemCormedix"
 import Discovery from "../components/discovery"
@@ -19,9 +19,9 @@ export default async function Hepatite({
 }) {
   return (
     <main>
-      <HepatiteTitleCase />
-      <HepatiteOneMinute />
-      <HepatiteImpact />
+      <MSDTitleCase />
+      <MSDOneMinute />
+      <MSDImpact />
 
       <CasePaywall
         caseKey="hepatite"

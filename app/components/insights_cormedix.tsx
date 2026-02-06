@@ -48,26 +48,13 @@ export default function InsightsCormedix() {
   const TEXT_10 = "col-span-4 lg:col-span-10 lg:col-start-2";
 
   return (
-    <section className="w-full mt-24 sm:mt-32 lg:mt-48">
+    <section className="w-full mt-6 sm:mt-8 lg:mt-12">
       {/* Container GLOBAL (PADRONIZADO) */}
       <div className={SITE_CONTAINER}>
         <div className={GRID_12}>
           {/* 10 col centralizado */}
           <div className={TEXT_10}>
             <div className="flex w-full flex-col gap-6">
-              <p className="text-xl font-semibold leading-none text-[#FF4C2C]">
-                Entendendo os padrões de mercado
-              </p>
-
-              <p className="text-xl font-medium leading-[1.3] text-[#131415]">
-                Com o objetivo de reconhecer e transformar padrões recorrentes em
-                decisões de arquitetura (hubs, filtros e quick links).
-              </p>
-
-              <p className="text-xl font-medium leading-[1.3] text-[#131415]">
-                Para reduzir achismos, eu analisei 8 sites de empresas listadas na
-                Nasdaq.
-              </p>
 
               {/* Logos / retângulos (8) */}
               <div className="grid grid-cols-2 gap-6 sm:grid-cols-4">
@@ -97,15 +84,8 @@ export default function InsightsCormedix() {
                 ))}
               </div>
 
-              <p className="text-xl font-semibold leading-none text-[#FF4C2C]">
-                Critérios
-              </p>
+              
 
-              <p className="text-xl font-medium leading-[1.3] text-[#131415]">
-                Referências amplamente conhecidas por investidores para encontrar
-                padrões de Investor Relations e também empresas do ecossistema
-                health/pharma para encontrar padrões específicos do setor.
-              </p>
 
               {/* Imagem grande */}
               <div className="relative h-[360px] w-full overflow-hidden bg-white sm:h-[480px] lg:h-[603px]">
@@ -122,7 +102,7 @@ export default function InsightsCormedix() {
               {/* Cards com máscara */}
               <InsightCard>
                 <p className="text-xl font-semibold leading-[1.4] text-black">
-                  Aprendizados absorvidos na solução
+                  Boas práticas absorvidas
                 </p>
 
                 <div className="mt-6 flex flex-col gap-2.5">
@@ -156,11 +136,7 @@ export default function InsightsCormedix() {
                     className="w-full bg-[#F9F1E8] px-6 py-3 text-left"
                   >
                     <span className="block text-base leading-[1.4] text-black">
-                      Todos os sites relacionados a pharma/medtech tinham mais de um
-                      produto e sua navegação de produtos era como uma biblioteca
-                      de produtos e fases de aprovação/desenvolvimento. O que não
-                      se aplica para CorMedix no lançamento do seu primeiro produto
-                      e foi rejeitado esse padrão de navegação.
+                      A maioria dos sites pharma/medtech tratava produtos como uma biblioteca (portfólio + fases regulatórias). Para a CorMedix, no lançamento do primeiro produto, esse padrão não se aplicava então não adotamos essa navegação.
                     </span>
                   </button>
                 </div>

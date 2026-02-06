@@ -75,29 +75,30 @@ export default function MSDTitleCase() {
                 {/* topo */}
                 <div className="flex flex-col gap-4">
                   <p className="text-sm font-semibold tracking-wide text-neutral-400">
-                    GILLEAD
+                    MSD
                   </p>
 
                   <div className="flex flex-wrap gap-2">
                     <span className="inline-flex items-center rounded-full bg-white px-6 py-3 text-sm leading-none text-black">
-                      Content + Product
+                      Sistema
                     </span>
                     <span className="inline-flex items-center rounded-full bg-white px-6 py-3 text-sm leading-none text-black">
-                      0→1 Discovery
+                      Logistíca
                     </span>
                     <span className="inline-flex items-center rounded-full bg-white px-6 py-3 text-sm leading-none text-black">
-                      UX Strategy
+                      Exames
                     </span>
                   </div>
 
                   <h1 className="font-display text-[44px] font-semibold leading-[1.15] text-black sm:text-[52px] lg:text-[56px] lg:leading-[1.2]">
-                    A epidemia de mitos sobre Hepatite C.
+                    Estabilizando
+a jornada de exames.
                   </h1>
 
-                  <p className="text-lg font-semibold leading-[1.35] text-black sm:text-xl">
-                    Um {" "}
-                    <span className="text-[#FF4C2C]">
-                      sistema mobile-first que guia e direciona para canais de agendamento.
+                  <p className="text-[#FF4C2C] text-lg font-semibold leading-[1.35] ">
+                    Reduzi risco operacional {" "}
+                    <span className="text-lg font-semibold leading-[1.35] text-black sm:text-xl">
+                       e retrabalho em um fluxo crítico de exames clínicos (sem tocar no backend).
                     </span>{" "}
                   </p>
                 </div>

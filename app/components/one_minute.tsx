@@ -26,11 +26,11 @@ export default function OneMinute() {
           <div className={CONTENT_12}>
             {/* Shape com bleed (só o fundo pode sangrar) */}
             <div className={SHAPE_BLEED}>
-              <div className="w-full bg-white">
+              <div className="w-full bg-white py-7">
                 {/* Conteúdo: padding condicional pra não duplicar no desktop */}
                 <div className={SHAPE_INNER_PAD}>
                   <div className={GRID_12}>
-                    <div className={`${TEXT_10} py-12 sm:py-14 lg:py-16`}>
+                    <div className={`${TEXT_10} py-12 sm:py-14 lg:py-24`}>
                       <div className="flex flex-col gap-12">
                         {/* Header */}
                         <div className="flex flex-col gap-6">
@@ -50,12 +50,13 @@ export default function OneMinute() {
                                   Contexto
                                 </p>
                                 <p className="text-lg leading-[1.4] text-[#131415]">
-                                  Em 2023, na re-submissão do DefenCath à FDA, o
-                                  site legado (+10 anos) virou um risco:
-                                  investidores tinham dificuldade para encontrar
-                                  filings/relatórios com confiança e Mídia &amp;
-                                  Comunidade científica precisavam “caçar PDFs”
-                                  para validar evidências clínicas.
+                                  Em 2023, durante a re-submissão do DefenCath à FDA, o site legado (mais de 10 anos) passou a representar um risco:
+                                </p>
+                                <p className="text-lg leading-[1.4] text-[#131415]">
+                                  <b>Investidores</b> tinham dificuldade para encontrar filings e relatórios com confiança.
+                                </p>
+                                <p className="text-lg leading-[1.4] text-[#131415]">
+                                  <b>Mídia e comunidade científica</b> precisavam vasculhar PDFs para validar as evidências clínicas.
                                 </p>
                               </div>
 
@@ -69,17 +70,12 @@ export default function OneMinute() {
                                   {/* Item 1 */}
                                   <div className="flex flex-col gap-3">
                                     <p className="text-lg font-semibold leading-none text-[#F54900]">
-                                      Investors-first
+                                      Investors-first - Nova arquitetura
                                     </p>
                                     <p className="text-lg leading-[1.4] text-[#131415]">
-                                      Acesso a informações críticas (SEC Filings,
-                                      resultados, stock e apresentações)
-                                      reorganizado por “hubs de tarefa”, reduzindo
-                                      atrito e aumentando previsibilidade.
-                                    </p>
+                                    Reorganizei e testei o acesso a informações críticas (SEC filings, resultados, stock e apresentações) em hubs por tarefa, reduzindo atrito e aumentando a previsibilidade da navegação.</p>
                                     <p className="text-lg leading-[1.4] text-[#131415]">
-                                      −62% no tempo médio (74,9s → 28,2s), +30pp de
-                                      sucesso (58% → 88%) e SEQ +0,79 (1–7).
+                                    {/* <b>Impacto:</b> −62% no tempo médio, +30pp na taxa de sucesso e SEQ +0,79 (escala 1–7).  */}
                                     </p>
                                   </div>
 
@@ -89,10 +85,9 @@ export default function OneMinute() {
                                       Credibilidade e governança
                                     </p>
                                     <p className="text-lg leading-[1.4] text-[#131415]">
-                                      Diferenciação clara entre conteúdo regulatório
-                                      vs. notícias, com melhor scent e menor erro de
-                                      navegação (misclicks médios −82%, 0,56 → 0,10).
-                                    </p>
+                                    Separei e medi com clareza conteúdo regulatório vs. notícias, melhorando a sinalização de conteúdo (information scent) e reduzindo erros de navegação.</p>
+                                                             <p className="text-lg leading-[1.4] text-[#131415]">
+                                   {/* <b>Impacto:</b> misclicks médios −82% (0,56 → 0,10).*/}</p>
                                   </div>
 
                                   {/* Item 3 */}
@@ -101,10 +96,7 @@ export default function OneMinute() {
                                       Escalabilidade
                                     </p>
                                     <p className="text-lg leading-[1.4] text-[#131415]">
-                                      Estrutura entregue em WordPress com handoff e
-                                      treinamento para autonomia do time interno com
-                                      regras de conteúdo e bases para evolução sem
-                                      degradação do hub.
+                                      Entreguei a estrutura em WordPress, com handoff + treinamento para garantir autonomia do time interno incluindo regras de conteúdo e bases para evolução do hub sem perda de consistência.
                                     </p>
                                   </div>
                                 </div>
@@ -137,12 +129,9 @@ export default function OneMinute() {
                                   Client
                                 </p>
                                 <p className="text-base leading-[1.4] text-[#131415]">
-                                  CorMedix (NASDAQ: CRMD) A biopharmaceutical
-                                  company transitioning to commercial-stage,
-                                  focused on reducing life-threatening infections
-                                  in high-risk patients.
+                                  CorMedix (NASDAQ: CRMD)
                                 </p>
-                                <div className="h-px w-full bg-black/80" />
+                                <div className="h-px w-full bg-amber-300" />
                               </div>
 
                               {/* Responsibilities */}
@@ -151,10 +140,7 @@ export default function OneMinute() {
                                   Responsibilities
                                 </p>
                                 <p className="text-base leading-[1.4] text-[#131415]">
-                                  UX Strategy &amp; Governance • Stakeholder
-                                  Negotiation (Legal/IR) • Information Architecture
-                                  • 3D Modeling &amp; Optimization • Frontend Design
-                                  QA • Handoff &amp; Internal Training
+                                Estratégia de UX • Arquitetura da Informação • Alinhamento com stakeholders (Jurídico/RI) • Suporte à implementação (QA + handoff)                                  
                                 </p>
                               </div>
                             </div>

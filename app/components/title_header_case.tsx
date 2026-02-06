@@ -96,7 +96,7 @@ export default function TitleCaseHeader() {
 
                   <p className="text-lg font-semibold leading-[1.35] text-black sm:text-xl">
                     Uma nova arquitetura para{" "}
-                    <span className="text-[#FF4C2C]">
+                    <span className="text-[#028FBE]">
                       reduzir a incerteza de investidores e jornalistas.
                     </span>{" "}
                   </p>
@@ -104,10 +104,10 @@ export default function TitleCaseHeader() {
 
                 {/* meta */}
                 <div className="grid w-full grid-cols-1 gap-x-6 gap-y-6 sm:grid-cols-2 lg:grid-cols-4 lg:gap-y-0">
-                  <MetaItem label="ROLE" value="Product Designer" />
-                  <MetaItem label="TIMELINE" value="3 months" />
-                  <MetaItem label="TECHNOLOGY" value="Wordpress, Spline, CMS" />
-                  <MetaItem label="OUTCOME" value="Revamp website" align="left" />
+                  <MetaItem label="FUNÇÃO" value="Designer de Produto" />
+                  <MetaItem label="DURAÇÃO" value="3 meses" />
+                  <MetaItem label="TECNOLOGIAS" value="Wordpress, Spline, CMS" />
+                  <MetaItem label="ENTREGAS" value="Nova arquitetura" align="left" />
                 </div>
               </div>
             </div>

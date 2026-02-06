@@ -20,16 +20,17 @@ export function Hero2026() {
         <div className="pointer-events-none relative z-10 mx-auto h-full w-full max-w-[1400px] px-8 sm:px-4 md:px-12 lg:px-28">
           <div className="relative h-full">
             {/* Top-left com margin-top de 80px */}
-            <p
-              className="absolute left-0 font-bricolageGrotesque font-semibold leading-[1.2] text-[#FF4C2C]"
-              style={{ 
-                fontSize: "clamp(24px, 2.6vw, 40px)", 
-                maxWidth: "16ch",
-                top: "80px" 
-              }}
-            >
-              Product Designer exploring AI and programming.
-            </p>
+     <p
+  className="absolute left-0 font-display font-semibold leading-[1.2] text-[#FF4C2C]"
+  style={{
+    fontSize: "40px",
+    maxWidth: "18ch",
+    top: "80px",
+  }}
+>
+  Designer de produtos explorando 3D, IA & programação.
+</p>
+
 
             {/* Bottom-right */}
             <p
@@ -39,9 +40,20 @@ export function Hero2026() {
                 maxWidth: "18ch" 
               }}
             >
-              A creative generalist and problem-solver skilled in designing
-              seamless workflows and structuring complex information.
+            
+
             </p>
+            <p
+              className="absolute bottom-0 right-0 text-left font-bricolageGrotesque font-medium leading-[1.2] text-[#131415]"
+              style={{ 
+                fontSize: "clamp(12px, 1.5vw, 18px)", 
+                maxWidth: "24ch" 
+              }}
+            >
+              Vim da publicidade: framing estratégico, performance e clareza executiva.
+
+            </p>
+            
             
           </div>
         </div>

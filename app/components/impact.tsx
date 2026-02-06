@@ -92,11 +92,11 @@ export default function Impact() {
                   <div className={GRID_12}>
                     {/* TEXTO/CONTEÚDO: 10 col centralizado (regra do projeto) */}
                     <div className={TEXT_10}>
-                      <div className="flex flex-col gap-12">
+                      <div className="flex flex-col py-16 gap-12">
                         {/* Parte 1 */}
                         <div className="flex flex-col gap-4">
                           <p className="text-lg font-semibold leading-none text-[#131415]">
-                            Impact
+                            Impacto
                           </p>
                           <p className="text-[32px] font-medium leading-[1.2] text-[#131415] sm:text-[40px]">
                             Melhoria mensurável nas jornadas críticas.

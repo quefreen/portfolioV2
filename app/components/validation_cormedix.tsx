@@ -51,7 +51,7 @@ export default function ValidationCormedix() {
               <p className="whitespace-pre-line text-xl font-medium leading-[1.3] text-[#131415]">
                 Teste de navegação em protótipo, 6 tarefas (4 escolhidas + 2
                 indicadas pelo time de negócios).{"\n"}
-                Métricas: Success, Time on Task, Misclicks, SEQ (1–7).
+                Métricas: Sucesso da tarefa, Tempo de execução, Misclicks, SEQ (1–7).
               </p>
             </div>
           </div>

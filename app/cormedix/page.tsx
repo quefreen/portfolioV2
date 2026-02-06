@@ -7,6 +7,8 @@ import InsightsCormedix from "../components/insights_cormedix";
 import MaterialCarousel from "../components/material_carousel";
 import ValidationCormedix from "../components/validation_cormedix";
 import Gallery from "../components/cormedicGallery";
+import AbordagemCormedix from "../components/abordagemcormedix";
+import TaskResultsGrid from "../components/gridCormedix";
 
 export default function Home() {
   return (
@@ -17,9 +19,10 @@ export default function Home() {
       <ProblemCormedix />
       <Discovery />
       <InsightsCormedix />
-      <MaterialCarousel />
+      
       <ValidationCormedix />
-      <Gallery />
+      <TaskResultsGrid />
+      
       
     </main>
   );
