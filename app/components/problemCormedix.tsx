@@ -35,7 +35,7 @@ export default function ProblemCormedix() {
                 {/* Ótica do negócio */}
                 <div className="flex flex-col gap-4">
                   <p className="text-xl leading-[1.4] text-black">
-                Pouco antes da re-submissão do DefenCath à FDA (2023), o site institucional começou a virar um risco: para quem estava de fora, ele não passava a clareza e a organização que a empresa precisava mostrar e tarefas importantes viravam um caminho de tentativa e erro.                </p>
+                Em 2023, durante a aplicação do seu primeiro produto (DefenCath) ao orgão regulatório Norte Americano (FDA) o site (legado mais de 10 anos) passou a representar um risco: para quem estava de fora, ele não passava a clareza e a organização que a empresa precisava mostrar e tarefas importantes viravam um caminho de tentativa e erro.                </p>
                   <p className="text-xl font-semibold leading-[1.4] text-[#FF4C2C]">
                     Investidores
                   </p>

@@ -53,7 +53,7 @@ type ImpactCardProps = {
 }
 
 function ImpactCard({ children, className = "" }: ImpactCardProps) {
-  const baseClasses = `flex flex-col gap-2.5 bg-white p-10 sm:p-14 ${className}`
+  const baseClasses = `flex flex-col gap-2.5 bg-white p-10 sm:p-10 ${className}`
   return (
     <div className={baseClasses} style={CARD_MASK_STYLE}>
       {children}
@@ -98,7 +98,7 @@ export default function Impact() {
                           <p className="text-lg font-semibold leading-none text-[#131415]">
                             Impacto
                           </p>
-                          <p className="text-[32px] font-medium leading-[1.2] text-[#131415] sm:text-[40px]">
+                          <p className="text-[32px] font-semibold leading-[1.2] text-[#131415] sm:text-[40px]">
                             Melhoria mensurável nas jornadas críticas.
                           </p>
                         </div>
@@ -106,7 +106,7 @@ export default function Impact() {
                         {/* Cards (3) */}
                         <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
                           <ImpactCard className="border-2 border-white">
-                            <p className="text-[56px] font-semibold leading-[1.1] text-[#131415] sm:text-[64px]">
+                            <p className="text-[56px] font-semibold leading-[1.1] text-[#131415] sm:text-[56px]">
                               −61%
                             </p>
                             <p className="text-lg font-semibold leading-[1.4] text-[#131415] sm:text-xl">
@@ -115,7 +115,7 @@ export default function Impact() {
                           </ImpactCard>
 
                           <ImpactCard>
-                            <p className="text-[56px] font-semibold leading-[1.1] text-[#131415] sm:text-[64px]">
+                            <p className="text-[56px] font-semibold leading-[1.1] text-[#131415] sm:text-[56px]">
                               +30pp
                             </p>
                             <p className="text-lg font-semibold leading-[1.4] text-[#131415] sm:text-xl">
@@ -124,11 +124,11 @@ export default function Impact() {
                           </ImpactCard>
 
                           <ImpactCard>
-                            <p className="text-[56px] font-semibold leading-[1.1] text-[#131415] sm:text-[64px]">
+                            <p className="text-[56px] font-semibold leading-[1.1] text-[#131415] sm:text-[56px]">
                               −82%
                             </p>
                             <p className="text-lg font-semibold leading-[1.4] text-[#131415] sm:text-xl">
-                              de misclicks (0,56 → 0,10), reduzindo tentativa-e-erro.
+                              de misclicks (0,56 → 0,10), reduzindo tentativa e erro.
                             </p>
                           </ImpactCard>
                         </div>
@@ -138,7 +138,7 @@ export default function Impact() {
                         {/* Parte 2 */}
                         <div className="flex flex-col gap-12">
                           <div className="flex flex-col gap-4">
-                            <p className="text-[32px] font-medium leading-[1.2] text-[#131415] sm:text-[40px]">
+                            <p className="text-[32px] font-semibold leading-[1.2] text-[#131415] sm:text-[40px]">
                               Entrega sustentável para o time interno.
                             </p>
                           </div>

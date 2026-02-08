@@ -109,8 +109,8 @@ export default function InsightsCormedix() {
                   {[
                     "Todos as empresas tem um hub separado para investidores.",
                     "SEC Filings não é “lista” é base consultável com filtros e grupos.",
-                    "“Quick Links” recorrentes para tarefas repetidas é estratégico.",
-                    "Atividades dentro do hub prova que a empresa está ativa e é previsível.",
+                    "“Quick Links” para tarefas repetidas é estratégico.",
+                    "Atividades dentro de notícias prova que a empresa está ativa e é previsível.",
                   ].map((text) => (
                     <button
                       key={text}
@@ -136,8 +136,27 @@ export default function InsightsCormedix() {
                     className="w-full bg-[#F9F1E8] px-6 py-3 text-left"
                   >
                     <span className="block text-base leading-[1.4] text-black">
-                      A maioria dos sites pharma/medtech tratava produtos como uma biblioteca (portfólio + fases regulatórias). Para a CorMedix, no lançamento do primeiro produto, esse padrão não se aplicava então não adotamos essa navegação.
+                      A maioria dos sites pharma/medtech tratava produtos como uma biblioteca. Para a CorMedix, no lançamento do primeiro produto, isto não se aplica (por enquanto).
                     </span>
+                    
+                  </button>
+                  <button
+                    type="button"
+                    className="w-full bg-[#F9F1E8] px-6 py-3 text-left"
+                  >
+                    <span className="block text-base leading-[1.4] text-black">
+                      Em alguns casos a área de investidores fornecia com prioridade alta (nos menus principais) links que retiravam o usuário daquele hub para links externos.
+                    </span>
+                    
+                  </button>
+                  <button
+                    type="button"
+                    className="w-full bg-[#F9F1E8] px-6 py-3 text-left"
+                  >
+                    <span className="block text-base leading-[1.4] text-black">
+                      Em alguns casos a área de investidores fornecia com prioridade alta (nos menus principais) links que retiravam o usuário daquele hub para links externos.
+                    </span>
+                    
                   </button>
                 </div>
               </InsightCard>

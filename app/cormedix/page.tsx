@@ -9,10 +9,16 @@ import ValidationCormedix from "../components/validation_cormedix";
 import Gallery from "../components/cormedicGallery";
 import AbordagemCormedix from "../components/abordagemcormedix";
 import TaskResultsGrid from "../components/gridCormedix";
+import { ArchitectureTabs } from "../components/tabcormedix";
+import Innovation3D from "../components/extrascormedix";
+import Retrospect from "../components/retrospectoCormedix";
+
+import CaseIntroCormedix from "../components/CaseItroCormedix";
 
 export default function Home() {
   return (
     <main>
+      <CaseIntroCormedix />
       <TitleCaseHeader />
       <OneMinute />
       <Impact />
@@ -21,8 +27,11 @@ export default function Home() {
       <InsightsCormedix />
       
       <ValidationCormedix />
+      <ArchitectureTabs />
       <TaskResultsGrid />
-      
+      <Innovation3D />
+      <Gallery />
+      <Retrospect />
       
     </main>
   );

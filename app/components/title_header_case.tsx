@@ -83,10 +83,10 @@ export default function TitleCaseHeader() {
                       B2B
                     </span>
                     <span className="inline-flex items-center rounded-full bg-white px-6 py-3 text-sm leading-none text-black">
-                      Regulated Industry
+                      Indústria regulada
                     </span>
                     <span className="inline-flex items-center rounded-full bg-white px-6 py-3 text-sm leading-none text-black">
-                      Investor Relations
+                      Investidores & Mídia
                     </span>
                   </div>
 

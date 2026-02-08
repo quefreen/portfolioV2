@@ -50,10 +50,10 @@ export default function OneMinute() {
                                   Contexto
                                 </p>
                                 <p className="text-lg leading-[1.4] text-[#131415]">
-                                  Em 2023, durante a re-submissão do DefenCath à FDA, o site legado (mais de 10 anos) passou a representar um risco:
+                                  Em 2023, durante a aplicação do seu primeiro produto (DefenCath) ao orgão regulatório Norte Americano (FDA) o site (legado mais de 10 anos) passou a representar um risco:
                                 </p>
                                 <p className="text-lg leading-[1.4] text-[#131415]">
-                                  <b>Investidores</b> tinham dificuldade para encontrar filings e relatórios com confiança.
+                                  <b>Investidores</b> tinham dificuldade para encontrar documentos oficiais e relatórios com confiança.
                                 </p>
                                 <p className="text-lg leading-[1.4] text-[#131415]">
                                   <b>Mídia e comunidade científica</b> precisavam vasculhar PDFs para validar as evidências clínicas.
@@ -73,7 +73,7 @@ export default function OneMinute() {
                                       Investors-first - Nova arquitetura
                                     </p>
                                     <p className="text-lg leading-[1.4] text-[#131415]">
-                                    Reorganizei e testei o acesso a informações críticas (SEC filings, resultados, stock e apresentações) em hubs por tarefa, reduzindo atrito e aumentando a previsibilidade da navegação.</p>
+                                    <b>Reorganizei e testei</b> o acesso a informações críticas (SEC filings, resultados, stock e apresentações) em hubs por tarefa, reduzindo atrito e <b>aumentando a previsibilidade da navegação</b>.</p>
                                     <p className="text-lg leading-[1.4] text-[#131415]">
                                     {/* <b>Impacto:</b> −62% no tempo médio, +30pp na taxa de sucesso e SEQ +0,79 (escala 1–7).  */}
                                     </p>
@@ -85,7 +85,7 @@ export default function OneMinute() {
                                       Credibilidade e governança
                                     </p>
                                     <p className="text-lg leading-[1.4] text-[#131415]">
-                                    Separei e medi com clareza conteúdo regulatório vs. notícias, melhorando a sinalização de conteúdo (information scent) e reduzindo erros de navegação.</p>
+                                    <b>Separei e medi</b> os conteúdos regulatórios vs. notícias, melhorando a sinalização de conteúdo (information scent) e <b>reduzindo erros de navegação</b>.</p>
                                                              <p className="text-lg leading-[1.4] text-[#131415]">
                                    {/* <b>Impacto:</b> misclicks médios −82% (0,56 → 0,10).*/}</p>
                                   </div>
