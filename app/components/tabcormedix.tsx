@@ -8,9 +8,9 @@ import type { CSSProperties } from "react";
 type CardTone = "danger" | "success";
 
 type InsightCardData = {
-  title: string; // topo do card
-  highlight: string; // linha com ícone
-  body: string; // texto menor
+  title: string;
+  highlight: string;
+  body: string;
 };
 
 type TabData = {
@@ -29,8 +29,8 @@ const DEFAULT_TABS: TabData[] = [
     label: "Arquitetura legado",
     badge: 3,
     tone: "danger",
-    imageSrc: "/cormedix/sitemap-legacy.png",
-    imageAlt: "Sitemap legado (estrutura anterior)",
+    imageSrc: "/sitemap_legado.jpg",
+    imageAlt: "",
     cards: [
       {
         title: "Taxonomia competindo entre seções",
@@ -57,8 +57,8 @@ const DEFAULT_TABS: TabData[] = [
     label: "Nova arquitetura",
     badge: 3,
     tone: "success",
-    imageSrc: "/cormedix/sitemap-new.png",
-    imageAlt: "Sitemap novo (arquitetura proposta)",
+    imageSrc: "/sitemap_novo.jpg",
+    imageAlt: "",
     cards: [
       {
         title: "Destinos canônicos",
@@ -82,219 +82,214 @@ const DEFAULT_TABS: TabData[] = [
   },
 ];
 
-// --- CONSTANTES DO LAYOUT (PADRÃO DO SITE) ---
+// --- PADRÃO DO SITE (OBRIGATÓRIO) ---
 const SITE_CONTAINER =
   "mx-auto w-full max-w-[1400px] px-4 sm:px-4 md:px-8 lg:px-12";
 const GRID_12 = "grid grid-cols-4 gap-6 lg:grid-cols-12";
 const TEXT_10 = "col-span-4 lg:col-span-10 lg:col-start-2";
+const CONTENT_12 = "col-span-4 lg:col-span-12";
 
-// --- CORES (ajuste aqui se quiser) ---
-const RED_ACCENT = "#FF4C2C";
-const GREEN_ACCENT = "#00A83A"; // verde “forte” como o do print
+// --- CORES (não alterar) ---
+// ✅ Cards
+const RED_ACCENT = "#F10000";
+const GREEN_ACCENT = "#00A83A";
+// ✅ Tabs (sempre laranja no active)
+const TAB_ACTIVE_ACCENT = "#FF4C2C";
 
-// --- MÁSCARA (CORNERS) ---
-const CORNER_MASK_MD: CSSProperties = {
-  maskImage: `
+// --- HELPERS: MASKS / CORNERS ---
+type CornerSize = "sm" | "md" | "lg";
+
+function cornerClamp(size: CornerSize) {
+  if (size === "sm") return "clamp(28px, 5vw, 72px)";
+  if (size === "lg") return "clamp(56px, 9vw, 140px)";
+  return "clamp(32px, 6vw, 80px)";
+}
+
+function mask4Corners(size: CornerSize): CSSProperties {
+  const c = cornerClamp(size);
+
+  const maskImage = `
     url(/esqtb.svg),
     url(/dirtb.svg),
     url(/esqbb.svg),
     url(/dirbb.svg),
     linear-gradient(#000, #000)
-  `,
-  maskPosition: `
-    left top,
-    right top,
-    left bottom,
-    right bottom,
-    center
-  `,
-  maskRepeat: "no-repeat",
-  maskSize: `
-    clamp(32px, 6vw, 80px) auto,
-    clamp(32px, 6vw, 80px) auto,
-    clamp(32px, 6vw, 80px) auto,
-    clamp(32px, 6vw, 80px) auto,
-    100% 100%
-  `,
-  maskComposite: "exclude",
-  WebkitMaskImage: `
-    url(/esqtb.svg),
-    url(/dirtb.svg),
-    url(/esqbb.svg),
-    url(/dirbb.svg),
-    linear-gradient(#000, #000)
-  `,
-  WebkitMaskPosition: `
-    left top,
-    right top,
-    left bottom,
-    right bottom,
-    center
-  `,
-  WebkitMaskRepeat: "no-repeat",
-  WebkitMaskSize: `
-    clamp(32px, 6vw, 80px) auto,
-    clamp(32px, 6vw, 80px) auto,
-    clamp(32px, 6vw, 80px) auto,
-    clamp(32px, 6vw, 80px) auto,
-    100% 100%
-  `,
-  WebkitMaskComposite: "xor",
-};
+  `;
 
-// shell (corners maiores)
-const CORNER_MASK_LG: CSSProperties = {
-  maskImage: `
-    url(/esqtb.svg),
-    url(/dirtb.svg),
-    url(/esqbb.svg),
-    url(/dirbb.svg),
-    linear-gradient(#000, #000)
-  `,
-  maskPosition: `
+  const maskPosition = `
     left top,
     right top,
     left bottom,
     right bottom,
     center
-  `,
-  maskRepeat: "no-repeat",
-  maskSize: `
-    clamp(56px, 9vw, 140px) auto,
-    clamp(56px, 9vw, 140px) auto,
-    clamp(56px, 9vw, 140px) auto,
-    clamp(56px, 9vw, 140px) auto,
-    100% 100%
-  `,
-  maskComposite: "exclude",
-  WebkitMaskImage: `
-    url(/esqtb.svg),
-    url(/dirtb.svg),
-    url(/esqbb.svg),
-    url(/dirbb.svg),
-    linear-gradient(#000, #000)
-  `,
-  WebkitMaskPosition: `
-    left top,
-    right top,
-    left bottom,
-    right bottom,
-    center
-  `,
-  WebkitMaskRepeat: "no-repeat",
-  WebkitMaskSize: `
-    clamp(56px, 9vw, 140px) auto,
-    clamp(56px, 9vw, 140px) auto,
-    clamp(56px, 9vw, 140px) auto,
-    clamp(56px, 9vw, 140px) auto,
-    100% 100%
-  `,
-  WebkitMaskComposite: "xor",
-};
+  `;
 
-function toneStyles(tone: CardTone) {
-  const isDanger = tone === "danger";
-  const accent = isDanger ? RED_ACCENT : GREEN_ACCENT;
+  const maskSize = `
+    ${c} auto,
+    ${c} auto,
+    ${c} auto,
+    ${c} auto,
+    100% 100%
+  `;
 
   return {
-    accent,
-    headerBg: isDanger ? `bg-[${RED_ACCENT}]` : `bg-[${GREEN_ACCENT}]`,
-    accentText: isDanger ? `text-[${RED_ACCENT}]` : `text-[${GREEN_ACCENT}]`,
-    iconBg: isDanger ? `bg-[${RED_ACCENT}]/10` : `bg-[${GREEN_ACCENT}]/10`,
-    iconStroke: isDanger ? `text-[${RED_ACCENT}]` : `text-[${GREEN_ACCENT}]`,
+    maskImage,
+    maskPosition,
+    maskRepeat: "no-repeat",
+    maskSize,
+    maskComposite: "exclude, exclude, exclude, exclude" as any,
+
+    WebkitMaskImage: maskImage as any,
+    WebkitMaskPosition: maskPosition as any,
+    WebkitMaskRepeat: "no-repeat" as any,
+    WebkitMaskSize: maskSize as any,
+    WebkitMaskComposite: "xor, xor, xor, xor" as any,
   };
 }
 
-function ThumbsUpIcon({ color }: { color: string }) {
-  return (
-    <svg
-      width="22"
-      height="22"
-      viewBox="0 0 24 24"
-      fill="none"
-      aria-hidden="true"
-    >
-      <path
-        d="M7 11v10H4a2 2 0 0 1-2-2v-6a2 2 0 0 1 2-2h3Zm0 0 5-8a2 2 0 0 1 3.7 1.3L14 11h6a2 2 0 0 1 2 2l-1 6a2 2 0 0 1-2 2H7"
-        stroke={color}
-        strokeWidth="2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-    </svg>
-  );
+function mask4CornersHalfHeight(size: CornerSize): CSSProperties {
+  const c = cornerClamp(size);
+  const cHalf = `calc(${c} / 2)`;
+
+  const maskImage = `
+    url(/esqtb.svg),
+    url(/dirtb.svg),
+    url(/esqbb.svg),
+    url(/dirbb.svg),
+    linear-gradient(#000, #000)
+  `;
+
+  const maskPosition = `
+    left top,
+    right top,
+    left bottom,
+    right bottom,
+    center
+  `;
+
+  const maskSize = `
+    ${cHalf} auto,
+    ${cHalf} auto,
+    ${cHalf} auto,
+    ${cHalf} auto,
+    100% 100%
+  `;
+
+  return {
+    maskImage,
+    maskPosition,
+    maskRepeat: "no-repeat",
+    maskSize,
+    maskComposite: "exclude, exclude, exclude, exclude" as any,
+
+    WebkitMaskImage: maskImage as any,
+    WebkitMaskPosition: maskPosition as any,
+    WebkitMaskRepeat: "no-repeat" as any,
+    WebkitMaskSize: maskSize as any,
+    WebkitMaskComposite: "xor, xor, xor, xor" as any,
+  };
 }
 
-function AlertIcon({ color }: { color: string }) {
-  return (
-    <svg
-      width="22"
-      height="22"
-      viewBox="0 0 24 24"
-      fill="none"
-      aria-hidden="true"
-    >
-      <path
-        d="M12 9v4m0 4h.01M10.3 3.5 2.6 17a2 2 0 0 0 1.7 3h15.4a2 2 0 0 0 1.7-3L13.7 3.5a2 2 0 0 0-3.4 0Z"
-        stroke={color}
-        strokeWidth="2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-    </svg>
-  );
+// ✅ máscara “inset” para alinhar o corner do conteúdo ao stroke
+function mask4CornersInset(size: CornerSize, insetPx: number): CSSProperties {
+  const c = cornerClamp(size);
+  const ci = `calc(${c} - ${insetPx}px)`;
+
+  const maskImage = `
+    url(/esqtb.svg),
+    url(/dirtb.svg),
+    url(/esqbb.svg),
+    url(/dirbb.svg),
+    linear-gradient(#000, #000)
+  `;
+
+  const maskPosition = `
+    left top,
+    right top,
+    left bottom,
+    right bottom,
+    center
+  `;
+
+  const maskSize = `
+    ${ci} auto,
+    ${ci} auto,
+    ${ci} auto,
+    ${ci} auto,
+    100% 100%
+  `;
+
+  return {
+    maskImage,
+    maskPosition,
+    maskRepeat: "no-repeat",
+    maskSize,
+    maskComposite: "exclude, exclude, exclude, exclude" as any,
+
+    WebkitMaskImage: maskImage as any,
+    WebkitMaskPosition: maskPosition as any,
+    WebkitMaskRepeat: "no-repeat" as any,
+    WebkitMaskSize: maskSize as any,
+    WebkitMaskComposite: "xor, xor, xor, xor" as any,
+  };
 }
 
-// ✅ CARD: mesma UI de antes, só trocando o corner pra máscara
-function InsightCard({
-  tone,
-  data,
-}: {
-  tone: CardTone;
-  data: InsightCardData;
-}) {
+function InsightCard({ tone, data }: { tone: CardTone; data: InsightCardData }) {
   const isDanger = tone === "danger";
   const accent = isDanger ? RED_ACCENT : GREEN_ACCENT;
 
+  const STROKE_PX = 4;
+  const INSET_PX = STROKE_PX * 2;
+
+  const iconSrc = isDanger ? "/danger.svg" : "/green.svg";
+
   return (
-    <div className="flex flex-col overflow-hidden" style={CORNER_MASK_MD}>
-      {/* Header colorido */}
+    <div
+      className="h-full"
+      style={{
+        ...mask4Corners("md"),
+        background: accent,
+        padding: STROKE_PX,
+      }}
+    >
       <div
-        className="h-14 px-4 py-2.5 flex items-center justify-center text-center"
-        style={{ background: accent }}
+        className="flex h-full flex-col overflow-hidden bg-white"
+        style={mask4CornersInset("md", INSET_PX)}
       >
-        <div className="text-white text-sm md:text-base font-semibold leading-5">
-          {data.title}
-        </div>
-      </div>
-
-      {/* Body neutro */}
-      <div className="bg-neutral-100 p-6 flex flex-col gap-5">
-        <div className="flex items-center gap-3">
-          <div
-            className="flex h-10 w-10 items-center justify-center rounded-full"
-            style={{ background: `${accent}14` }} // ~10% alpha
-          >
-            {isDanger ? (
-              <AlertIcon color={accent} />
-            ) : (
-              <ThumbsUpIcon color={accent} />
-            )}
-          </div>
-
-          <div
-            className="text-sm md:text-base font-semibold leading-5"
-            style={{ color: accent }}
-          >
-            {data.highlight}
+        {/* Header colorido */}
+        <div
+          className="px-4 py-2.5 flex items-center justify-center text-center"
+          style={{
+            background: accent,
+            height: "calc(var(--spacing) * 18)",
+          }}
+        >
+          <div className="text-white text-sm md:text-base font-semibold leading-5">
+            {data.title}
           </div>
         </div>
 
-        <div className="h-px w-full bg-black/80" />
+        {/* Body neutro — preenche até o final */}
+        <div className="bg-white p-6 flex flex-1 flex-col gap-5">
+          <div className="flex items-center gap-3">
+            <div className="relative shrink-0 w-6 h-6 md:w-7 md:h-7 lg:w-8 lg:h-8">
+              <Image src={iconSrc} alt="" fill aria-hidden="true" />
+            </div>
 
-        <p className="text-neutral-900 text-sm md:text-base leading-6">
-          {data.body}
-        </p>
+            <div
+              className="text-sm md:text-base font-semibold leading-5"
+              style={{ color: accent }}
+            >
+              {data.highlight}
+            </div>
+          </div>
+
+          <div className="h-px w-full bg-black/80" />
+
+          <p className="text-neutral-900 text-sm md:text-base leading-6">
+            {data.body}
+          </p>
+        </div>
       </div>
     </div>
   );
@@ -302,112 +297,132 @@ function InsightCard({
 
 export function ArchitectureTabs({
   tabs = DEFAULT_TABS,
-  defaultTab = "new",
+  defaultTab,
   className = "",
 }: {
   tabs?: TabData[];
   defaultTab?: TabData["key"];
   className?: string;
 }) {
-  const [active, setActive] = React.useState<TabData["key"]>(defaultTab);
+  const [active, setActive] = React.useState<TabData["key"]>(() => {
+    return defaultTab ?? tabs[0]?.key ?? "legacy";
+  });
+
   const activeTab = tabs.find((t) => t.key === active) ?? tabs[0];
 
+  // Cards invadem a área de cima — reduz a altura do “fundo branco/imagem”
+  const CARDS_OVERLAP: CSSProperties = {
+    marginTop: "calc(-1 * clamp(64px, 7vw, 120px))",
+  };
+
   return (
-    <section className={["w-full mt-24 sm:mt-32 lg:mt-48", className].join(" ")}>
+    <section className={["w-full py-16 sm:py-20 lg:py-24", className].join(" ")}>
       <div className={SITE_CONTAINER}>
         <div className={GRID_12}>
-          <div className={TEXT_10}>
+          {/* ✅ Shell branco (largura grande) permanece em CONTENT_12 */}
+          <div className={CONTENT_12}>
             <div className="relative">
               {/* Tabs flutuantes */}
-              <div className="absolute left-1/2 top-0 z-20 -translate-x-1/2 -translate-y-1/2">
+              <div className="absolute left-1/2 top-0 z-30 -translate-x-1/2 -translate-y-1/2">
+                {/* wrapper ao redor do grupo */}
                 <div
-                  className="bg-white p-2"
+                  className="p-3"
                   style={{
-                    ...CORNER_MASK_MD,
+                    background: "#F7F7F7",
+                    ...mask4CornersHalfHeight("sm"),
                     boxShadow: "0 10px 30px rgba(0,0,0,0.08)",
                   }}
                 >
-                  <div className="flex overflow-hidden rounded-3xl bg-white">
-                    {tabs.map((t, idx) => {
-                      const isActive = t.key === active;
-                      const accent =
-                        t.tone === "danger" ? RED_ACCENT : GREEN_ACCENT;
+                  {/* ✅ grupo “pílula” (botões grudados) */}
+                  <div className="w-full" style={mask4CornersHalfHeight("sm")}>
+                    <div className="flex w-full overflow-hidden bg-white">
+                      {tabs.map((t) => {
+                        const isActive = t.key === active;
 
-                      return (
-                        <button
-                          key={t.key}
-                          type="button"
-                          onClick={() => setActive(t.key)}
-                          className={[
-                            "px-8 md:px-12 py-5 md:py-6",
-                            "flex items-center gap-4",
-                            "transition-colors",
-                            idx === 0 ? "rounded-l-3xl" : "rounded-r-3xl",
-                            isActive ? "text-white" : "bg-white text-zinc-400",
-                          ].join(" ")}
-                          style={{
-                            background: isActive ? accent : "transparent",
-                          }}
-                          role="tab"
-                          aria-selected={isActive}
-                        >
-                          <span className="text-base md:text-xl font-semibold leading-5">
-                            {t.label}
-                          </span>
-
-                          <span
+                        return (
+                          <button
+                            key={t.key}
+                            type="button"
+                            onClick={() => setActive(t.key)}
+                            role="tab"
+                            aria-selected={isActive}
                             className={[
-                              "inline-flex h-6 w-6 items-center justify-center rounded-full text-sm font-semibold",
+                              "flex-1",
+                              "px-10 py-5",
+                              "md:px-12 md:py-6",
+                              "lg:px-14",
+                              "flex items-center justify-between gap-4",
+                              "transition-colors",
+                              "min-w-[240px] md:min-w-[280px] lg:min-w-[320px]",
+                              "text-left",
                             ].join(" ")}
                             style={{
-                              background: isActive
-                                ? "rgba(255,255,255,0.20)"
-                                : "rgba(0,0,0,0.06)",
-                              color: isActive ? "#fff" : "#9A9A9A",
+                              background: isActive ? TAB_ACTIVE_ACCENT : "#FFFFFF",
+                              color: isActive ? "#FFFFFF" : "#9A9A9A",
                             }}
-                            aria-label={`Total de itens: ${t.badge}`}
                           >
-                            {t.badge}
-                          </span>
-                        </button>
-                      );
-                    })}
+                            <span className="text-base md:text-lg lg:text-xl font-semibold leading-none lg:whitespace-nowrap">
+                              {t.label}
+                            </span>
+
+                            <span
+                              className="inline-flex h-7 w-7 shrink-0 aspect-square items-center justify-center rounded-full text-sm font-semibold leading-none"
+                              style={{
+                                background: isActive
+                                  ? "rgba(255,255,255,0.20)"
+                                  : "rgba(0,0,0,0.06)",
+                                color: isActive ? "#fff" : "#9A9A9A",
+                              }}
+                              aria-label={`Total de itens: ${t.badge}`}
+                            >
+                              {t.badge}
+                            </span>
+                          </button>
+                        );
+                      })}
+                    </div>
                   </div>
                 </div>
               </div>
 
-              {/* Shell branco (sem roxo), com corners máscara */}
+              {/* Fundo branco (vai virar imagem): largura/altura mantidas */}
               <div
-                className="bg-white px-6 pb-8 pt-20 md:px-10 md:pb-10"
+                className="relative z-10 bg-white px-6 pt-8 pb-10 md:px-10"
                 style={{
-                  ...CORNER_MASK_LG,
+                  ...mask4Corners("lg"),
                   boxShadow: "0 20px 60px rgba(0,0,0,0.06)",
                 }}
               >
-                {/* Imagem por tab */}
-                <div className="bg-white/30 p-4 sm:p-6" style={CORNER_MASK_MD}>
+                {/* Área da imagem */}
+                <div className="bg-white/30 p-4 sm:p-6" style={mask4Corners("md")}>
                   <div className="relative w-full">
-                    <div className="relative w-full aspect-[16/9] md:aspect-[21/9]">
+                    <div className="relative w-full aspect-[16/9] md:aspect-[14/9]">
                       <Image
                         src={activeTab.imageSrc}
                         alt={activeTab.imageAlt}
                         fill
                         className="object-contain"
-                        sizes="(max-width: 768px) 100vw, 1240px"
+                        sizes="(max-width: 768px) 100vw, 1400px"
                         priority
                       />
                     </div>
                   </div>
                 </div>
+              </div>
 
-                {/* Cards */}
-                <div className="mt-8 grid grid-cols-1 gap-6 md:grid-cols-3">
-                  {activeTab.cards.map((c, idx) => (
-                    <InsightCard key={idx} tone={activeTab.tone} data={c} />
-                  ))}
+              {/* ✅ Cards dentro do limite do conteúdo (TEXT_10), mantendo o overlap */}
+              <div className="relative z-20" style={CARDS_OVERLAP}>
+                <div className={GRID_12}>
+                  <div className={TEXT_10}>
+                    <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
+                      {activeTab.cards.map((c, idx) => (
+                        <InsightCard key={idx} tone={activeTab.tone} data={c} />
+                      ))}
+                    </div>
+                  </div>
                 </div>
               </div>
-              {/* /shell */}
+              {/* /cards */}
             </div>
           </div>
         </div>

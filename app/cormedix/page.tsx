@@ -14,22 +14,26 @@ import Innovation3D from "../components/extrascormedix";
 import Retrospect from "../components/retrospectoCormedix";
 
 import CaseIntroCormedix from "../components/CaseItroCormedix";
+import CaseMerge02Cormedix from "../components/CaseMerge02Cormedix";
+import ValidationCormedix02 from "../components/ValidationCormedix02";
 
 export default function Home() {
   return (
     <main>
-      <CaseIntroCormedix />
-      <TitleCaseHeader />
+      <CaseIntroCormedix /> 
+      <CaseMerge02Cormedix />
+
+     {/* <TitleCaseHeader />
       <OneMinute />
       <Impact />
       <ProblemCormedix />
       <Discovery />
-      <InsightsCormedix />
+      <InsightsCormedix /> 
       
-      <ValidationCormedix />
+      <ValidationCormedix02 />*/}
       <ArchitectureTabs />
       <TaskResultsGrid />
-      <Innovation3D />
+      
       <Gallery />
       <Retrospect />
       

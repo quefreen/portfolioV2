@@ -363,7 +363,7 @@ export default function CorMedixCaseIntro() {
                                       />
                                     ))}
                                   </div>
-                                  <div className="h-px w-full bg-black/10" />
+                                  <div className="h-1 w-full bg-black/10" />
                                 </div>
 
                                 <div className="flex flex-col gap-3">
@@ -373,7 +373,7 @@ export default function CorMedixCaseIntro() {
                                   <p className="text-base leading-[1.45] text-[#131415]">
                                     CorMedix (NASDAQ: CRMD)
                                   </p>
-                                  <div className="h-px w-full bg-black/10" />
+                                  <div className="h-1 w-full bg-black/10" />
                                 </div>
 
                                 <div className="flex flex-col gap-3">
@@ -389,6 +389,7 @@ export default function CorMedixCaseIntro() {
                             </div>
                           </div>
                           {/* /layout */}
+                          <div className="h-4"></div>
                         </div>
                       </div>
                     </div>

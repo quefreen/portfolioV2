@@ -1,12 +1,64 @@
 // src/components/problem_cormedix.tsx
+import type { CSSProperties } from "react";
+
+// --- CONSTANTES DO LAYOUT (MESMAS DO BENTO) ---
+const SITE_CONTAINER =
+  "mx-auto w-full max-w-[1400px] px-4 sm:px-4 md:px-8 lg:px-12";
+const GRID_12 = "grid grid-cols-4 gap-6 lg:grid-cols-12";
+const TEXT_10 = "col-span-4 lg:col-span-10 lg:col-start-2";
+
+// --- MÁSCARA (4 cantos) ---
+const CARD_MASK_STYLE: CSSProperties = {
+  maskImage: `
+    url(/esqtb.svg),
+    url(/dirtb.svg),
+    url(/esqbb.svg),
+    url(/dirbb.svg),
+    linear-gradient(#000, #000)
+  `,
+  maskPosition: `
+    left top,
+    right top,
+    left bottom,
+    right bottom,
+    center
+  `,
+  maskRepeat: "no-repeat",
+  maskSize: `
+    clamp(28px, 5vw, 72px) auto,
+    clamp(28px, 5vw, 72px) auto,
+    clamp(28px, 5vw, 72px) auto,
+    clamp(28px, 5vw, 72px) auto,
+    100% 100%
+  `,
+  maskComposite: "exclude",
+  WebkitMaskComposite: "xor",
+};
+
+type ProblemCardProps = {
+  title: string;
+  body: string;
+};
+
+function ProblemCard({ title, body }: ProblemCardProps) {
+  return (
+    <div
+      className="bg-white p-8 sm:p-10"
+      style={CARD_MASK_STYLE}
+    >
+      <div className="flex flex-col gap-4">
+        <p className="text-[16px] font-semibold leading-none text-[#FF4C2C]">
+          {title}
+        </p>
+        <p className="text-xl leading-[1.45] text-black">
+          {body}
+        </p>
+      </div>
+    </div>
+  );
+}
 
 export default function ProblemCormedix() {
-  // --- CONSTANTES DO LAYOUT (MESMAS DO BENTO) ---
-  const SITE_CONTAINER =
-    "mx-auto w-full max-w-[1400px] px-4 sm:px-4 md:px-8 lg:px-12";
-  const GRID_12 = "grid grid-cols-4 gap-6 lg:grid-cols-12";
-  const TEXT_10 = "col-span-4 lg:col-span-10 lg:col-start-2";
-
   return (
     <section className="w-full mt-24 sm:mt-32 lg:mt-48">
       <div className={SITE_CONTAINER}>
@@ -30,43 +82,39 @@ export default function ProblemCormedix() {
                 </p>
               </div>
 
-              {/* Seções */}
-              <div className="flex flex-col gap-12">
-                {/* Ótica do negócio */}
-                <div className="flex flex-col gap-4">
-                  <p className="text-xl leading-[1.4] text-black">
-                Em 2023, durante a aplicação do seu primeiro produto (DefenCath) ao orgão regulatório Norte Americano (FDA) o site (legado mais de 10 anos) passou a representar um risco: para quem estava de fora, ele não passava a clareza e a organização que a empresa precisava mostrar e tarefas importantes viravam um caminho de tentativa e erro.                </p>
-                  <p className="text-xl font-semibold leading-[1.4] text-[#FF4C2C]">
-                    Investidores
-                  </p>
-                  
-                  <p className="text-xl leading-[1.4] text-black">
-                Achar relatórios e materiais de apoio (apresentações e projeções) exigia navegar demais e “ir testando” até dar certo.                  </p>
-                </div>
+              {/* Contexto (texto geral) */}
+              <p className="text-xl leading-[1.45] text-black">
+                Em 2023, durante a aplicação do seu primeiro produto (DefenCath) ao orgão
+                regulatório Norte Americano (FDA) o site (legado mais de 10 anos) passou
+                a representar um risco: para quem estava de fora, ele não passava a clareza
+                e a organização que a empresa precisava mostrar e tarefas importantes viravam
+                um caminho de tentativa e erro.
+              </p>
 
-                {/* Ótica dos usuários */}
-                <div className="flex flex-col gap-4">
-                  <p className="text-xl font-semibold leading-[1.4] text-[#FF4C2C]">
-                    Mídia & comunidade científica
-                  </p>
-                  <p className="text-xl leading-[1.4] text-black">
-                Validar evidências clínicas e baixar assets de mídia muitas vezes dependia de “caça ao PDF” (ou do Google), com mais esforço e mais dúvida sobre qual era a fonte certa.                  </p>
-                 
-                </div>
+              {/* ✅ 3 cards lado a lado */}
+              <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
+                <ProblemCard
+                  title="Investidores"
+                  body="Relatórios, apresentações e projeções exigiam cliques demais — difícil encontrar rápido e com confiança."
+                />
 
-                {/* Conflito central */}
-                <div className="flex flex-col gap-4">
-                  <p className="text-xl font-semibold leading-[1.4] text-[#FF4C2C]">
-                    Conflito central:
-                  </p>
-                  <p className="text-xl leading-[1.4] text-black">
-                  Melhorar acesso e transparência sem extrapolar compliance e sem comprometer a manutenção do conteúdo pelo time interno (governança).
-                  </p>
-                </div>
+                <ProblemCard
+                  title="Mídia & comunidade científica"
+                  body="Evidências clínicas e press kit viraram “caça ao PDF” (muitas vezes via Google), aumentando a dúvida sobre a fonte oficial."
+                />
+
+                
               </div>
-              {/* /Seções */}
+              
+              <div className="text-[16px] font-semibold leading-none text-[#FF4C2C]">
+                  Conflito central
+              
+                </div><div className="text-xl leading-[1.45] text-black">
+                  Aumentar acesso e transparência sem violar compliance — e sem criar um conteúdo impossível de manter pelo time interno (governança).
+                </div>
             </div>
           </div>
+          {/* /TEXT_10 */}
         </div>
       </div>
     </section>
