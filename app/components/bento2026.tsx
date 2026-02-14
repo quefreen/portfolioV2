@@ -1,7 +1,11 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import type { ReactNode } from "react";
+import * as React from "react";
+
+const EMAIL = "quefreen.almeida@gmail.com";
 
 // Small utility to merge class names
 function cn(...classes: (string | undefined | false)[]) {
@@ -37,6 +41,41 @@ function BentoCard({
 }
 
 export default function BentoHome2026() {
+  // ✅ Feedback do botão "copiar e-mail"
+  const [emailCopied, setEmailCopied] = React.useState(false);
+  const copyTimerRef = React.useRef<number | null>(null);
+
+  React.useEffect(() => {
+    return () => {
+      if (copyTimerRef.current) window.clearTimeout(copyTimerRef.current);
+    };
+  }, []);
+
+  const handleCopyEmail = React.useCallback(async () => {
+    let ok = true;
+
+    try {
+      await navigator.clipboard.writeText(EMAIL);
+    } catch {
+      try {
+        const el = document.createElement("textarea");
+        el.value = EMAIL;
+        document.body.appendChild(el);
+        el.select();
+        document.execCommand("copy");
+        document.body.removeChild(el);
+      } catch {
+        ok = false;
+      }
+    }
+
+    if (!ok) return;
+
+    setEmailCopied(true);
+    if (copyTimerRef.current) window.clearTimeout(copyTimerRef.current);
+    copyTimerRef.current = window.setTimeout(() => setEmailCopied(false), 1400);
+  }, []);
+
   return (
     <section className="w-full bg-[#F7F7F7]">
       {/* CSS global da máscara (1x só) */}
@@ -46,7 +85,6 @@ export default function BentoHome2026() {
             .corner-mask {
               --corner: clamp(56px, 6vw, 96px);
 
-              /* Safari/Chrome (webkit) */
               -webkit-mask-image:
                 url(/esqtb.svg),
                 url(/dirtb.svg),
@@ -66,10 +104,8 @@ export default function BentoHome2026() {
                 var(--corner) var(--corner),
                 var(--corner) var(--corner),
                 100% 100%;
-              /* aplica "xor" entre as camadas (repete para todas) */
               -webkit-mask-composite: xor;
 
-              /* Spec (Firefox/others) */
               mask-image:
                 url(/esqtb.svg),
                 url(/dirtb.svg),
@@ -89,11 +125,9 @@ export default function BentoHome2026() {
                 var(--corner) var(--corner),
                 var(--corner) var(--corner),
                 100% 100%;
-              /* "exclude" = recorte negativo das formas no fill total */
               mask-composite: exclude;
             }
 
-            /* versão menor (se quiser em cards pequenos) */
             .corner-mask-sm {
               --corner: clamp(44px, 5.2vw, 64px);
             }
@@ -115,251 +149,690 @@ export default function BentoHome2026() {
           {/* ========== COLUNA 1 ========== */}
           <div className="flex flex-col gap-6 lg:col-span-4">
             {/* Card 1 */}
-        <BentoCard className="h-[240px] lg:h-[480px]">
-  <Link href="/cormedix" className="block h-full">
-    {/* overflow-hidden é essencial para a imagem 1.5x não vazar */}
-    <div className="corner-mask relative h-full w-full overflow-hidden bg-[#B0EAFF] shadow-sm">
-      
-      {/* Imagem de BG: Sempre visível, estática e colada no bottom */}
-      <img
-        src="/cormedix_thumb.png"
-        alt="Cormedix Background"
-        className="pointer-events-none absolute inset-0 h-full w-full object-cover object-bottom"
-      />
+            <BentoCard className="h-[240px] lg:h-[480px]">
+              <Link href="/cormedix" className="block h-full">
+                <div
+                  className={[
+                    "corner-mask group relative h-full w-full overflow-hidden",
+                    "bg-[#0B1220]",
+                    "transition-transform duration-300 ease-out",
+                  ].join(" ")}
+                  onMouseEnter={() => {
+                    const v = document.getElementById(
+                      "cormedix-card-video"
+                    ) as HTMLVideoElement | null;
+                    if (!v) return;
+                    v.currentTime = 0;
+                    v.play().catch(() => {});
+                  }}
+                  onMouseLeave={() => {
+                    const v = document.getElementById(
+                      "cormedix-card-video"
+                    ) as HTMLVideoElement | null;
+                    if (!v) return;
+                    v.pause();
+                    v.currentTime = 0;
+                  }}
+                  onFocus={() => {
+                    const v = document.getElementById(
+                      "cormedix-card-video"
+                    ) as HTMLVideoElement | null;
+                    if (!v) return;
+                    v.currentTime = 0;
+                    v.play().catch(() => {});
+                  }}
+                  onBlur={() => {
+                    const v = document.getElementById(
+                      "cormedix-card-video"
+                    ) as HTMLVideoElement | null;
+                    if (!v) return;
+                    v.pause();
+                    v.currentTime = 0;
+                  }}
+                >
+                  {/* BG VIDEO */}
+                  <video
+                    id="cormedix-card-video"
+                    className={[
+                      "absolute inset-0 h-full w-full object-cover",
+                      "transition-transform duration-700 ease-out",
+                      "group-hover:scale-[1.04] group-focus-within:scale-[1.04]",
+                    ].join(" ")}
+                    muted
+                    playsInline
+                    preload="metadata"
+                    aria-hidden="true"
+                  >
+                    <source src="/CormedixHero.mp4" type="video/mp4" />
+                  </video>
 
-      {/* Conteúdo: z-10 para ficar acima da imagem */}
-      <div className="relative z-10 flex h-full flex-col justify-between p-8 sm:p-10 md:p-12 lg:p-12 xl:p-16">
-        <div>
-          <p className="font-bricolageGrotesque text-sm font-semibold text-[#131415] transition-colors duration-300">
-            Cormedix
-          </p>
+                  {/* Overlay (sutil, aparece no hover pra dar “polish”) */}
+                  <div
+                    className={[
+                      "absolute inset-0",
+                      "bg-gradient-to-b from-black/0",
+                      "opacity-70 transition-opacity duration-500 ease-out",
+                      "group-hover:opacity-45 group-focus-within:opacity-45",
+                    ].join(" ")}
+                    aria-hidden="true"
+                  />
 
-          <p className="font-bricolageGrotesque mt-2 text-3xl font-semibold leading-[1.15] text-[#131415] transition-colors duration-300">
-            Prescrevendo dados para decisões.
-          </p>
-        </div>
-      </div>
+                  {/* Conteúdo: texto, texto, imagem */}
+                  <div className="relative z-10 flex h-full flex-col p-8 sm:p-10 md:p-12 lg:p-12 xl:p-16">
+                    {/* Topo */}
+                    <div className="flex items-center justify-between gap-6">
+                      <p
+                        className={[
+                          "font-bricolageGrotesque text-sm font-semibold text-white",
+                          "transition-transform duration-300 ease-out",
+                          "group-hover:-translate-y-[1px] group-focus-within:-translate-y-[1px]",
+                        ].join(" ")}
+                      >
+                        CORMEDIX
+                      </p>
 
-    </div>
-  </Link>
-</BentoCard>
+                      <div
+                        className={[
+                          "relative h-[22px] w-[22px]",
+                          "transition-transform duration-300 ease-out",
+                          "group-hover:translate-x-[2px] group-hover:-translate-y-[2px] group-hover:rotate-45",
+                          "group-focus-within:translate-x-[2px] group-focus-within:-translate-y-[2px] group-focus-within:rotate-45",
+                        ].join(" ")}
+                      >
+                        <Image
+                          src="/arrow.svg"
+                          alt=""
+                          fill
+                          className="object-contain"
+                          draggable={false}
+                          priority={false}
+                        />
+                      </div>
+                    </div>
+
+                    {/* Título */}
+                    <p
+                      className={[
+                        "font-bricolageGrotesque mt-2 text-3xl font-semibold leading-[1.15] text-white",
+                        "transition-transform duration-300 ease-out",
+                        "group-hover:-translate-y-[1px] group-focus-within:-translate-y-[1px]",
+                      ].join(" ")}
+                    >
+                      Prescrevendo dados para decisões.
+                    </p>
+
+                    <div
+                      className={["group-focus-within:w-16 group-focus-within:bg-[#FF4C2C]"].join(
+                        " "
+                      )}
+                      aria-hidden="true"
+                    />
+
+                    {/* IMAGEM abaixo */}
+                    <div className="relative mt-auto flex-1 min-h-[140px] sm:min-h-[180px] lg:min-h-[240px]">
+                      <div
+                        className={[
+                          "absolute left-1/2",
+                          "bottom-[-110px]",
+                          "h-full w-[170%] -translate-x-1/2",
+                          "transition-transform duration-500 ease-out",
+                          "group-hover:-translate-y-[2px] group-focus-within:-translate-y-[2px]",
+                        ].join(" ")}
+                      >
+                        <div className="relative h-full w-full">
+                          <Image
+                            src="/aftercormedixF.png"
+                            alt="Preview"
+                            fill
+                            className={[
+                              "object-contain object-bottom",
+                              "transition-transform duration-700 ease-out",
+                              "group-hover:scale-[1.26] group-focus-within:scale-[1.06]",
+                            ].join(" ")}
+                            draggable={false}
+                            priority={false}
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </Link>
+            </BentoCard>
 
             {/* Card 4 */}
             <BentoCard className="h-[240px] lg:h-[120px]">
-  <Link href="/highpoint" className="block h-full">
-    {/* IMPORTANTE: Usei 'corner-mask' E 'corner-mask-sm' juntas */}
-    <div className="corner-mask corner-mask-sm relative flex h-full flex-col justify-center overflow-hidden bg-white shadow-sm">
-      
-      {/* Background Image Fixa */}
-      <div
-        className="pointer-events-none absolute inset-0 z-0"
-        style={{
-          backgroundImage: "url(/.jpg)",
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-        }}
-      />
+              <Link href="/highpoint" className="block h-full">
+                <div className="corner-mask corner-mask-sm relative flex h-full flex-col justify-center overflow-hidden bg-white shadow-sm">
+                  <div
+                    className="pointer-events-none absolute inset-0 z-0"
+                    style={{
+                      backgroundImage: "url(/.jpg)",
+                      backgroundSize: "cover",
+                      backgroundPosition: "center",
+                    }}
+                  />
 
-      {/* Conteúdo: Padding reduzido (p-6) para caber na altura de 120px */}
-     {/* O segredo é o h-full + items-center + text-center */}
-<div className="relative z-10 flex h-full flex-col items-center justify-center px-8 text-center">
-  <p
-    className="text-[1.25rem] font-medium leading-tight text-[#131415] lg:text-[1.5rem]"
-    style={{ fontFamily: "var(--font-schibstedGrotesk), sans-serif" }}
-  >
-    sobre mim
-  </p>
-</div>
-
-    </div>
-  </Link>
-</BentoCard>
+                  <div className="relative z-10 flex h-full flex-col items-center justify-center px-8 text-center">
+                    <p
+                      className="text-[1.25rem] font-medium leading-tight text-[#131415] lg:text-[1.5rem]"
+                      style={{
+                        fontFamily:
+                          "var(--font-schibstedGrotesk), sans-serif",
+                      }}
+                    >
+                      sobre mim
+                    </p>
+                  </div>
+                </div>
+              </Link>
+            </BentoCard>
 
             {/* Card 7 */}
-            <BentoCard className="h-[240px] lg:h-[240px]">
-  <Link href="#" className="block h-full">
-    <div className="corner-mask relative h-full w-full overflow-hidden bg-white shadow-sm">
-      
-      {/* Imagem Full - Sempre visível e sem efeitos de hover */}
-      <img
-        src="/mobile.png"
-        alt="Background"
-        className="pointer-events-none absolute inset-0 h-full w-full object-cover"
-      />
+            <BentoCard className="group h-[240px] lg:h-[240px]">
+              <Link href="#" className="block h-full">
+                <div className="corner-mask relative h-full w-full overflow-hidden bg-white shadow-sm">
+                  <img
+                    src="/hepatite_thumb.jpg"
+                    alt="Background"
+                    className={[
+                      "pointer-events-none absolute inset-0 h-full w-full object-cover",
+                      "transition-transform duration-700 ease-out will-change-transform",
+                      "group-hover:scale-[1.14] group-hover:translate-y-[2px]",
+                    ].join(" ")}
+                  />
 
-    </div>
-  </Link>
-</BentoCard>
+                  <div
+                    className={[
+                      "pointer-events-none absolute inset-0",
+                      "opacity-0 transition-opacity duration-500 ease-out",
+                      "group-hover:opacity-100",
+                    ].join(" ")}
+                    aria-hidden="true"
+                    style={{ background: "" }}
+                  />
+                </div>
+              </Link>
+            </BentoCard>
           </div>
 
           {/* ========== COLUNA 2 ========== */}
           <div className="flex flex-col gap-6 lg:col-span-4">
-            {/* Spacer (como você já tinha) */}
             <div className="hidden lg:block lg:min-h-[120px] lg:flex-1" />
 
             {/* Card 2 */}
-                   <BentoCard className="h-[240px] lg:h-[480px]">
-  <Link href="/cormedix" className="block h-full">
-    {/* overflow-hidden é essencial para a imagem 1.5x não vazar */}
-    <div className="corner-mask relative h-full w-full overflow-hidden bg-[#FFF8BD] shadow-sm">
-      
-      {/* Imagem de BG: Sempre visível, estática e colada no bottom */}
-      <img
-        src="/cormedix_thumb.png"
-        alt="Cormedix Background"
-        className="pointer-events-none absolute inset-0 h-full w-full object-cover object-bottom"
-      />
+            <BentoCard className="h-[240px] lg:h-[480px]">
+              <Link href="/cormedix" className="block h-full">
+                <div
+                  className={[
+                    "corner-mask group relative h-full w-full overflow-hidden",
+                    "bg-[#0B1220]",
+                    "transition-transform duration-300 ease-out",
+                  ].join(" ")}
+                  onMouseEnter={() => {
+                    const v = document.getElementById(
+                      "cormedix-card-video"
+                    ) as HTMLVideoElement | null;
+                    if (!v) return;
+                    v.currentTime = 0;
+                    v.play().catch(() => {});
+                  }}
+                  onMouseLeave={() => {
+                    const v = document.getElementById(
+                      "cormedix-card-video"
+                    ) as HTMLVideoElement | null;
+                    if (!v) return;
+                    v.pause();
+                    v.currentTime = 0;
+                  }}
+                  onFocus={() => {
+                    const v = document.getElementById(
+                      "cormedix-card-video"
+                    ) as HTMLVideoElement | null;
+                    if (!v) return;
+                    v.currentTime = 0;
+                    v.play().catch(() => {});
+                  }}
+                  onBlur={() => {
+                    const v = document.getElementById(
+                      "cormedix-card-video"
+                    ) as HTMLVideoElement | null;
+                    if (!v) return;
+                    v.pause();
+                    v.currentTime = 0;
+                  }}
+                >
+                  <video
+                    id="cormedix-card-video"
+                    className={[
+                      "absolute inset-0 h-full w-full object-cover",
+                      "transition-transform duration-700 ease-out",
+                      "group-hover:scale-[1.04] group-focus-within:scale-[1.04] bg-amber-400",
+                    ].join(" ")}
+                    muted
+                    playsInline
+                    preload="metadata"
+                    aria-hidden="true"
+                  >
+                    <source src="/" type="video/mp4" />
+                  </video>
 
-      {/* Conteúdo: z-10 para ficar acima da imagem */}
-      <div className="relative z-10 flex h-full flex-col justify-between p-8 sm:p-10 md:p-12 lg:p-12 xl:p-16">
-        <div>
-          <p className="font-bricolageGrotesque text-sm font-semibold text-[#131415] transition-colors duration-300">
-            Gillead
-          </p>
+                  <div
+                    className={[
+                      "absolute inset-0",
+                      "bg-gradient-to-b from-black/0",
+                      "opacity-70 transition-opacity duration-500 ease-out",
+                      "group-hover:opacity-45 group-focus-within:opacity-45",
+                    ].join(" ")}
+                    aria-hidden="true"
+                  />
 
-          <p className="font-bricolageGrotesque mt-2 text-3xl font-semibold leading-[1.15] text-[#131415] transition-colors duration-300">
-            A epidemia
-de mitos sobre a Hepatite C.
-          </p>
-        </div>
-      </div>
+                  <div className="relative z-10 flex h-full flex-col p-8 sm:p-10 md:p-12 lg:p-12 xl:p-16">
+                    <div className="flex items-center justify-between gap-6">
+                      <p
+                        className={[
+                          "font-bricolageGrotesque text-sm font-semibold text-[#131415]",
+                          "transition-transform duration-300 ease-out",
+                          "group-hover:-translate-y-[1px] group-focus-within:-translate-y-[1px]",
+                        ].join(" ")}
+                      >
+                        GILEAD
+                      </p>
 
-    </div>
-  </Link>
-</BentoCard>
+                      <div
+                        className={[
+                          "relative h-[22px] w-[22px]",
+                          "transition-transform duration-300 ease-out",
+                          "group-hover:translate-x-[2px] group-hover:-translate-y-[2px] group-hover:rotate-45",
+                          "group-focus-within:translate-x-[2px] group-focus-within:-translate-y-[2px] group-focus-within:rotate-45",
+                        ].join(" ")}
+                      >
+                        <Image
+                          src="/blackarrow.svg"
+                          alt=""
+                          fill
+                          className="object-contain"
+                          draggable={false}
+                          priority={false}
+                        />
+                      </div>
+                    </div>
 
-            {/* Card 5 */}
-           <BentoCard className="h-[240px] lg:h-[240px]">
-  <Link href="#" className="block h-full">
-    <div className="corner-mask relative h-full w-full overflow-hidden bg-white shadow-sm">
-      
-      {/* Imagem Full - Sempre visível e sem efeitos de hover */}
-      <img
-        src="/smile.png"
-        alt="Background"
-        className="pointer-events-none absolute inset-0 h-full w-full object-cover"
-      />
+                    <p
+                      className={[
+                        "font-bricolageGrotesque mt-2 text-3xl font-semibold leading-[1.15] text-[#131415]",
+                        "transition-transform duration-300 ease-out",
+                        "group-hover:-translate-y-[1px] group-focus-within:-translate-y-[1px]",
+                      ].join(" ")}
+                    >
+                      A epidemia
+                      <br />
+                      de mitos sobre a
+                      <br />
+                      Hepatite C.
+                    </p>
 
-    </div>
-  </Link>
-</BentoCard>
+                    <div
+                      className={["group-focus-within:w-16 group-focus-within:bg-[#FF4C2C]"].join(
+                        " "
+                      )}
+                      aria-hidden="true"
+                    />
+
+                    <div className="relative mt-auto flex-1 min-h-[140px] sm:min-h-[180px] lg:min-h-[240px]">
+                      <div
+                        className={[
+                          "absolute left-1/2",
+                          "bottom-[-110px]",
+                          "h-full w-[170%] -translate-x-1/2",
+                          "transition-transform duration-500 ease-out",
+                          "group-hover:-translate-y-[2px] group-focus-within:-translate-y-[2px]",
+                        ].join(" ")}
+                      >
+                        <div className="relative h-full w-full">
+                          <Image
+                            src="/hepatite_thumbB.png"
+                            alt="Preview"
+                            fill
+                            className={[
+                              "object-contain object-bottom",
+                              "transition-transform duration-700 ease-out",
+                              "group-hover:scale-[1.06] group-focus-within:scale-[1.06]",
+                            ].join(" ")}
+                            draggable={false}
+                            priority={false}
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </Link>
+            </BentoCard>
+
+            {/* Card 5 (wave/sad/happy) */}
+            <BentoCard className="h-[240px] lg:h-[240px]">
+              <Link href="#" className="block h-full">
+                <div className="corner-mask group relative h-full w-full overflow-hidden bg-white shadow-sm">
+                  <div className="absolute inset-0 bg-gradient-to-b from-white to-[#F7F7F7]" />
+
+                  <img
+                    src="/wave.svg"
+                    alt=""
+                    aria-hidden="true"
+                    className={[
+                      "pointer-events-none absolute left-1/2 bottom-0",
+                      "w-[880%] max-w-none",
+                      "-translate-x-1/2 translate-y-[80%]",
+                      "transition-transform duration-700 ease-out will-change-transform",
+                      "group-hover:translate-x-[-45%] group-focus-within:translate-x-[-45%]",
+                    ].join(" ")}
+                  />
+
+                  <img
+                    src="/sad.svg"
+                    alt=""
+                    aria-hidden="true"
+                    className={[
+                      "pointer-events-none absolute left-1/2 top-1/2",
+                      "-translate-x-1/2 -translate-y-1/2",
+                      "w-[64px] h-[64px] sm:w-[96px] sm:h-[96px]",
+                      "transition-all duration-500 ease-out will-change-transform",
+                      "group-hover:translate-y-[120px] group-hover:opacity-0 group-hover:rotate-[10deg]",
+                      "group-focus-within:translate-y-[120px] group-focus-within:opacity-0 group-focus-within:rotate-[10deg]",
+                    ].join(" ")}
+                  />
+
+                  <img
+                    src="/happy.svg"
+                    alt=""
+                    aria-hidden="true"
+                    className={[
+                      "pointer-events-none absolute left-1/2 top-1/2",
+                      "-translate-x-1/2 translate-y-[140px]",
+                      "opacity-0",
+                      "w-[64px] h-[64px] sm:w-[96px] sm:h-[96px]",
+                      "transition-all duration-550 ease-out delay-75 will-change-transform",
+                      "group-hover:-translate-y-1/2 group-hover:opacity-100",
+                      "group-focus-within:-translate-y-1/2 group-focus-within:opacity-100",
+                    ].join(" ")}
+                  />
+                </div>
+              </Link>
+            </BentoCard>
           </div>
 
           {/* ========== COLUNA 3 ========== */}
           <div className="flex flex-col gap-6 lg:col-span-4">
-            {/* Card 3 (corner menor opcional) */}
-          <BentoCard className="group h-[240px] lg:h-[240px]">
-  <Link href="/pdpoint" className="block h-full">
-    {/* overflow-hidden é essencial aqui para cortar o excesso dos 110% */}
-    <div className="corner-mask corner-mask-sm relative h-full w-full overflow-hidden bg-white shadow-sm transition-colors duration-300">
-      
-      {/* 1 - Texture BG (dash.png) - Z-0 */}
-      <div
-        className="pointer-events-none absolute inset-0 z-0 opacity-30"
-        style={{
-          backgroundImage: "url(/dash.png)",
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-        }}
-      />
+            {/* Card 3 */}
+            <BentoCard className="group h-[240px] lg:h-[240px]">
+              <Link href="/pdpoint" className="block h-full">
+                <div className="corner-mask corner-mask-sm relative h-full w-full overflow-hidden bg-white shadow-sm transition-colors duration-300">
+                  <div
+                    className={[
+                      "pointer-events-none absolute inset-0 z-0 opacity-80",
+                      "transition-transform duration-700 ease-out",
+                      "group-hover:scale-[1.02]",
+                    ].join(" ")}
+                    style={{
+                      backgroundImage: "url(/dashs.svg)",
+                      backgroundSize: "cover",
+                      backgroundPosition: "center",
+                    }}
+                  />
 
-      {/* 2 - O SVG do gráfico (AUMENTADO em 10%) - Z-1 */}
-      <img 
-        src="/graaph.svg" 
-        alt="" 
-        // MUDANÇAS AQUI: w-[110%], left-[-5%] e max-w-none
-        className="pointer-events-none absolute bottom-0 left-[-5%] z-[1] w-[110%] max-w-none object-contain object-bottom mix-blend-multiply opacity-30" 
-      />
+                  <img
+                    src="/graph.svg"
+                    alt=""
+                    className={[
+                      "pointer-events-none absolute bottom-0 left-[-5%] z-[1] w-[110%] max-w-none",
+                      "object-contain object-bottom mix-blend-multiply opacity-30",
+                      "transition-transform duration-700 ease-out will-change-transform",
+                      "group-hover:scale-[1.08] group-hover:translate-y-[6px]",
+                      "group-hover:opacity-40",
+                    ].join(" ")}
+                  />
 
-      {/* 3 - Conteúdo Centralizado - Z-10 */}
-      <div className="relative z-10 flex h-full flex-col items-center justify-center px-6 text-center">
-        <span 
-          className="text-[3.5rem] font-semibold leading-none tracking-tighter text-[#131415] lg:text-[4rem]"
-          style={{ fontFamily: "var(--font-schibstedGrotesk), sans-serif" }}
-        >
-          +30pp
-        </span>
-        <p 
-          className="max-w-[220px] text-[1.2rem] font-medium leading-tight text-[#131415] mt-2"
-          style={{ fontFamily: "var(--font-schibstedGrotesk), sans-serif" }}
-        >
-          de sucesso na conclusão das tarefas
-        </p>
-      </div>
+                  <div
+                    className={[
+                      "relative z-10 flex h-full flex-col items-center justify-center px-6 text-center",
+                      "transition-transform duration-300 ease-out",
+                      "group-hover:-translate-y-[2px]",
+                    ].join(" ")}
+                  >
+                    <span
+                      className={[
+                        "text-[3.5rem] font-semibold leading-none tracking-tighter text-[#131415] lg:text-[4rem]",
+                        "transition-transform duration-300 ease-out",
+                        "group-hover:scale-[1.01]",
+                      ].join(" ")}
+                      style={{
+                        fontFamily:
+                          "var(--font-schibstedGrotesk), sans-serif",
+                      }}
+                    >
+                      +30pp
+                    </span>
 
-      {/* Header discreto */}
-      <div className="absolute top-8 left-8 z-20">
-        <h3 className="text-[0.75rem] font-bold uppercase tracking-widest text-[#999]">
-          {/* Texto opcional */}
-        </h3>
-      </div>
-      
-    </div>
-  </Link>
-</BentoCard>
-            {/* Card 6 */}
-           <BentoCard className="h-[240px] lg:h-[120px]">
-  <Link href="/highpoint" className="block h-full">
-    {/* IMPORTANTE: Usei 'corner-mask' E 'corner-mask-sm' juntas */}
-    <div className="corner-mask corner-mask-sm relative flex h-full flex-col justify-center overflow-hidden bg-white shadow-sm">
-      
-      {/* Background Image Fixa */}
-      <div
-        className="pointer-events-none absolute inset-0 z-0"
-        style={{
-          backgroundImage: "url(/.jpg)",
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-        }}
-      />
+                    <p
+                      className={[
+                        "max-w-[220px] text-[1.2rem] font-medium leading-tight text-[#131415] mt-2",
+                        "transition-opacity duration-300 ease-out",
+                        "group-hover:opacity-95",
+                      ].join(" ")}
+                      style={{
+                        fontFamily:
+                          "var(--font-schibstedGrotesk), sans-serif",
+                      }}
+                    >
+                      de sucesso na conclusão das tarefas
+                    </p>
+                  </div>
 
-      {/* Conteúdo: Padding reduzido (p-6) para caber na altura de 120px */}
-     {/* O segredo é o h-full + items-center + text-center */}
-<div className="relative z-10 flex h-full flex-col items-center justify-center px-8 text-center">
-  <p
-    className="text-[1.25rem] font-medium leading-tight text-[#131415] lg:text-[1.5rem]"
-    style={{ fontFamily: "var(--font-schibstedGrotesk), sans-serif" }}
-  >
-    copiar e-mail
-  </p>
-</div>
+                  <div className="absolute top-8 left-8 z-20">
+                    <h3 className="text-[0.75rem] font-bold uppercase tracking-widest text-[#999]"></h3>
+                  </div>
+                </div>
+              </Link>
+            </BentoCard>
 
-    </div>
-  </Link>
-</BentoCard>
+            {/* ✅ Card 6 (COPIAR EMAIL) — corrigido com feedback "E-mail copiado" */}
+            <BentoCard className="h-[240px] lg:h-[120px]">
+              <button
+                type="button"
+                onClick={handleCopyEmail}
+                className="block h-full w-full text-left"
+                aria-label={`Copiar e-mail ${EMAIL}`}
+              >
+                <div className="corner-mask corner-mask-sm relative flex h-full flex-col justify-center overflow-hidden shadow-sm transition-colors duration-300 stroke focus:outline-none focus-visible:ring-2 focus-visible:ring-[#FF4C2C]/30">
+                  {/* Background Image Fixa (opcional) */}
+                  <div
+                    className="pointer-events-none absolute inset-0 z-0"
+                    style={{
+                      backgroundImage: "url(/SEU_BG.jpg)",
+                      backgroundSize: "cover",
+                      backgroundPosition: "center",
+                      opacity: 1,
+                    }}
+                  />
+
+                  {/* ✅ Pill de feedback */}
+                  <div className="pointer-events-none absolute right-4 top-4 z-20">
+                   
+                  </div>
+
+                  {/* Conteúdo */}
+                  <div className="relative z-10 flex h-full flex-col items-center justify-center px-8 text-center">
+                    <p
+                      className={cn(
+                        "text-[1.25rem] font-medium leading-tight lg:text-[1.5rem]",
+                        "transition-colors duration-300",
+                        emailCopied ? "text-[#FF4C2C]" : "text-[#131415]"
+                      )}
+                      style={{
+                        fontFamily:
+                          "var(--font-schibstedGrotesk), sans-serif",
+                      }}
+                    >
+                      {emailCopied ? "E-mail copiado" : "copiar e-mail"}
+                    </p>
+
+                    {/* opcional: mostrar o email embaixo (bem discreto) */}
+                    
+                  </div>
+                </div>
+              </button>
+            </BentoCard>
 
             {/* Card 9 */}
-                <BentoCard className="h-[240px] lg:h-[480px]">
-  <Link href="/cormedix" className="block h-full">
-    {/* overflow-hidden é essencial para a imagem 1.5x não vazar */}
-    <div className="corner-mask relative h-full w-full overflow-hidden bg-[#E2FFBD] shadow-sm">
-      
-      {/* Imagem de BG: Sempre visível, estática e colada no bottom */}
-      <img
-        src="/cormedix_thumb.png"
-        alt="Cormedix Background"
-        className="pointer-events-none absolute inset-0 h-full w-full object-cover object-bottom"
-      />
+            <BentoCard className="h-[240px] lg:h-[480px]">
+              <Link href="/cormedix" className="block h-full">
+                <div
+                  className={[
+                    "corner-mask group relative h-full w-full overflow-hidden",
+                    "bg-[#0B1220]",
+                    "transition-transform duration-300 ease-out",
+                  ].join(" ")}
+                  onMouseEnter={() => {
+                    const v = document.getElementById(
+                      "cormedix-card-video"
+                    ) as HTMLVideoElement | null;
+                    if (!v) return;
+                    v.currentTime = 0;
+                    v.play().catch(() => {});
+                  }}
+                  onMouseLeave={() => {
+                    const v = document.getElementById(
+                      "cormedix-card-video"
+                    ) as HTMLVideoElement | null;
+                    if (!v) return;
+                    v.pause();
+                    v.currentTime = 0;
+                  }}
+                  onFocus={() => {
+                    const v = document.getElementById(
+                      "cormedix-card-video"
+                    ) as HTMLVideoElement | null;
+                    if (!v) return;
+                    v.currentTime = 0;
+                    v.play().catch(() => {});
+                  }}
+                  onBlur={() => {
+                    const v = document.getElementById(
+                      "cormedix-card-video"
+                    ) as HTMLVideoElement | null;
+                    if (!v) return;
+                    v.pause();
+                    v.currentTime = 0;
+                  }}
+                >
+                  <video
+                    id="cormedix-card-video"
+                    className={[
+                      "absolute inset-0 h-full w-full object-cover",
+                      "transition-transform duration-700 ease-out",
+                      "group-hover:scale-[1.04] group-focus-within:scale-[1.04] bg-[#10A958]",
+                    ].join(" ")}
+                    muted
+                    playsInline
+                    preload="metadata"
+                    aria-hidden="true"
+                  >
+                    <source src="/" type="video/mp4" />
+                  </video>
 
-      {/* Conteúdo: z-10 para ficar acima da imagem */}
-      <div className="relative z-10 flex h-full flex-col justify-between p-8 sm:p-10 md:p-12 lg:p-12 xl:p-16">
-        <div>
-          <p className="font-bricolageGrotesque text-sm font-semibold text-[#131415] transition-colors duration-300">
-            MSD
-          </p>
+                  <div
+                    className={[
+                      "absolute inset-0",
+                      "bg-gradient-to-b from-black/0",
+                      "opacity-70 transition-opacity duration-500 ease-out",
+                      "group-hover:opacity-45 group-focus-within:opacity-45",
+                    ].join(" ")}
+                    aria-hidden="true"
+                  />
 
-          <p className="font-bricolageGrotesque mt-2 text-3xl font-semibold leading-[1.15] text-[#131415] transition-colors duration-300">
-            Estabilizando a jornada de exames.
-          </p>
-        </div>
-      </div>
+                  <div className="relative z-10 flex h-full flex-col p-8 sm:p-10 md:p-12 lg:p-12 xl:p-16">
+                    <div className="flex items-center justify-between gap-6">
+                      <p
+                        className={[
+                          "font-bricolageGrotesque text-sm font-semibold text-white",
+                          "transition-transform duration-300 ease-out",
+                          "group-hover:-translate-y-[1px] group-focus-within:-translate-y-[1px]",
+                        ].join(" ")}
+                      >
+                        MSD
+                      </p>
 
-    </div>
-  </Link>
-</BentoCard>
+                      <div
+                        className={[
+                          "relative h-[22px] w-[22px]",
+                          "transition-transform duration-300 ease-out",
+                          "group-hover:translate-x-[2px] group-hover:-translate-y-[2px] group-hover:rotate-45",
+                          "group-focus-within:translate-x-[2px] group-focus-within:-translate-y-[2px] group-focus-within:rotate-45",
+                        ].join(" ")}
+                      >
+                        <Image
+                          src="/arrow.svg"
+                          alt=""
+                          fill
+                          className="object-contain"
+                          draggable={false}
+                          priority={false}
+                        />
+                      </div>
+                    </div>
+
+                    <p
+                      className={[
+                        "font-bricolageGrotesque mt-2 text-3xl font-semibold leading-[1.15] text-white",
+                        "transition-transform duration-300 ease-out",
+                        "group-hover:-translate-y-[1px] group-focus-within:-translate-y-[1px]",
+                      ].join(" ")}
+                    >
+                      Estabilizando jornadas de exames.
+                    </p>
+
+                    <div
+                      className={["group-focus-within:w-16 group-focus-within:bg-[#FF4C2C]"].join(
+                        " "
+                      )}
+                      aria-hidden="true"
+                    />
+
+                    <div className="relative mt-auto flex-1 min-h-[140px] sm:min-h-[180px] lg:min-h-[240px]">
+                      <div
+                        className={[
+                          "absolute left-1/2",
+                          "bottom-[-50px]",
+                          "h-full w-[170%] -translate-x-1/2",
+                          "transition-transform duration-500 ease-out",
+                          "group-hover:-translate-y-[2px] group-focus-within:-translate-y-[2px]",
+                        ].join(" ")}
+                      >
+                        <div className="relative h-full w-full">
+                          <Image
+                            src="/msd_thumb.jpg"
+                            alt="Preview"
+                            fill
+                            className={[
+                              "object-contain object-bottom",
+                              "transition-transform duration-700 ease-out",
+                              "group-hover:scale-[1.16] group-focus-within:scale-[1.06]",
+                            ].join(" ")}
+                            draggable={false}
+                            priority={false}
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </Link>
+            </BentoCard>
           </div>
         </div>
       </div>
+
       <div className="h-48" />
     </section>
   );

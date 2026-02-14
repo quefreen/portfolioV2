@@ -405,7 +405,7 @@ export default function ProblemDiscoveryCormedix() {
                         <div
                           key={item.src}
                           className="relative h-[89px] w-full overflow-hidden bg-white"
-                          style={maskFourCorners("sm")}
+                          
                         >
                           <Image
                             src={item.src}
@@ -471,9 +471,7 @@ export default function ProblemDiscoveryCormedix() {
                           className="w-full bg-[#F9F1E8] px-6 py-3 text-left"
                         >
                           <span className="block text-base leading-[1.4] text-black">
-                            A maioria dos sites pharma/medtech tratava produtos como uma
-                            biblioteca. Para a CorMedix, no lançamento do primeiro
-                            produto, isto não se aplica (por enquanto).
+                            Muitos sites pharma/medtech organizam tudo por portfólio e pipeline. Para a CorMedix, com um primeiro produto em fase crítica, faria mais sentido reduzir escolhas e guiar por tarefas.
                           </span>
                         </button>
 
@@ -482,9 +480,7 @@ export default function ProblemDiscoveryCormedix() {
                           className="w-full bg-[#F9F1E8] px-6 py-3 text-left"
                         >
                           <span className="block text-base leading-[1.4] text-black">
-                            Em alguns casos a área de investidores fornecia com prioridade
-                            alta (nos menus principais) links que retiravam o usuário
-                            daquele hub para links externos.
+                            Alguns hubs de Investor Relations “expulsam” o usuário para sites de terceiros. Preferimos manter o fluxo no hub para preservar contexto, consistência e confiança.
                           </span>
                         </button>
 
@@ -493,10 +489,7 @@ export default function ProblemDiscoveryCormedix() {
                           className="w-full bg-[#F9F1E8] px-6 py-3 text-left"
                         >
                           <span className="block text-base leading-[1.4] text-black">
-                            Em alguns casos a área de investidores fornecia com prioridade
-                            alta (nos menus principais) links que retiravam o usuário
-                            daquele hub para links externos.
-                          </span>
+Ideias como calculadora de investimento e webcasts/presentations em áudio ficaram fora do MVP por exigirem mais tempo, conteúdo e testes e poderiam comprometer o prazo de entrega.                          </span>
                         </button>
                       </div>
                     </MaskedCard>

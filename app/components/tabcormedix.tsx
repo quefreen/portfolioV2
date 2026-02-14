@@ -57,7 +57,7 @@ const DEFAULT_TABS: TabData[] = [
     label: "Nova arquitetura",
     badge: 3,
     tone: "success",
-    imageSrc: "/sitemap_novo.jpg",
+    imageSrc: "/sitemap_novoA.jpg",
     imageAlt: "",
     cards: [
       {

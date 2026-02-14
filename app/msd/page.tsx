@@ -12,6 +12,12 @@ import Gallery from "../components/cormedicGallery"
 
 import CasePaywall from "../components/case_paywall"
 
+import MSDCaseIntro from "../components/CaseMSD"
+
+import Protecao from "../components/protecao"
+import FooterCornerCap from "../components/footercap"
+import { FooterBase } from "../components/footer2026"
+
 export default async function Hepatite({
   searchParams,
 }: {
@@ -19,25 +25,10 @@ export default async function Hepatite({
 }) {
   return (
     <main>
-      <MSDTitleCase />
-      <MSDOneMinute />
-      <MSDImpact />
-
-      <CasePaywall
-        caseKey="hepatite"
-        wrongPassword={searchParams?.pw === "1"}
-        passwordEnvKey="CASE_HEPATITE_PASSWORD"
-        linkedinUrl="https://www.linkedin.com/in/quefreen/"
-        contactEmail="quefreen.almeida@gmail.com"
-        nextHref="/"
-      >
-        <ProblemCormedix />
-        <Discovery />
-        <InsightsCormedix />
-        <MaterialCarousel />
-        <ValidationCormedix />
-        <Gallery />
-      </CasePaywall>
+      <MSDCaseIntro />
+      <Protecao />
+            <FooterCornerCap />
+                  <FooterBase />
     </main>
   )
 }

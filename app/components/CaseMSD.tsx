@@ -15,14 +15,21 @@ type TeamMember = {
   role: string; // ex: "Product Manager"
 };
 
-const TEAM: TeamMember[] = [
-  { initials: "RB", name: "Ricardo Brandão", role: "Gerente de Projetos" },
-  { initials: "AM", name: "Ana Mahfuz", role: "Gerente de Contas" },
-  { initials: "DM", name: "Diego Muniz", role: "Full Stack" },
-  { initials: "IA", name: "Igor Alvarez", role: "Tech Lead" },
-  { initials: "LO", name: "Leticia Oliveira", role: "QA" },
-
+const TEAM = [
+  {
+    id: "jaqueline-assis",
+    initials: "JA",
+    name: "Jaqueline Assis",
+    role: "Gerente de Contas",
+  },
+  {
+    id: "franciele-souza",
+    initials: "FS",
+    name: "Franciele Souza",
+    role: "Gerente de Projetos",
+  },
 ];
+
 
 function MetaItem({ label, value, align = "left" }: MetaItemProps) {
   const alignCls =
@@ -145,7 +152,7 @@ function ImpactCard({
   );
 }
 
-export default function CorMedixCaseIntro() {
+export default function MSDCaseIntro() {
   return (
     <section className="w-full">
       {/* =========================
@@ -155,7 +162,7 @@ export default function CorMedixCaseIntro() {
         className="relative z-20 w-full"
         style={{
           background:
-            "linear-gradient(180deg, rgba(225, 225, 225, 0) 50%, rgba(0, 143, 190 , 0.2) 100%), #F7F7F7",
+            "linear-gradient(180deg, rgba(225, 225, 225, 0) 50%, rgba(0, 164, 101, 0.2) 100%), #F7F7F7",
         }}
       >
         <div className={SITE_CONTAINER}>
@@ -166,30 +173,31 @@ export default function CorMedixCaseIntro() {
                 <div className="flex w-full flex-col gap-12">
                   <div className="flex flex-col gap-4">
                     <p className="text-sm font-semibold tracking-wide text-neutral-400">
-                      CORMEDIX
+                      MSD
                     </p>
 
                     <div className="flex flex-wrap gap-2">
                       <span className="inline-flex items-center rounded-full bg-white px-6 py-3 text-sm leading-none text-black">
-                        Saúde
+                        Content + Product
                       </span>
                       <span className="inline-flex items-center rounded-full bg-white px-6 py-3 text-sm leading-none text-black">
-                        B2B
+                        0→1 Discovery
                       </span>
                       <span className="inline-flex items-center rounded-full bg-white px-6 py-3 text-sm leading-none text-black">
-                        Investidores & Mídia
+                        Saúde Pública
                       </span>
                     </div>
 
                     <h1 className="font-display text-[44px] font-semibold leading-[1.15] text-black sm:text-[52px] lg:text-[56px] lg:leading-[1.2]">
-                      Prescrevendo dados para decisões.
+                      Estabilizando
+a jornadade exames.
                     </h1>
 
                     {/* ✅ azul só aqui */}
                     <p className="text-lg font-semibold leading-[1.35] text-black sm:text-xl">
-                      Uma nova arquitetura para{" "}
-                      <span className="text-[#028FBE]">
-                        reduzir a incerteza de investidores e jornalistas.
+                      Reduzi risco operacional e retrabalho em um fluxo crítico de exames clínicos{" "}
+                      <span className="text-[#00A465]">
+                      sem tocar no backend.
                       </span>
                     </p>
                   </div>
@@ -197,9 +205,9 @@ export default function CorMedixCaseIntro() {
                   {/* meta */}
                   <div className="grid w-full grid-cols-1 gap-x-6 gap-y-6 sm:grid-cols-2 lg:grid-cols-4 lg:gap-y-0">
                     <MetaItem label="FUNÇÃO" value="Designer de Produto" />
-                    <MetaItem label="DURAÇÃO" value="3 meses" />
-                    <MetaItem label="TECNOLOGIAS" value="Wordpress, Spline, CMS" />
-                    <MetaItem label="ENTREGAS" value="Nova arquitetura" />
+                    <MetaItem label="DURAÇÃO" value="6 meses" />
+                    <MetaItem label="TECNOLOGIAS" value="Sistema Legado" />
+                    <MetaItem label="ENTREGAS" value="Fluxos de tarefas otimizados" />
                   </div>
                 </div>
               </div>
@@ -222,7 +230,7 @@ export default function CorMedixCaseIntro() {
                     <div className="relative h-full w-full overflow-hidden bg-black">
                       <video
                         className="absolute inset-0 h-full w-full object-cover"
-                        src="/cormedix_hero.mp4"
+                        src="/msd_hero.mp4"
                         autoPlay
                         muted
                         loop
@@ -265,7 +273,7 @@ export default function CorMedixCaseIntro() {
         className="relative z-10 w-full"
         style={{
           background:
-            "linear-gradient(0deg, rgba(225, 225, 225, 0) 0%, rgba(0, 143, 190 , 0.2) 100%), #F7F7F7",
+            "linear-gradient(0deg, rgba(225, 225, 225, 0) 0%, rgba(0, 164, 101, 0.2) 100%), #F7F7F7",
           marginTop: `-${OVERLAP_PX}px`, // ✅ overlap real
           paddingTop: `${OVERLAP_PX}px`, // ✅ compensa pra não “subir” conteúdo
         }}
@@ -299,20 +307,12 @@ export default function CorMedixCaseIntro() {
                                   {/* ✅ Relacionados (P->P = 12px) */}
                                   <div className={`flex flex-col ${REL_P_TO_P}`}>
                                     <p className="text-lg leading-[1.45] text-[#131415]">
-                                      Em 2023, durante a aplicação do seu primeiro produto (DefenCath)
-                                      ao orgão regulatório Norte Americano (FDA) o site (legado mais de
-                                      10 anos) passou a representar um risco:
-                                    </p>
+Transformação de um sistema legado de solicitação e operação de exames críticos e sensível usado por médicos, laboratórios e logística.                                    </p>
 
                                     <p className="text-lg leading-[1.45] text-[#131415]">
-                                      <b>Investidores</b> tinham dificuldade para encontrar documentos
-                                      oficiais e relatórios com confiança.
-                                    </p>
+O produto antigo era desktop-only, tinha jornadas longas com telas superdensas (até 40 decisões), pouca tolerância a erro (ex.: sem “voltar”) e retomada difícil, gerando atrito, chamadas no SAC e risco operacional.                                    </p>
 
-                                    <p className="text-lg leading-[1.45] text-[#131415]">
-                                      <b>Mídia e comunidade científica</b> precisavam vasculhar PDFs
-                                      para validar as evidências clínicas.
-                                    </p>
+                                    
                                   </div>
                                 </div>
 
@@ -325,39 +325,29 @@ export default function CorMedixCaseIntro() {
                                   <div className="flex flex-col gap-8">
                                     {/* Item 1 */}
                                     <div className={`flex flex-col ${REL_P_TO_P}`}>
-                                      <p className="text-lg font-semibold leading-none text-[#F54900]">
-                                        Investors-first - Nova arquitetura
-                                      </p>
+                                      
                                       <p className="text-lg leading-[1.45] text-[#131415]">
-                                        <b>Reorganizei e testei</b> o acesso a informações críticas
-                                        (SEC filings, resultados, stock e apresentações) em hubs por
-                                        tarefa, reduzindo atrito e{" "}
-                                        <b>aumentando a previsibilidade da navegação</b>.
-                                      </p>
+<b>3 fluxos críticos simplificados</b> (médico, laboratório, logística)                                      </p>
+<p className="text-lg leading-[1.45] text-[#131415]">
+Voltar/retomar/estados para<b> evitar perda de trabalho</b>                                     </p>
+<p className="text-lg leading-[1.45] text-[#131415]">
+Autorizações via PDF com status (menos ambiguidade e retrabalho)                                  </p>
+<p className="text-lg leading-[1.45] text-[#131415]">
+Design system + regras + docs (consistência e escala)                                    </p>
+<p className="text-lg leading-[1.45] text-[#131415]">
+HTML pronto pro legado (viabilidade e menos risco)                              </p>
                                     </div>
 
                                     {/* Item 2 */}
                                     <div className={`flex flex-col ${REL_P_TO_P}`}>
-                                      <p className="text-lg font-semibold leading-none text-[#F54900]">
-                                        Credibilidade e governança
-                                      </p>
+                                      
                                       <p className="text-lg leading-[1.45] text-[#131415]">
-                                        <b>Separei e medi</b> os conteúdos regulatórios vs. notícias,
-                                        melhorando a sinalização de conteúdo (information scent) e{" "}
-                                        <b>reduzindo erros de navegação</b>.
-                                      </p>
+                                 </p>
                                     </div>
 
                                     {/* Item 3 */}
                                     <div className={`flex flex-col ${REL_P_TO_P}`}>
-                                      <p className="text-lg font-semibold leading-none text-[#F54900]">
-                                        Escalabilidade
-                                      </p>
-                                      <p className="text-lg leading-[1.45] text-[#131415]">
-                                        Entreguei a estrutura em WordPress, com handoff + treinamento
-                                        para garantir autonomia do time interno incluindo regras de
-                                        conteúdo e bases para evolução do hub sem perda de consistência.
-                                      </p>
+                                     
                                     </div>
                                   </div>
                                 </div>
@@ -371,85 +361,86 @@ export default function CorMedixCaseIntro() {
                                   <div>
   <p className="text-base font-semibold leading-none text-[#747474]">Time</p>
 
-  <div className="mt-3 flex items-center -space-x-2">
-    {TEAM.map((m) => (
-      <div key={m.initials} className="relative">
-        {/* Trigger */}
+<div className="mt-3 flex items-center -space-x-2">
+  {TEAM.map((m) => (
+    <div key={m.id} className="relative">
+      {/* Trigger */}
+      <div
+        className={[
+          "group",
+          "relative flex h-12 w-12 items-center justify-center",
+          "rounded-full border-2 border-white bg-[#D9D9D9]",
+          "text-[14px] font-semibold leading-none text-[#131415]",
+          "select-none",
+          "focus:outline-none focus-visible:ring-2 focus-visible:ring-[#FF4C2C]/30",
+        ].join(" ")}
+        tabIndex={0}
+        aria-label={`${m.name} - ${m.role}`}
+      >
+        {/* ✅ Iniciais */}
+        <span aria-hidden="true">{m.initials}</span>
+
+        {/* Tooltip (centralizado + preto) */}
         <div
           className={[
-            "group",
-            "relative flex h-12 w-12 items-center justify-center",
-            "rounded-full border-2 border-white bg-[#D9D9D9]",
-            "text-[14px] font-semibold leading-none text-[#131415]",
-            "select-none",
-            "focus:outline-none focus-visible:ring-2 focus-visible:ring-[#FF4C2C]/30",
+            "pointer-events-none absolute left-1/2 top-0 z-50",
+            "-translate-x-1/2 -translate-y-[calc(100%+10px)]",
+            "opacity-0 scale-95",
+            "group-hover:opacity-100 group-hover:scale-100",
+            "group-focus-visible:opacity-100 group-focus-visible:scale-100",
+            "transition-all duration-150",
           ].join(" ")}
-          tabIndex={0}
-          aria-label={`${m.name} - ${m.role}`}
+          role="tooltip"
+          aria-hidden="true"
         >
-          {m.initials}
-
-          {/* Tooltip (centralizado + preto) */}
           <div
             className={[
-              "pointer-events-none absolute left-1/2 top-0 z-50",
-              "-translate-x-1/2 -translate-y-[calc(100%+10px)]",
-              "opacity-0 scale-95",
-              "group-hover:opacity-100 group-hover:scale-100",
-              "group-focus-visible:opacity-100 group-focus-visible:scale-100",
-              "transition-all duration-150",
+              "w-[240px] bg-[#131415] px-4 py-3",
+              "shadow-[0_12px_30px_rgba(0,0,0,0.25)]",
             ].join(" ")}
-            role="tooltip"
-            aria-hidden="true"
           >
-            <div
-              className={[
-                "w-[240px] bg-[#131415] px-4 py-3",
-                "shadow-[0_12px_30px_rgba(0,0,0,0.25)]",
-              ].join(" ")}
-            >
-              <div className="flex flex-col gap-1">
-                <p className="text-[14px] font-semibold leading-[1.2] text-white">
-                  {m.name}
-                </p>
-                <p className="text-[13px] font-medium leading-[1.2] text-white/75">
-                  {m.role}
-                </p>
-              </div>
+            <div className="flex flex-col gap-1">
+              <p className="text-[14px] font-semibold leading-[1.2] text-white">
+                {m.name}
+              </p>
+              <p className="text-[13px] font-medium leading-[1.2] text-white/75">
+                {m.role}
+              </p>
             </div>
           </div>
         </div>
       </div>
-    ))}
-  </div>
+    </div>
+  ))}
+</div>
+
 </div>
                                   <div className="h-1 w-full bg-black/10" />
                                 </div>
 
                                 <div className="flex flex-col gap-3">
                                   <p className="text-base font-semibold leading-none text-[#747474]">
-                                    Client
+                                    Cliente
                                   </p>
                                   <p className="text-base leading-[1.45] text-[#131415]">
-                                    CorMedix (NASDAQ: CRMD)
+                                    MSD
                                   </p>
                                   <div className="h-1 w-full bg-black/10" />
                                 </div>
 
                                 <div className="flex flex-col gap-3">
                                   <p className="text-base font-semibold leading-none text-[#747474]">
-                                    Responsibilities
+                                    Responsabilidades
                                   </p>
                                   <p className="text-base leading-[1.45] text-[#131415]">
-                                    Estratégia de UX • Arquitetura da Informação • Alinhamento com
-                                    stakeholders (Jurídico/RI) • Suporte à implementação (QA + handoff)
+                                    Pesquisa & síntese • Estratégia de UX/Conteúdo • Arquitetura de informação • Health literacy (tom/clareza) • Instrumentação (eventos + funis)
                                   </p>
                                 </div>
                               </div>
                             </div>
                           </div>
                           {/* /layout */}
-                          <div className="h-4"></div>
+                          
                         </div>
                       </div>
                     </div>
@@ -475,7 +466,7 @@ export default function CorMedixCaseIntro() {
             <div className={CONTENT_12}>
               <div className={SHAPE_BLEED}>
                 <div
-                  className="w-full bg-[#C7E3EC]"
+                  className="w-full bg-[#D1F9EB]"
                   style={edgeMaskBottom("lg")}
                 >
                   <div className={SHAPE_INNER_PAD}>
@@ -483,74 +474,60 @@ export default function CorMedixCaseIntro() {
                       <div className={TEXT_10}>
                         <div className={`${SECTION_Y} flex flex-col ${STACK_24}`}>
                           {/* Header */}
+                          <div className="h-2"></div>
                           <div className="flex flex-col gap-4">
                             <p className="text-lg font-semibold leading-none text-[#131415]">
                               Impacto
                             </p>
                             <p className="text-[32px] font-semibold leading-[1.2] text-[#131415] sm:text-[40px]">
-                              Melhoria mensurável nas jornadas críticas.
+                              Mitigação de Risco (sem tocar no backend)
                             </p>
                           </div>
 
                           {/* Cards (3) */}
-                          <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
+                          <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
                             <ImpactCard size="sm" className="border-2 border-white">
-                              <p className="text-[56px] font-semibold leading-[1.1] text-[#131415]">
-                                −61%
+                              <p className="text-[40px] font-semibold leading-[1.1] text-[#131415]">
+                                Menos erro em decisões críticas (Error-proofing)
                               </p>
                               <p className="text-lg font-semibold leading-[1.4] text-[#131415]">
-                                no tempo médio para concluir em 6 tarefas (64s → 24,2s).
-                              </p>
+Aumentei a tolerância a erro com padrões de recuperação e estados claros.                           </p>
                             </ImpactCard>
 
                             <ImpactCard size="sm">
-                              <p className="text-[56px] font-semibold leading-[1.1] text-[#131415]">
-                                +30pp
+                              <p className="text-[40px] font-semibold leading-[1.1] text-[#131415]">
+                                Redução de carga cognitiva 
                               </p>
                               <p className="text-lg font-semibold leading-[1.4] text-[#131415]">
-                                de sucesso na conclusão das tarefas (63% → 93%).
-                              </p>
+Reduzi densidade de decisão e reorganizei a informação para decisões mais seguras.                              </p>
                             </ImpactCard>
 
-                            <ImpactCard size="sm">
-                              <p className="text-[56px] font-semibold leading-[1.1] text-[#131415]">
-                                −82%
-                              </p>
-                              <p className="text-lg font-semibold leading-[1.4] text-[#131415]">
-                                de misclicks (0,56 → 0,10), reduzindo tentativa e erro.
-                              </p>
-                            </ImpactCard>
+                            
                           </div>
 
                           {/* Espaço “controlado” */}
-                          <div className="h-4 sm:h-8" />
+                         
 
                           {/* Parte 2 */}
-                          <div className="flex flex-col gap-4">
-                            <p className="text-[32px] font-semibold leading-[1.2] text-[#131415] sm:text-[40px]">
-                              Entrega sustentável para o time interno.
-                            </p>
-                          </div>
+                          
 
                           {/* Cards (2) */}
                           <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
                             <ImpactCard size="md">
-                              <p className="text-[28px] font-semibold leading-[1.2] text-[#131415] sm:text-[32px]">
-                                WordPress + documentação
+                              <p className="text-[40px] font-semibold leading-[1.1] text-[#131415]">
+                                Mobile onde não existia produto
                               </p>
                               <p className="text-lg font-medium leading-[1.4] text-[#131415] sm:text-xl">
-                                permitindo que o time publique/atualize conteúdo e escale páginas
-                                sem depender de design/dev a cada ajuste.
+                                Criei a base mobile-first para um produto que não tinha versão mobile.
                               </p>
                             </ImpactCard>
 
                             <ImpactCard size="md">
-                              <p className="whitespace-pre-line text-[28px] font-semibold leading-[1.2] text-[#131415] sm:text-[32px]">
-                                Roadmap{"\n"}pós-lançamento
+                              <p className="text-[40px] font-semibold leading-[1.1] text-[#131415]">
+                                Escalabilidade por consistência 
                               </p>
                               <p className="text-lg font-medium leading-[1.4] text-[#131415] sm:text-xl">
-                                Entregamos um backlog priorizado para a fase pós-DefenCath e expansão
-                                do hub científico.
+                               Para evitar que melhorias virassem “páginas soltas”, estruturei um foundation.
                               </p>
                             </ImpactCard>
                           </div>
