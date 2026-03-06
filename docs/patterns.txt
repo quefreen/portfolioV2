@@ -1,0 +1,352 @@
+================================================================================
+PORTFOLIO V2 — DESIGN & ANIMATION PATTERNS
+Last updated: 2026-03-03
+================================================================================
+
+
+────────────────────────────────────────────────────────────────────────────────
+1. LAYOUT CONSTANTS
+────────────────────────────────────────────────────────────────────────────────
+
+Todas as constantes abaixo são usadas em todos os componentes de forma idêntica.
+Nunca usar valores ad-hoc — sempre referenciar estas constantes.
+
+  SITE_CONTAINER  = "mx-auto w-full max-w-[1400px] px-4 sm:px-4 md:px-8 lg:px-12"
+  GRID_12         = "grid grid-cols-4 gap-6 lg:grid-cols-12"
+  TEXT_10         = "col-span-4 lg:col-span-10 lg:col-start-2"    // coluna centralizada
+  CONTENT_12      = "col-span-4 lg:col-span-12"                   // largura total
+  SHAPE_BLEED     = "-mx-4 md:-mx-8 lg:-mx-12 xl:mx-0"           // bleed lateral
+  SHAPE_INNER_PAD = "px-4 sm:px-4 md:px-8 lg:px-12 xl:px-0"     // padding compensador
+
+
+────────────────────────────────────────────────────────────────────────────────
+2. SISTEMA DE ESPAÇAMENTO (múltiplos de 4px)
+────────────────────────────────────────────────────────────────────────────────
+
+Tokens verticais — usar APENAS estes, nunca valores arbitrários.
+
+  SECTION_Y = "py-16 sm:py-20 lg:py-24"   // 64/80/96px — entre seções externas
+  STACK_12  = "gap-3"                      // 12px — itens intimamente relacionados (P→P)
+  STACK_24  = "gap-6"                      // 24px — gap base entre elementos de um grupo
+  STACK_32  = "gap-8"                      // 32px
+  STACK_40  = "gap-10"                     // 40px
+  STACK_48  = "gap-12"                     // 48px — entre sub-seções
+  STACK_64  = "gap-16"                     // 64px — entre sub-seções maiores dentro de uma seção
+
+Regra de aplicação:
+  - 96px (SECTION_Y)  → entre seções pai (hero ↔ summary ↔ impact etc.)
+  - 64px (STACK_64)   → entre blocos principais dentro de uma mesma seção
+  - 48px (STACK_48)   → entre grupos de conteúdo
+  - 24px (STACK_24)   → gap padrão entre elementos de um grupo
+  - 12px (STACK_12)   → parágrafos relacionados, label + valor, título + body
+
+Proibido:
+  - Divs espaçadoras com altura fixa (ex: <div className="h-8" />)
+  - Valores de margin/padding ad-hoc que não correspondam a um token acima
+
+
+────────────────────────────────────────────────────────────────────────────────
+3. SISTEMA DE MÁSCARAS SVG (corners)
+────────────────────────────────────────────────────────────────────────────────
+
+Arquivos em /public/:
+  esqtb.svg  → canto superior esquerdo
+  dirtb.svg  → canto superior direito
+  esqbb.svg  → canto inferior esquerdo
+  dirbb.svg  → canto inferior direito
+
+Tamanhos de canto (cornerClamp):
+  sm  → clamp(24px, 4.5vw, 56px)
+  md  → clamp(32px, 6vw, 80px)
+  lg  → clamp(56px, 9vw, 140px)
+
+Variantes de máscara:
+  maskFourCorners(size)  → 4 cantos (padrão para cards)
+  edgeMaskTop(size)      → apenas cantos superiores (conectores de seção)
+  edgeMaskBottom(size)   → apenas cantos inferiores (conectores de seção)
+
+Propriedades obrigatórias na máscara de 4 cantos:
+  maskComposite: "exclude"
+  WebkitMaskComposite: "xor"
+  5 camadas: 4 SVGs de canto + linear-gradient(#000,#000) como fill
+
+Uso típico:
+  <div style={maskFourCorners("sm")} className="bg-white p-8">  ← card pequeno
+  <div style={maskFourCorners("md")} className="bg-white p-10"> ← card médio
+  <div style={edgeMaskBottom("lg")} className="bg-[#C7E3EC]">  ← seção de impacto
+
+
+────────────────────────────────────────────────────────────────────────────────
+4. PALETA DE CORES
+────────────────────────────────────────────────────────────────────────────────
+
+  #FF4C2C   → laranja primário (accent, badges, highlights)
+  #131415   → texto/bg escuro
+  #F7F7F7   → bg claro (hero, summary)
+  #028FBE   → azul (hero subtitle — apenas Cormedix)
+  #C7E3EC   → bg azul claro (seção de impacto)
+  #F10000   → vermelho legacy (InsightCards tab legacy)
+  #00A83A   → verde novo (InsightCards tab new)
+  #747474   → texto secundário (sidebar labels)
+  #F54900   → laranja escuro (results highlights no summary)
+
+
+────────────────────────────────────────────────────────────────────────────────
+5. STACK DE ANIMAÇÕES — Lenis + GSAP ScrollTrigger
+────────────────────────────────────────────────────────────────────────────────
+
+Dependências:
+  lenis  ~3KB gzipped — scroll suave com física natural
+  gsap   — animações e ScrollTrigger
+
+Por que Lenis (não Locomotive Scroll v5):
+  - Locomotive v5 é construído internamente sobre Lenis — usar direto é mais limpo
+  - Melhor compatibilidade com Next.js App Router
+  - Sem container de scroll virtual que conflita com elementos fixed/sticky
+
+Por que GSAP ScrollTrigger:
+  - Sincroniza nativamente via autoRaf: false (GSAP ticker controla o RAF)
+  - gsap.context() faz cleanup automático no unmount
+  - Contador animado limpo via onUpdate + ref direto ao DOM
+
+
+────────────────────────────────────────────────────────────────────────────────
+6. SmoothScrollProvider — configuração global
+────────────────────────────────────────────────────────────────────────────────
+
+Localização: app/components/SmoothScrollProvider.tsx
+Usado em:    app/layout.tsx (envolve {children})
+
+Configuração do Lenis:
+  lerp: 0.1          → suavidade do scroll (0 = imediato, 1 = muito lento)
+  smoothWheel: true  → suaviza scroll de mouse wheel
+  autoRaf: false     → GSAP ticker controla o loop RAF (sincronização perfeita)
+
+Integração com GSAP:
+  lenis.on("scroll", ScrollTrigger.update)  → atualiza triggers a cada frame
+  gsap.ticker.add((time) => lenis.raf(time * 1000))
+  gsap.ticker.lagSmoothing(0)               → evita spike de lag
+
+Comportamento em navegação (usePathname):
+  lenisRef.current?.scrollTo(0, { immediate: true })  → reseta scroll para o topo
+  ScrollTrigger.refresh()                              → recalcula posições dos triggers
+
+
+────────────────────────────────────────────────────────────────────────────────
+7. PADRÃO DE ANIMAÇÃO NOS COMPONENTES
+────────────────────────────────────────────────────────────────────────────────
+
+Imports necessários (adicionar a qualquer componente que precisar de animação):
+
+  "use client"
+  import { useEffect, useRef } from "react"
+  import { gsap } from "gsap"
+  import { ScrollTrigger } from "gsap/ScrollTrigger"
+  gsap.registerPlugin(ScrollTrigger)
+
+Setup do contexto (dentro do componente):
+
+  const containerRef = useRef<HTMLElement>(null)   // ou <HTMLDivElement> se for div
+
+  useEffect(() => {
+    if (!containerRef.current) return
+
+    const ctx = gsap.context(() => {
+      const mm = gsap.matchMedia()
+      mm.add("(prefers-reduced-motion: no-preference)", () => {
+
+        // FADE-UP individual
+        gsap.utils.toArray<HTMLElement>("[data-fade]").forEach((el) => {
+          gsap.fromTo(el,
+            { autoAlpha: 0, y: 28 },
+            { autoAlpha: 1, y: 0, duration: 0.8, ease: "power3.out",
+              scrollTrigger: { trigger: el, start: "top 88%", once: true } }
+          )
+        })
+
+        // STAGGER grupos
+        gsap.utils.toArray<HTMLElement>("[data-stagger]").forEach((group) => {
+          const items = group.querySelectorAll<HTMLElement>("[data-stagger-item]")
+          if (!items.length) return
+          gsap.fromTo(items,
+            { autoAlpha: 0, y: 20 },
+            { autoAlpha: 1, y: 0, duration: 0.65, stagger: 0.1, ease: "power3.out",
+              scrollTrigger: { trigger: group, start: "top 85%", once: true } }
+          )
+        })
+
+      })
+    }, containerRef)
+
+    return () => ctx.revert()
+  }, [])
+
+  // Adicionar ref ao elemento raiz:
+  return <section ref={containerRef} ...>
+
+
+────────────────────────────────────────────────────────────────────────────────
+8. ATRIBUTOS DE DADOS (data attributes) — como usar no JSX
+────────────────────────────────────────────────────────────────────────────────
+
+data-fade
+  → Fade-up individual. Colocar no elemento que deve animar por conta própria.
+  → y: 28px, duration: 0.8s, start: "top 88%"
+  → Uso: headers de seção, parágrafos, imagens standalone, blocos de meta
+
+  Exemplo:
+    <div data-fade className="flex flex-col gap-4">
+      <SectionHeader ... />
+    </div>
+
+data-stagger + data-stagger-item
+  → Stagger em grupo. O pai recebe data-stagger, cada filho recebe data-stagger-item.
+  → y: 20px, duration: 0.65s, stagger: 0.1s, start: "top 85%"
+  → Uso: grids de cards, listas de logos, grupos de parágrafos
+
+  Exemplo:
+    <div data-stagger className="grid grid-cols-3 gap-4">
+      <div data-stagger-item><Card /></div>
+      <div data-stagger-item><Card /></div>
+      <div data-stagger-item><Card /></div>
+    </div>
+
+  ATENÇÃO: o data-stagger-item deve ser um wrapper div, não o próprio card.
+  Isso evita conflitos com o style={mask...} do card.
+
+
+────────────────────────────────────────────────────────────────────────────────
+9. ANIMATED COUNTER — números de impacto
+────────────────────────────────────────────────────────────────────────────────
+
+Componente inline em CaseItroCormedix.tsx.
+Usado para substituir números estáticos de impacto que devem contar ao entrar
+na viewport.
+
+Interface:
+  prefix?   string   → caractere antes do número (ex: "−", "+")
+  value     number   → valor final absoluto (sempre positivo; prefix define o sinal)
+  suffix?   string   → caractere após o número (ex: "%", "pp")
+  className string   → classes Tailwind para o <p>
+
+Comportamento:
+  - gsap.set(el, { autoAlpha: 0 })  → oculta imediatamente no mount (evita flash SSR)
+  - Ao entrar na viewport (top 85%): fade-in em 0.3s + contador de 0 ao valor em 1.6s
+  - ease: "power2.out" → desaceleração natural no final
+  - once: true → dispara uma única vez
+
+Exemplo de uso:
+  <AnimatedCounter
+    prefix="−"
+    value={61}
+    suffix="%"
+    className="text-[56px] font-semibold leading-[1.1] text-[#131415]"
+  />
+  → renderiza: −61%
+
+Counters implementados no Cormedix:
+  −61%   → avg. completion time
+  +30pp  → task success rate
+  −82%   → misclick rate
+
+
+────────────────────────────────────────────────────────────────────────────────
+10. DECISÕES TÉCNICAS E REGRAS
+────────────────────────────────────────────────────────────────────────────────
+
+autoAlpha vs opacity:
+  → Sempre usar autoAlpha. Diferença: autoAlpha também controla visibility,
+    desativando pointer-events quando o elemento está invisível. opacity não faz isso.
+
+gsap.context() + ref:
+  → Sempre usar gsap.context(callback, containerRef).
+  → Faz cleanup automático de todos os ScrollTriggers e tweens do contexto no unmount.
+  → Sem isso, ScrollTriggers órfãos causam memory leak em navegação client-side.
+
+gsap.matchMedia("prefers-reduced-motion"):
+  → Toda animação deve estar dentro do mm.add("(prefers-reduced-motion: no-preference)").
+  → Usuários com essa preferência ativa verão os elementos em seu estado final
+    sem nenhuma animação — acessibilidade garantida.
+
+once: true em todos os triggers:
+  → Animação dispara uma única vez ao entrar na viewport.
+  → Padrão para portfolios — não re-anima ao fazer scroll para cima e voltar.
+
+ScrollTrigger.refresh() na troca de rota:
+  → Necessário porque o Next.js App Router renderiza novas páginas no client.
+  → Sem isso, as posições dos triggers ficam desatualizadas após navegação.
+
+gsap.registerPlugin(ScrollTrigger):
+  → Chamar uma vez por arquivo que usa ScrollTrigger.
+  → GSAP gerencia duplicatas — sem problema em registrar múltiplas vezes.
+
+autoRaf: false no Lenis:
+  → GSAP ticker controla o requestAnimationFrame — sincronização perfeita entre
+    Lenis e ScrollTrigger. Sem isso, podem ocorrer descompassos de 1 frame.
+
+
+────────────────────────────────────────────────────────────────────────────────
+11. MAPA DE ANIMAÇÕES — componentes Cormedix
+────────────────────────────────────────────────────────────────────────────────
+
+CaseItroCormedix.tsx
+  data-fade         → bloco título+tags+h1+subtitle
+  data-fade         → grid de meta items (Role, Duration, Technologies, Deliverables)
+  data-fade         → "Project Summary" heading
+  data-fade         → bloco Context (label + parágrafos)
+  data-fade         → bloco Results (label + 3 sub-itens)
+  data-fade         → heading "Measurable gains..."
+  data-stagger      → 3 impact cards (−61%, +30pp, −82%)
+  data-fade         → heading "Sustainable delivery..."
+  data-stagger      → 2 cards sustentáveis (WordPress + Roadmap)
+  AnimatedCounter   → −61%, +30pp, −82%
+
+CaseMerge02Cormedix.tsx
+  data-fade         → SectionHeader "Problem"
+  data-fade         → parágrafo de contexto do problema
+  data-stagger      → 3 InfoCards (Investors, Media, Core Conflict)
+  data-fade         → SectionHeader "Discovery & Insights"
+  data-fade         → bloco de texto (8 empresas Nasdaq)
+  data-fade         → label "Criteria"
+  data-stagger      → 2 criteria cards
+  data-stagger      → 8 logos de empresas
+  data-fade         → imagem de análise competitiva
+  data-fade         → MaskedCard "Best practices we adopted"
+  data-fade         → MaskedCard "Practices we didn't follow"
+  data-fade         → SectionHeader "Validation & Evidence"
+  data-fade         → parágrafo de descrição do teste
+  data-fade         → label "How was the test?"
+  data-stagger      → 4 ValidationInfoCards
+
+tabcormedix.tsx
+  data-fade         → container principal da tab (div.relative)
+  data-stagger      → 3 InsightCards (animam ao entrar na viewport — apenas mount)
+
+gridCormedix.tsx
+  data-fade         → bloco inteiro de header (badge + título + subtítulo + NDA panel)
+  data-stagger      → 6 TaskCardUI
+
+retrospectoCormedix.tsx
+  data-fade         → bloco header (badge + título + subtitle)
+  data-stagger      → 3 parágrafos de conteúdo
+
+
+────────────────────────────────────────────────────────────────────────────────
+12. CHECKLIST — adicionar animações a um novo componente
+────────────────────────────────────────────────────────────────────────────────
+
+  [ ] Adicionar "use client" no topo se ainda não existir
+  [ ] Importar useEffect, useRef de "react"
+  [ ] Importar gsap de "gsap" e ScrollTrigger de "gsap/ScrollTrigger"
+  [ ] Chamar gsap.registerPlugin(ScrollTrigger) no topo do módulo
+  [ ] Criar containerRef = useRef<HTMLElement>(null)
+  [ ] Adicionar ref={containerRef} ao elemento raiz da seção/componente
+  [ ] Criar useEffect com gsap.context() + gsap.matchMedia()
+  [ ] Retornar () => ctx.revert() no cleanup do useEffect
+  [ ] Adicionar data-fade nos elementos de fade individual
+  [ ] Adicionar data-stagger no container + data-stagger-item nos filhos diretos
+  [ ] Verificar que data-stagger-item é um wrapper div, não o card com style={mask...}
+  [ ] Testar prefers-reduced-motion no DevTools → elementos devem aparecer sem animação
+  [ ] Verificar console do browser — sem erros de ScrollTrigger ou Lenis
+
+================================================================================

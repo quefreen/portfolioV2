@@ -10,7 +10,7 @@ export default function Home() {
   return (
     <main>
       <Hero2026 />
-      <BentoHome2026 />
+<BentoHome2026 />
       <FooterCornerCap />
       <FooterBase />
       

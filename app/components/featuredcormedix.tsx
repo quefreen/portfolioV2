@@ -6,7 +6,7 @@ import type { CSSProperties } from "react";
 import Image from "next/image";
 
 // ==============================
-// Grid e containers (obrigatório)
+// Grid and containers
 // ==============================
 const SITE_CONTAINER =
   "mx-auto w-full max-w-[1400px] px-4 sm:px-4 md:px-8 lg:px-12";
@@ -14,19 +14,15 @@ const GRID_12 = "grid grid-cols-4 gap-6 lg:grid-cols-12";
 const TEXT_10 = "col-span-4 lg:col-span-10 lg:col-start-2";
 
 // ==============================
-// Espaçamento vertical padrão (obrigatório)
+// Spacing
 // ==============================
 const SECTION_Y = "py-16 sm:py-20 lg:py-24";
-
-// ==============================
-// Spacing tokens (obrigatório)
-// ==============================
 const STACK_12 = "gap-3"; // 12px
 const STACK_24 = "gap-6"; // 24px
 const STACK_32 = "gap-8"; // 32px
 
 // ==============================
-// Masks / corners helpers (SVG corners)
+// Masks / corners helpers
 // ==============================
 type CornerSize = "sm" | "md" | "lg";
 
@@ -89,7 +85,6 @@ function MaskedSurface({
   innerClassName?: string;
   children: React.ReactNode;
 }) {
-  // ✅ Sem “contorno cinza”: apenas um surface branco mascarado
   return (
     <div
       className={["w-full bg-white", className].join(" ")}
@@ -129,7 +124,7 @@ function ImageFill({
 }
 
 // ==============================
-// Componente final
+// Main component
 // ==============================
 export function FeatureAssetsGrid({
   investorImage = "/crmdd.jpg",
@@ -150,7 +145,6 @@ export function FeatureAssetsGrid({
     <section className={["w-full", SECTION_Y, className].join(" ")}>
       <div className={SITE_CONTAINER}>
         <div className={GRID_12}>
-          {/* ✅ Mesma largura da sessão acima (contida em TEXT_10) */}
           <div className={TEXT_10}>
             <div className={["flex w-full flex-col", STACK_24].join(" ")}>
               {/* ROW 1 */}
@@ -160,17 +154,17 @@ export function FeatureAssetsGrid({
                   <MaskedSurface corner="md" className="h-full">
                     <div className="flex h-full w-full flex-col">
                       <div className="h-80 sm:h-96">
-                        <ImageFill src={investorImage} alt="Investidores" />
+                        <ImageFill src={investorImage} alt="Investor Hub" />
                       </div>
 
-                      <div className="p-12">
+                      <div className="p-10 sm:p-12">
                         <div className={["flex flex-col", STACK_12].join(" ")}>
                           <p className="text-base font-semibold leading-6 text-neutral-900">
-                            Investidores
+                            Investors
                           </p>
                           <p className="text-base font-medium leading-6 text-neutral-900">
-                            Um hub focado em clareza, transparência e acesso fácil aos relatórios
-                            (SEC Filings).
+                            A hub built for clarity, transparency, and easy access
+                            to reports and SEC Filings.
                           </p>
                         </div>
                       </div>
@@ -183,15 +177,15 @@ export function FeatureAssetsGrid({
                   <div className={["flex w-full flex-col", STACK_32].join(" ")}>
                     <MaskedSurface corner="md">
                       <div className="relative h-72 sm:h-80 w-full">
-                        <ImageFill src={splineImage} alt="Inovação 3D Interativa" />
-                        <div className="absolute inset-0 flex flex-col justify-end p-12">
+                        <ImageFill src={splineImage} alt="3D Interactive Innovation" />
+                        <div className="absolute inset-0 flex flex-col justify-end p-10 sm:p-12">
                           <div className={["flex flex-col", STACK_12].join(" ")}>
                             <p className="text-base font-semibold leading-6 text-white">
-                              Inovação 3D Interativa
+                              3D Interactive Innovation
                             </p>
                             <p className="text-base font-medium leading-6 text-white">
-                              Protótipo da molécula do DefenCath em Spline para comunicar a ciência
-                              complexa do produto.
+                              DefenCath molecule prototype in Spline — communicating
+                              complex product science interactively.
                             </p>
                           </div>
                         </div>
@@ -201,13 +195,13 @@ export function FeatureAssetsGrid({
                     <div className="grid grid-cols-2 gap-6">
                       <MaskedSurface corner="sm">
                         <div className="aspect-square">
-                          <ImageFill src={thumbA} alt="Thumb A" />
+                          <ImageFill src={thumbA} alt="Feature detail A" />
                         </div>
                       </MaskedSurface>
 
                       <MaskedSurface corner="sm">
                         <div className="aspect-square">
-                          <ImageFill src={thumbB} alt="Thumb B" />
+                          <ImageFill src={thumbB} alt="Feature detail B" />
                         </div>
                       </MaskedSurface>
                     </div>
@@ -215,10 +209,10 @@ export function FeatureAssetsGrid({
                 </div>
               </div>
 
-              {/* ROW 2 (agora contido em TEXT_10 também) */}
+              {/* ROW 2 */}
               <MaskedSurface corner="md" className="w-full">
                 <div className="h-[320px] sm:h-[420px] lg:h-[560px] p-8 w-full">
-                  <ImageFill src={fullWidthImage} alt="Imagem full width" />
+                  <ImageFill src={fullWidthImage} alt="Design system overview" />
                 </div>
               </MaskedSurface>
             </div>

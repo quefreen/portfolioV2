@@ -4,15 +4,67 @@ import Image from "next/image";
 import Link from "next/link";
 import type { ReactNode } from "react";
 import * as React from "react";
+import { useEffect, useRef, useCallback } from "react";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+gsap.registerPlugin(ScrollTrigger);
 
 const EMAIL = "quefreen.almeida@gmail.com";
 
-// Small utility to merge class names
 function cn(...classes: (string | undefined | false)[]) {
   return classes.filter(Boolean).join(" ");
 }
 
-// Generic Bento card wrapper (IMPORTANTE: sem bg aqui)
+// ============================================================
+// useTilt: 3D card tilt + radial spotlight (no re-renders)
+// ============================================================
+function useTilt(intensity = 7) {
+  const cardRef = useRef<HTMLDivElement>(null);
+  const spotRef = useRef<HTMLDivElement>(null);
+
+  const onMove = useCallback(
+    (e: React.MouseEvent<HTMLDivElement>) => {
+      const card = cardRef.current;
+      const spot = spotRef.current;
+      if (!card) return;
+      const r = card.getBoundingClientRect();
+      const x = (e.clientX - r.left) / r.width;
+      const y = (e.clientY - r.top) / r.height;
+
+      gsap.to(card, {
+        rotateX: -(y - 0.5) * intensity * 2,
+        rotateY: (x - 0.5) * intensity * 2,
+        duration: 0.35,
+        ease: "power2.out",
+        overwrite: "auto",
+      });
+
+      if (spot) {
+        spot.style.background = `radial-gradient(circle 320px at ${x * 100}% ${y * 100}%, rgba(255,255,255,0.14), transparent 65%)`;
+        spot.style.opacity = "1";
+      }
+    },
+    [intensity]
+  );
+
+  const onLeave = useCallback(() => {
+    gsap.to(cardRef.current, {
+      rotateX: 0,
+      rotateY: 0,
+      duration: 0.85,
+      ease: "elastic.out(1, 0.4)",
+      overwrite: "auto",
+    });
+    if (spotRef.current) spotRef.current.style.opacity = "0";
+  }, []);
+
+  return { cardRef, spotRef, onMove, onLeave };
+}
+
+// ============================================================
+// Generic Bento card wrapper
+// ============================================================
 function BentoCard({
   className,
   children,
@@ -25,7 +77,6 @@ function BentoCard({
   style?: React.CSSProperties;
 }) {
   const base = cn("group relative overflow-hidden", className);
-
   if (href) {
     return (
       <Link href={href} className={base} style={style}>
@@ -40,10 +91,35 @@ function BentoCard({
   );
 }
 
+// ============================================================
+// Video helpers
+// ============================================================
+function playVideo(id: string) {
+  const v = document.getElementById(id) as HTMLVideoElement | null;
+  if (!v) return;
+  v.currentTime = 0;
+  v.play().catch(() => {});
+}
+
+function pauseVideo(id: string) {
+  const v = document.getElementById(id) as HTMLVideoElement | null;
+  if (!v) return;
+  v.pause();
+  v.currentTime = 0;
+}
+
+// ============================================================
+// Main component
+// ============================================================
 export default function BentoHome2026() {
-  // ✅ Feedback do botão "copiar e-mail"
   const [emailCopied, setEmailCopied] = React.useState(false);
-  const copyTimerRef = React.useRef<number | null>(null);
+  const copyTimerRef = useRef<number | null>(null);
+  const containerRef = useRef<HTMLElement>(null);
+
+  // Three tilt instances — one per big video card
+  const t1 = useTilt(7);
+  const t2 = useTilt(7);
+  const t9 = useTilt(7);
 
   React.useEffect(() => {
     return () => {
@@ -51,9 +127,49 @@ export default function BentoHome2026() {
     };
   }, []);
 
+  useEffect(() => {
+    if (!containerRef.current) return;
+    const ctx = gsap.context(() => {
+      const mm = gsap.matchMedia();
+      mm.add("(prefers-reduced-motion: no-preference)", () => {
+        gsap.utils.toArray<HTMLElement>("[data-fade]").forEach((el) => {
+          gsap.fromTo(
+            el,
+            { autoAlpha: 0, y: 28 },
+            {
+              autoAlpha: 1,
+              y: 0,
+              duration: 0.8,
+              ease: "power3.out",
+              scrollTrigger: { trigger: el, start: "top 88%", once: true },
+            }
+          );
+        });
+
+        gsap.utils.toArray<HTMLElement>("[data-stagger]").forEach((group) => {
+          const items = (group as HTMLElement).querySelectorAll<HTMLElement>("[data-stagger-item]");
+          if (!items.length) return;
+          gsap.fromTo(
+            items,
+            { autoAlpha: 0, y: 20 },
+            {
+              autoAlpha: 1,
+              y: 0,
+              duration: 0.65,
+              stagger: 0.12,
+              ease: "power3.out",
+              scrollTrigger: { trigger: group, start: "top 85%", once: true },
+            }
+          );
+        });
+      });
+    }, containerRef);
+
+    return () => ctx.revert();
+  }, []);
+
   const handleCopyEmail = React.useCallback(async () => {
     let ok = true;
-
     try {
       await navigator.clipboard.writeText(EMAIL);
     } catch {
@@ -68,66 +184,31 @@ export default function BentoHome2026() {
         ok = false;
       }
     }
-
     if (!ok) return;
-
     setEmailCopied(true);
     if (copyTimerRef.current) window.clearTimeout(copyTimerRef.current);
     copyTimerRef.current = window.setTimeout(() => setEmailCopied(false), 1400);
   }, []);
 
   return (
-    <section className="w-full bg-[#F7F7F7]">
-      {/* CSS global da máscara (1x só) */}
+    <section ref={containerRef} className="w-full bg-[#F7F7F7] pb-24 sm:pb-28 lg:pb-32">
+      {/* Corner mask CSS */}
       <style
         dangerouslySetInnerHTML={{
           __html: `
             .corner-mask {
               --corner: clamp(56px, 6vw, 96px);
-
-              -webkit-mask-image:
-                url(/esqtb.svg),
-                url(/dirtb.svg),
-                url(/esqbb.svg),
-                url(/dirbb.svg),
-                linear-gradient(#000, #000);
-              -webkit-mask-position:
-                left top,
-                right top,
-                left bottom,
-                right bottom,
-                center;
+              -webkit-mask-image: url(/esqtb.svg), url(/dirtb.svg), url(/esqbb.svg), url(/dirbb.svg), linear-gradient(#000, #000);
+              -webkit-mask-position: left top, right top, left bottom, right bottom, center;
               -webkit-mask-repeat: no-repeat;
-              -webkit-mask-size:
-                var(--corner) var(--corner),
-                var(--corner) var(--corner),
-                var(--corner) var(--corner),
-                var(--corner) var(--corner),
-                100% 100%;
+              -webkit-mask-size: var(--corner) var(--corner), var(--corner) var(--corner), var(--corner) var(--corner), var(--corner) var(--corner), 100% 100%;
               -webkit-mask-composite: xor;
-
-              mask-image:
-                url(/esqtb.svg),
-                url(/dirtb.svg),
-                url(/esqbb.svg),
-                url(/dirbb.svg),
-                linear-gradient(#000, #000);
-              mask-position:
-                left top,
-                right top,
-                left bottom,
-                right bottom,
-                center;
+              mask-image: url(/esqtb.svg), url(/dirtb.svg), url(/esqbb.svg), url(/dirbb.svg), linear-gradient(#000, #000);
+              mask-position: left top, right top, left bottom, right bottom, center;
               mask-repeat: no-repeat;
-              mask-size:
-                var(--corner) var(--corner),
-                var(--corner) var(--corner),
-                var(--corner) var(--corner),
-                var(--corner) var(--corner),
-                100% 100%;
+              mask-size: var(--corner) var(--corner), var(--corner) var(--corner), var(--corner) var(--corner), var(--corner) var(--corner), 100% 100%;
               mask-composite: exclude;
             }
-
             .corner-mask-sm {
               --corner: clamp(44px, 5.2vw, 64px);
             }
@@ -137,62 +218,38 @@ export default function BentoHome2026() {
 
       <div className="mx-auto w-full max-w-[1400px] px-4 sm:px-4 md:px-8 lg:px-12">
         <h4
-          className="px-4 text-[1rem] font-semibold leading-[100%] text-[#999] sm:px-4 md:px-4 lg:px-16"
+          data-fade
+          className="mb-8 px-4 text-[1rem] font-semibold leading-[100%] text-[#999] sm:px-4 md:px-4 lg:px-16"
           style={{ fontFamily: "var(--font-schibstedGrotesk), sans-serif" }}
         >
-          PROJETOS
+          WORK
         </h4>
 
-        <div className="h-8" />
+        <div data-stagger className="grid grid-cols-1 gap-6 lg:grid-cols-12">
+          {/* ========== COLUMN 1 ========== */}
+          <div data-stagger-item className="flex flex-col gap-6 lg:col-span-4">
 
-        <div className="grid grid-cols-1 gap-6 lg:grid-cols-12">
-          {/* ========== COLUNA 1 ========== */}
-          <div className="flex flex-col gap-6 lg:col-span-4">
-            {/* Card 1 */}
-            <BentoCard className="h-[240px] lg:h-[480px]">
+            {/* Card 1 — Cormedix (tilt) */}
+            <div className="h-[300px] sm:h-[360px] lg:h-[480px]" style={{ perspective: "1200px" }}>
               <Link href="/cormedix" className="block h-full">
                 <div
-                  className={[
-                    "corner-mask group relative h-full w-full overflow-hidden",
-                    "bg-[#0B1220]",
-                    "transition-transform duration-300 ease-out",
-                  ].join(" ")}
-                  onMouseEnter={() => {
-                    const v = document.getElementById(
-                      "cormedix-card-video"
-                    ) as HTMLVideoElement | null;
-                    if (!v) return;
-                    v.currentTime = 0;
-                    v.play().catch(() => {});
-                  }}
-                  onMouseLeave={() => {
-                    const v = document.getElementById(
-                      "cormedix-card-video"
-                    ) as HTMLVideoElement | null;
-                    if (!v) return;
-                    v.pause();
-                    v.currentTime = 0;
-                  }}
-                  onFocus={() => {
-                    const v = document.getElementById(
-                      "cormedix-card-video"
-                    ) as HTMLVideoElement | null;
-                    if (!v) return;
-                    v.currentTime = 0;
-                    v.play().catch(() => {});
-                  }}
-                  onBlur={() => {
-                    const v = document.getElementById(
-                      "cormedix-card-video"
-                    ) as HTMLVideoElement | null;
-                    if (!v) return;
-                    v.pause();
-                    v.currentTime = 0;
-                  }}
+                  ref={t1.cardRef}
+                  className="corner-mask group relative h-full w-full overflow-hidden bg-[#0B1220]"
+                  onMouseMove={t1.onMove}
+                  onMouseEnter={() => playVideo("video-cormedix")}
+                  onMouseLeave={() => { t1.onLeave(); pauseVideo("video-cormedix"); }}
+                  onFocus={() => playVideo("video-cormedix")}
+                  onBlur={() => pauseVideo("video-cormedix")}
                 >
-                  {/* BG VIDEO */}
+                  {/* Spotlight */}
+                  <div
+                    ref={t1.spotRef}
+                    className="pointer-events-none absolute inset-0 z-[4] opacity-0 transition-opacity duration-500"
+                    aria-hidden="true"
+                  />
+
                   <video
-                    id="cormedix-card-video"
+                    id="video-cormedix"
                     className={[
                       "absolute inset-0 h-full w-full object-cover",
                       "transition-transform duration-700 ease-out",
@@ -206,89 +263,31 @@ export default function BentoHome2026() {
                     <source src="/CormedixHero.mp4" type="video/mp4" />
                   </video>
 
-                  {/* Overlay (sutil, aparece no hover pra dar “polish”) */}
                   <div
-                    className={[
-                      "absolute inset-0",
-                      "bg-gradient-to-b from-black/0",
-                      "opacity-70 transition-opacity duration-500 ease-out",
-                      "group-hover:opacity-45 group-focus-within:opacity-45",
-                    ].join(" ")}
+                    className="absolute inset-0 bg-gradient-to-b from-black/0 opacity-70 transition-opacity duration-500 ease-out group-hover:opacity-45 group-focus-within:opacity-45"
                     aria-hidden="true"
                   />
 
-                  {/* Conteúdo: texto, texto, imagem */}
                   <div className="relative z-10 flex h-full flex-col p-8 sm:p-10 md:p-12 lg:p-12 xl:p-16">
-                    {/* Topo */}
                     <div className="flex items-center justify-between gap-6">
-                      <p
-                        className={[
-                          "font-bricolageGrotesque text-sm font-semibold text-white",
-                          "transition-transform duration-300 ease-out",
-                          "group-hover:-translate-y-[1px] group-focus-within:-translate-y-[1px]",
-                        ].join(" ")}
-                      >
+                      <p className="font-bricolageGrotesque text-sm font-semibold text-white transition-transform duration-300 ease-out group-hover:-translate-y-[1px] group-focus-within:-translate-y-[1px]">
                         CORMEDIX
                       </p>
-
-                      <div
-                        className={[
-                          "relative h-[22px] w-[22px]",
-                          "transition-transform duration-300 ease-out",
-                          "group-hover:translate-x-[2px] group-hover:-translate-y-[2px] group-hover:rotate-45",
-                          "group-focus-within:translate-x-[2px] group-focus-within:-translate-y-[2px] group-focus-within:rotate-45",
-                        ].join(" ")}
-                      >
-                        <Image
-                          src="/arrow.svg"
-                          alt=""
-                          fill
-                          className="object-contain"
-                          draggable={false}
-                          priority={false}
-                        />
+                      <div className="relative h-[22px] w-[22px] transition-transform duration-300 ease-out group-hover:translate-x-[2px] group-hover:-translate-y-[2px] group-hover:rotate-45 group-focus-within:translate-x-[2px] group-focus-within:-translate-y-[2px] group-focus-within:rotate-45">
+                        <Image src="/arrow.svg" alt="" fill className="object-contain" draggable={false} priority={false} />
                       </div>
                     </div>
-
-                    {/* Título */}
-                    <p
-                      className={[
-                        "font-bricolageGrotesque mt-2 text-3xl font-semibold leading-[1.15] text-white",
-                        "transition-transform duration-300 ease-out",
-                        "group-hover:-translate-y-[1px] group-focus-within:-translate-y-[1px]",
-                      ].join(" ")}
-                    >
-                      Prescrevendo dados para decisões.
+                    <p className="font-bricolageGrotesque mt-2 text-3xl font-semibold leading-[1.15] text-white transition-transform duration-300 ease-out group-hover:-translate-y-[1px] group-focus-within:-translate-y-[1px]">
+                      Prescribing data for confident decisions.
                     </p>
-
-                    <div
-                      className={["group-focus-within:w-16 group-focus-within:bg-[#FF4C2C]"].join(
-                        " "
-                      )}
-                      aria-hidden="true"
-                    />
-
-                    {/* IMAGEM abaixo */}
                     <div className="relative mt-auto flex-1 min-h-[140px] sm:min-h-[180px] lg:min-h-[240px]">
-                      <div
-                        className={[
-                          "absolute left-1/2",
-                          "bottom-[-110px]",
-                          "h-full w-[170%] -translate-x-1/2",
-                          "transition-transform duration-500 ease-out",
-                          "group-hover:-translate-y-[2px] group-focus-within:-translate-y-[2px]",
-                        ].join(" ")}
-                      >
+                      <div className="absolute left-1/2 bottom-[-110px] h-full w-[170%] -translate-x-1/2 transition-transform duration-500 ease-out group-hover:-translate-y-[2px] group-focus-within:-translate-y-[2px]">
                         <div className="relative h-full w-full">
                           <Image
                             src="/aftercormedixF.png"
                             alt="Preview"
                             fill
-                            className={[
-                              "object-contain object-bottom",
-                              "transition-transform duration-700 ease-out",
-                              "group-hover:scale-[1.26] group-focus-within:scale-[1.06]",
-                            ].join(" ")}
+                            className="object-contain object-bottom transition-transform duration-700 ease-out group-hover:scale-[1.26] group-focus-within:scale-[1.06]"
                             draggable={false}
                             priority={false}
                           />
@@ -298,207 +297,105 @@ export default function BentoHome2026() {
                   </div>
                 </div>
               </Link>
-            </BentoCard>
+            </div>
 
-            {/* Card 4 */}
-            <BentoCard className="h-[240px] lg:h-[120px]">
-              <Link href="/highpoint" className="block h-full">
+            {/* Card 4 — About */}
+            <BentoCard className="h-[200px] lg:h-[120px]">
+              <Link href="/sobre" className="block h-full">
                 <div className="corner-mask corner-mask-sm relative flex h-full flex-col justify-center overflow-hidden bg-white shadow-sm">
-                  <div
-                    className="pointer-events-none absolute inset-0 z-0"
-                    style={{
-                      backgroundImage: "url(/.jpg)",
-                      backgroundSize: "cover",
-                      backgroundPosition: "center",
-                    }}
-                  />
-
                   <div className="relative z-10 flex h-full flex-col items-center justify-center px-8 text-center">
                     <p
                       className="text-[1.25rem] font-medium leading-tight text-[#131415] lg:text-[1.5rem]"
-                      style={{
-                        fontFamily:
-                          "var(--font-schibstedGrotesk), sans-serif",
-                      }}
+                      style={{ fontFamily: "var(--font-schibstedGrotesk), sans-serif" }}
                     >
-                      sobre mim
+                      about
                     </p>
                   </div>
                 </div>
               </Link>
             </BentoCard>
 
-            {/* Card 7 */}
+            {/* Card 7 — Hepatite thumbnail */}
             <BentoCard className="group h-[240px] lg:h-[240px]">
-              <Link href="#" className="block h-full">
+              <Link href="/hepatite" className="block h-full">
                 <div className="corner-mask relative h-full w-full overflow-hidden bg-white shadow-sm">
                   <img
                     src="/hepatite_thumb.jpg"
-                    alt="Background"
+                    alt="Hepatite C case study"
                     className={[
                       "pointer-events-none absolute inset-0 h-full w-full object-cover",
                       "transition-transform duration-700 ease-out will-change-transform",
                       "group-hover:scale-[1.14] group-hover:translate-y-[2px]",
                     ].join(" ")}
                   />
-
-                  <div
-                    className={[
-                      "pointer-events-none absolute inset-0",
-                      "opacity-0 transition-opacity duration-500 ease-out",
-                      "group-hover:opacity-100",
-                    ].join(" ")}
-                    aria-hidden="true"
-                    style={{ background: "" }}
-                  />
                 </div>
               </Link>
             </BentoCard>
           </div>
 
-          {/* ========== COLUNA 2 ========== */}
-          <div className="flex flex-col gap-6 lg:col-span-4">
+          {/* ========== COLUMN 2 ========== */}
+          <div data-stagger-item className="flex flex-col gap-6 lg:col-span-4">
             <div className="hidden lg:block lg:min-h-[120px] lg:flex-1" />
 
-            {/* Card 2 */}
-            <BentoCard className="h-[240px] lg:h-[480px]">
-              <Link href="/cormedix" className="block h-full">
+            {/* Card 2 — Hepatite (tilt) */}
+            <div className="h-[300px] sm:h-[360px] lg:h-[480px]" style={{ perspective: "1200px" }}>
+              <Link href="/hepatite" className="block h-full">
                 <div
-                  className={[
-                    "corner-mask group relative h-full w-full overflow-hidden",
-                    "bg-[#0B1220]",
-                    "transition-transform duration-300 ease-out",
-                  ].join(" ")}
-                  onMouseEnter={() => {
-                    const v = document.getElementById(
-                      "cormedix-card-video"
-                    ) as HTMLVideoElement | null;
-                    if (!v) return;
-                    v.currentTime = 0;
-                    v.play().catch(() => {});
-                  }}
-                  onMouseLeave={() => {
-                    const v = document.getElementById(
-                      "cormedix-card-video"
-                    ) as HTMLVideoElement | null;
-                    if (!v) return;
-                    v.pause();
-                    v.currentTime = 0;
-                  }}
-                  onFocus={() => {
-                    const v = document.getElementById(
-                      "cormedix-card-video"
-                    ) as HTMLVideoElement | null;
-                    if (!v) return;
-                    v.currentTime = 0;
-                    v.play().catch(() => {});
-                  }}
-                  onBlur={() => {
-                    const v = document.getElementById(
-                      "cormedix-card-video"
-                    ) as HTMLVideoElement | null;
-                    if (!v) return;
-                    v.pause();
-                    v.currentTime = 0;
-                  }}
+                  ref={t2.cardRef}
+                  className="corner-mask group relative h-full w-full overflow-hidden bg-[#0B1220]"
+                  onMouseMove={t2.onMove}
+                  onMouseEnter={() => playVideo("video-hepatite")}
+                  onMouseLeave={() => { t2.onLeave(); pauseVideo("video-hepatite"); }}
+                  onFocus={() => playVideo("video-hepatite")}
+                  onBlur={() => pauseVideo("video-hepatite")}
                 >
+                  {/* Spotlight */}
+                  <div
+                    ref={t2.spotRef}
+                    className="pointer-events-none absolute inset-0 z-[4] opacity-0 transition-opacity duration-500"
+                    aria-hidden="true"
+                  />
+
                   <video
-                    id="cormedix-card-video"
+                    id="video-hepatite"
                     className={[
                       "absolute inset-0 h-full w-full object-cover",
                       "transition-transform duration-700 ease-out",
-                      "group-hover:scale-[1.04] group-focus-within:scale-[1.04] bg-amber-400",
+                      "group-hover:scale-[1.04] group-focus-within:scale-[1.04]",
                     ].join(" ")}
                     muted
                     playsInline
                     preload="metadata"
                     aria-hidden="true"
                   >
-                    <source src="/" type="video/mp4" />
+                    <source src="/hepatite_hero.mp4" type="video/mp4" />
                   </video>
 
                   <div
-                    className={[
-                      "absolute inset-0",
-                      "bg-gradient-to-b from-black/0",
-                      "opacity-70 transition-opacity duration-500 ease-out",
-                      "group-hover:opacity-45 group-focus-within:opacity-45",
-                    ].join(" ")}
+                    className="absolute inset-0 bg-gradient-to-b from-black/0 opacity-70 transition-opacity duration-500 ease-out group-hover:opacity-45 group-focus-within:opacity-45"
                     aria-hidden="true"
                   />
 
                   <div className="relative z-10 flex h-full flex-col p-8 sm:p-10 md:p-12 lg:p-12 xl:p-16">
                     <div className="flex items-center justify-between gap-6">
-                      <p
-                        className={[
-                          "font-bricolageGrotesque text-sm font-semibold text-[#131415]",
-                          "transition-transform duration-300 ease-out",
-                          "group-hover:-translate-y-[1px] group-focus-within:-translate-y-[1px]",
-                        ].join(" ")}
-                      >
+                      <p className="font-bricolageGrotesque text-sm font-semibold text-white transition-transform duration-300 ease-out group-hover:-translate-y-[1px] group-focus-within:-translate-y-[1px]">
                         GILEAD
                       </p>
-
-                      <div
-                        className={[
-                          "relative h-[22px] w-[22px]",
-                          "transition-transform duration-300 ease-out",
-                          "group-hover:translate-x-[2px] group-hover:-translate-y-[2px] group-hover:rotate-45",
-                          "group-focus-within:translate-x-[2px] group-focus-within:-translate-y-[2px] group-focus-within:rotate-45",
-                        ].join(" ")}
-                      >
-                        <Image
-                          src="/blackarrow.svg"
-                          alt=""
-                          fill
-                          className="object-contain"
-                          draggable={false}
-                          priority={false}
-                        />
+                      <div className="relative h-[22px] w-[22px] transition-transform duration-300 ease-out group-hover:translate-x-[2px] group-hover:-translate-y-[2px] group-hover:rotate-45 group-focus-within:translate-x-[2px] group-focus-within:-translate-y-[2px] group-focus-within:rotate-45">
+                        <Image src="/arrow.svg" alt="" fill className="object-contain" draggable={false} priority={false} />
                       </div>
                     </div>
-
-                    <p
-                      className={[
-                        "font-bricolageGrotesque mt-2 text-3xl font-semibold leading-[1.15] text-[#131415]",
-                        "transition-transform duration-300 ease-out",
-                        "group-hover:-translate-y-[1px] group-focus-within:-translate-y-[1px]",
-                      ].join(" ")}
-                    >
-                      A epidemia
-                      <br />
-                      de mitos sobre a
-                      <br />
-                      Hepatite C.
+                    <p className="font-bricolageGrotesque mt-2 text-3xl font-semibold leading-[1.15] text-white transition-transform duration-300 ease-out group-hover:-translate-y-[1px] group-focus-within:-translate-y-[1px]">
+                      Fighting the epidemic of myths about Hepatitis C.
                     </p>
-
-                    <div
-                      className={["group-focus-within:w-16 group-focus-within:bg-[#FF4C2C]"].join(
-                        " "
-                      )}
-                      aria-hidden="true"
-                    />
-
                     <div className="relative mt-auto flex-1 min-h-[140px] sm:min-h-[180px] lg:min-h-[240px]">
-                      <div
-                        className={[
-                          "absolute left-1/2",
-                          "bottom-[-110px]",
-                          "h-full w-[170%] -translate-x-1/2",
-                          "transition-transform duration-500 ease-out",
-                          "group-hover:-translate-y-[2px] group-focus-within:-translate-y-[2px]",
-                        ].join(" ")}
-                      >
+                      <div className="absolute left-1/2 bottom-[-110px] h-full w-[170%] -translate-x-1/2 transition-transform duration-500 ease-out group-hover:-translate-y-[2px] group-focus-within:-translate-y-[2px]">
                         <div className="relative h-full w-full">
                           <Image
                             src="/hepatite_thumbB.png"
                             alt="Preview"
                             fill
-                            className={[
-                              "object-contain object-bottom",
-                              "transition-transform duration-700 ease-out",
-                              "group-hover:scale-[1.06] group-focus-within:scale-[1.06]",
-                            ].join(" ")}
+                            className="object-contain object-bottom transition-transform duration-700 ease-out group-hover:scale-[1.06] group-focus-within:scale-[1.06]"
                             draggable={false}
                             priority={false}
                           />
@@ -508,14 +405,13 @@ export default function BentoHome2026() {
                   </div>
                 </div>
               </Link>
-            </BentoCard>
+            </div>
 
-            {/* Card 5 (wave/sad/happy) */}
+            {/* Card 5 — About (wave/emotional) */}
             <BentoCard className="h-[240px] lg:h-[240px]">
-              <Link href="#" className="block h-full">
+              <Link href="/sobre" className="block h-full">
                 <div className="corner-mask group relative h-full w-full overflow-hidden bg-white shadow-sm">
                   <div className="absolute inset-0 bg-gradient-to-b from-white to-[#F7F7F7]" />
-
                   <img
                     src="/wave.svg"
                     alt=""
@@ -528,7 +424,6 @@ export default function BentoHome2026() {
                       "group-hover:translate-x-[-45%] group-focus-within:translate-x-[-45%]",
                     ].join(" ")}
                   />
-
                   <img
                     src="/sad.svg"
                     alt=""
@@ -542,7 +437,6 @@ export default function BentoHome2026() {
                       "group-focus-within:translate-y-[120px] group-focus-within:opacity-0 group-focus-within:rotate-[10deg]",
                     ].join(" ")}
                   />
-
                   <img
                     src="/happy.svg"
                     alt=""
@@ -562,11 +456,12 @@ export default function BentoHome2026() {
             </BentoCard>
           </div>
 
-          {/* ========== COLUNA 3 ========== */}
-          <div className="flex flex-col gap-6 lg:col-span-4">
-            {/* Card 3 */}
+          {/* ========== COLUMN 3 ========== */}
+          <div data-stagger-item className="flex flex-col gap-6 lg:col-span-4">
+
+            {/* Card 3 — Stats (Cormedix) */}
             <BentoCard className="group h-[240px] lg:h-[240px]">
-              <Link href="/pdpoint" className="block h-full">
+              <Link href="/cormedix" className="block h-full">
                 <div className="corner-mask corner-mask-sm relative h-full w-full overflow-hidden bg-white shadow-sm transition-colors duration-300">
                   <div
                     className={[
@@ -580,7 +475,6 @@ export default function BentoHome2026() {
                       backgroundPosition: "center",
                     }}
                   />
-
                   <img
                     src="/graph.svg"
                     alt=""
@@ -588,11 +482,9 @@ export default function BentoHome2026() {
                       "pointer-events-none absolute bottom-0 left-[-5%] z-[1] w-[110%] max-w-none",
                       "object-contain object-bottom mix-blend-multiply opacity-30",
                       "transition-transform duration-700 ease-out will-change-transform",
-                      "group-hover:scale-[1.08] group-hover:translate-y-[6px]",
-                      "group-hover:opacity-40",
+                      "group-hover:scale-[1.08] group-hover:translate-y-[6px] group-hover:opacity-40",
                     ].join(" ")}
                   />
-
                   <div
                     className={[
                       "relative z-10 flex h-full flex-col items-center justify-center px-6 text-center",
@@ -601,67 +493,31 @@ export default function BentoHome2026() {
                     ].join(" ")}
                   >
                     <span
-                      className={[
-                        "text-[3.5rem] font-semibold leading-none tracking-tighter text-[#131415] lg:text-[4rem]",
-                        "transition-transform duration-300 ease-out",
-                        "group-hover:scale-[1.01]",
-                      ].join(" ")}
-                      style={{
-                        fontFamily:
-                          "var(--font-schibstedGrotesk), sans-serif",
-                      }}
+                      className="text-[3.5rem] font-semibold leading-none tracking-tighter text-[#131415] lg:text-[4rem] transition-transform duration-300 ease-out group-hover:scale-[1.01]"
+                      style={{ fontFamily: "var(--font-schibstedGrotesk), sans-serif" }}
                     >
                       +30pp
                     </span>
-
                     <p
-                      className={[
-                        "max-w-[220px] text-[1.2rem] font-medium leading-tight text-[#131415] mt-2",
-                        "transition-opacity duration-300 ease-out",
-                        "group-hover:opacity-95",
-                      ].join(" ")}
-                      style={{
-                        fontFamily:
-                          "var(--font-schibstedGrotesk), sans-serif",
-                      }}
+                      className="max-w-[220px] text-[1.2rem] font-medium leading-tight text-[#131415] mt-2 transition-opacity duration-300 ease-out group-hover:opacity-95"
+                      style={{ fontFamily: "var(--font-schibstedGrotesk), sans-serif" }}
                     >
-                      de sucesso na conclusão das tarefas
+                      task success rate
                     </p>
-                  </div>
-
-                  <div className="absolute top-8 left-8 z-20">
-                    <h3 className="text-[0.75rem] font-bold uppercase tracking-widest text-[#999]"></h3>
                   </div>
                 </div>
               </Link>
             </BentoCard>
 
-            {/* ✅ Card 6 (COPIAR EMAIL) — corrigido com feedback "E-mail copiado" */}
-            <BentoCard className="h-[240px] lg:h-[120px]">
+            {/* Card 6 — Copy email */}
+            <BentoCard className="h-[200px] lg:h-[120px]">
               <button
                 type="button"
                 onClick={handleCopyEmail}
                 className="block h-full w-full text-left"
-                aria-label={`Copiar e-mail ${EMAIL}`}
+                aria-label={`Copy email ${EMAIL}`}
               >
-                <div className="corner-mask corner-mask-sm relative flex h-full flex-col justify-center overflow-hidden shadow-sm transition-colors duration-300 stroke focus:outline-none focus-visible:ring-2 focus-visible:ring-[#FF4C2C]/30">
-                  {/* Background Image Fixa (opcional) */}
-                  <div
-                    className="pointer-events-none absolute inset-0 z-0"
-                    style={{
-                      backgroundImage: "url(/SEU_BG.jpg)",
-                      backgroundSize: "cover",
-                      backgroundPosition: "center",
-                      opacity: 1,
-                    }}
-                  />
-
-                  {/* ✅ Pill de feedback */}
-                  <div className="pointer-events-none absolute right-4 top-4 z-20">
-                   
-                  </div>
-
-                  {/* Conteúdo */}
+                <div className="corner-mask corner-mask-sm relative flex h-full flex-col justify-center overflow-hidden bg-white shadow-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-[#FF4C2C]/30">
                   <div className="relative z-10 flex h-full flex-col items-center justify-center px-8 text-center">
                     <p
                       className={cn(
@@ -669,156 +525,74 @@ export default function BentoHome2026() {
                         "transition-colors duration-300",
                         emailCopied ? "text-[#FF4C2C]" : "text-[#131415]"
                       )}
-                      style={{
-                        fontFamily:
-                          "var(--font-schibstedGrotesk), sans-serif",
-                      }}
+                      style={{ fontFamily: "var(--font-schibstedGrotesk), sans-serif" }}
                     >
-                      {emailCopied ? "E-mail copiado" : "copiar e-mail"}
+                      {emailCopied ? "email copied" : "copy email"}
                     </p>
-
-                    {/* opcional: mostrar o email embaixo (bem discreto) */}
-                    
                   </div>
                 </div>
               </button>
             </BentoCard>
 
-            {/* Card 9 */}
-            <BentoCard className="h-[240px] lg:h-[480px]">
-              <Link href="/cormedix" className="block h-full">
+            {/* Card 9 — MSD (tilt) */}
+            <div className="h-[300px] sm:h-[360px] lg:h-[480px]" style={{ perspective: "1200px" }}>
+              <Link href="/msd" className="block h-full">
                 <div
-                  className={[
-                    "corner-mask group relative h-full w-full overflow-hidden",
-                    "bg-[#0B1220]",
-                    "transition-transform duration-300 ease-out",
-                  ].join(" ")}
-                  onMouseEnter={() => {
-                    const v = document.getElementById(
-                      "cormedix-card-video"
-                    ) as HTMLVideoElement | null;
-                    if (!v) return;
-                    v.currentTime = 0;
-                    v.play().catch(() => {});
-                  }}
-                  onMouseLeave={() => {
-                    const v = document.getElementById(
-                      "cormedix-card-video"
-                    ) as HTMLVideoElement | null;
-                    if (!v) return;
-                    v.pause();
-                    v.currentTime = 0;
-                  }}
-                  onFocus={() => {
-                    const v = document.getElementById(
-                      "cormedix-card-video"
-                    ) as HTMLVideoElement | null;
-                    if (!v) return;
-                    v.currentTime = 0;
-                    v.play().catch(() => {});
-                  }}
-                  onBlur={() => {
-                    const v = document.getElementById(
-                      "cormedix-card-video"
-                    ) as HTMLVideoElement | null;
-                    if (!v) return;
-                    v.pause();
-                    v.currentTime = 0;
-                  }}
+                  ref={t9.cardRef}
+                  className="corner-mask group relative h-full w-full overflow-hidden bg-[#0B1220]"
+                  onMouseMove={t9.onMove}
+                  onMouseEnter={() => playVideo("video-msd")}
+                  onMouseLeave={() => { t9.onLeave(); pauseVideo("video-msd"); }}
+                  onFocus={() => playVideo("video-msd")}
+                  onBlur={() => pauseVideo("video-msd")}
                 >
+                  {/* Spotlight */}
+                  <div
+                    ref={t9.spotRef}
+                    className="pointer-events-none absolute inset-0 z-[4] opacity-0 transition-opacity duration-500"
+                    aria-hidden="true"
+                  />
+
                   <video
-                    id="cormedix-card-video"
+                    id="video-msd"
                     className={[
                       "absolute inset-0 h-full w-full object-cover",
                       "transition-transform duration-700 ease-out",
-                      "group-hover:scale-[1.04] group-focus-within:scale-[1.04] bg-[#10A958]",
+                      "group-hover:scale-[1.04] group-focus-within:scale-[1.04]",
                     ].join(" ")}
                     muted
                     playsInline
                     preload="metadata"
                     aria-hidden="true"
                   >
-                    <source src="/" type="video/mp4" />
+                    <source src="/msd_hero.mp4" type="video/mp4" />
                   </video>
 
                   <div
-                    className={[
-                      "absolute inset-0",
-                      "bg-gradient-to-b from-black/0",
-                      "opacity-70 transition-opacity duration-500 ease-out",
-                      "group-hover:opacity-45 group-focus-within:opacity-45",
-                    ].join(" ")}
+                    className="absolute inset-0 bg-gradient-to-b from-black/0 opacity-70 transition-opacity duration-500 ease-out group-hover:opacity-45 group-focus-within:opacity-45"
                     aria-hidden="true"
                   />
 
                   <div className="relative z-10 flex h-full flex-col p-8 sm:p-10 md:p-12 lg:p-12 xl:p-16">
                     <div className="flex items-center justify-between gap-6">
-                      <p
-                        className={[
-                          "font-bricolageGrotesque text-sm font-semibold text-white",
-                          "transition-transform duration-300 ease-out",
-                          "group-hover:-translate-y-[1px] group-focus-within:-translate-y-[1px]",
-                        ].join(" ")}
-                      >
+                      <p className="font-bricolageGrotesque text-sm font-semibold text-white transition-transform duration-300 ease-out group-hover:-translate-y-[1px] group-focus-within:-translate-y-[1px]">
                         MSD
                       </p>
-
-                      <div
-                        className={[
-                          "relative h-[22px] w-[22px]",
-                          "transition-transform duration-300 ease-out",
-                          "group-hover:translate-x-[2px] group-hover:-translate-y-[2px] group-hover:rotate-45",
-                          "group-focus-within:translate-x-[2px] group-focus-within:-translate-y-[2px] group-focus-within:rotate-45",
-                        ].join(" ")}
-                      >
-                        <Image
-                          src="/arrow.svg"
-                          alt=""
-                          fill
-                          className="object-contain"
-                          draggable={false}
-                          priority={false}
-                        />
+                      <div className="relative h-[22px] w-[22px] transition-transform duration-300 ease-out group-hover:translate-x-[2px] group-hover:-translate-y-[2px] group-hover:rotate-45 group-focus-within:translate-x-[2px] group-focus-within:-translate-y-[2px] group-focus-within:rotate-45">
+                        <Image src="/arrow.svg" alt="" fill className="object-contain" draggable={false} priority={false} />
                       </div>
                     </div>
-
-                    <p
-                      className={[
-                        "font-bricolageGrotesque mt-2 text-3xl font-semibold leading-[1.15] text-white",
-                        "transition-transform duration-300 ease-out",
-                        "group-hover:-translate-y-[1px] group-focus-within:-translate-y-[1px]",
-                      ].join(" ")}
-                    >
-                      Estabilizando jornadas de exames.
+                    <p className="font-bricolageGrotesque mt-2 text-3xl font-semibold leading-[1.15] text-white transition-transform duration-300 ease-out group-hover:-translate-y-[1px] group-focus-within:-translate-y-[1px]">
+                      Stabilizing the clinical exam journey.
                     </p>
-
-                    <div
-                      className={["group-focus-within:w-16 group-focus-within:bg-[#FF4C2C]"].join(
-                        " "
-                      )}
-                      aria-hidden="true"
-                    />
-
                     <div className="relative mt-auto flex-1 min-h-[140px] sm:min-h-[180px] lg:min-h-[240px]">
-                      <div
-                        className={[
-                          "absolute left-1/2",
-                          "bottom-[-50px]",
-                          "h-full w-[170%] -translate-x-1/2",
-                          "transition-transform duration-500 ease-out",
-                          "group-hover:-translate-y-[2px] group-focus-within:-translate-y-[2px]",
-                        ].join(" ")}
-                      >
+                      <div className="absolute left-1/2 bottom-[-50px] h-full w-[170%] -translate-x-1/2 transition-transform duration-500 ease-out group-hover:-translate-y-[2px] group-focus-within:-translate-y-[2px]">
                         <div className="relative h-full w-full">
                           <Image
                             src="/msd_thumb.jpg"
                             alt="Preview"
                             fill
-                            className={[
-                              "object-contain object-bottom",
-                              "transition-transform duration-700 ease-out",
-                              "group-hover:scale-[1.16] group-focus-within:scale-[1.06]",
-                            ].join(" ")}
+                            className="object-contain object-bottom transition-transform duration-700 ease-out group-hover:scale-[1.16] group-focus-within:scale-[1.06]"
                             draggable={false}
                             priority={false}
                           />
@@ -828,12 +602,10 @@ export default function BentoHome2026() {
                   </div>
                 </div>
               </Link>
-            </BentoCard>
+            </div>
           </div>
         </div>
       </div>
-
-      <div className="h-48" />
     </section>
   );
 }

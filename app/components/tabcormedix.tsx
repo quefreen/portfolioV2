@@ -2,8 +2,13 @@
 "use client";
 
 import * as React from "react";
+import { useEffect, useRef } from "react";
 import Image from "next/image";
 import type { CSSProperties } from "react";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+gsap.registerPlugin(ScrollTrigger);
 
 type CardTone = "danger" | "success";
 
@@ -26,77 +31,75 @@ type TabData = {
 const DEFAULT_TABS: TabData[] = [
   {
     key: "legacy",
-    label: "Arquitetura legado",
+    label: "Legacy Architecture",
     badge: 3,
     tone: "danger",
     imageSrc: "/sitemap_legado.jpg",
-    imageAlt: "",
+    imageAlt: "Legacy sitemap",
     cards: [
       {
-        title: "Taxonomia competindo entre seções",
-        highlight: "Itens duplicados no menu criam mais incerteza.",
+        title: "Competing taxonomy across sections",
+        highlight: "Duplicated menu items increase uncertainty.",
         body:
-          'Conteúdos similares aparecem em mais de um lugar, deixando o “destino certo” ambíguo. Isso enfraquece o information scent e aumenta tentativa-e-erro.',
+          "Similar content appears in multiple places, making the 'right destination' ambiguous. This weakens information scent and increases trial-and-error.",
       },
       {
-        title: "Investors é “flat” demais",
-        highlight: "Dentro de Investors, tudo fica no mesmo nível.",
+        title: "Investors section is too flat",
+        highlight: "Inside Investors, everything sits at the same level.",
         body:
-          'Sem agrupamento por intenção, o usuário precisa escanear a lista e “chutar” o item. O caminho perde previsibilidade e aumenta a chance de cliques errados.',
+          "Without intent-based grouping, users must scan the list and guess. Paths lose predictability and wrong clicks increase.",
       },
       {
-        title: "Falta de orientação por tarefas",
-        highlight: "Divisão por setores e não por jornadas do usuário.",
+        title: "No task-based orientation",
+        highlight: "Organized by sector, not by user journeys.",
         body:
-          "A navegação prioriza áreas amplas (Company, Partnering, etc.) em vez de necessidades recorrentes de cada público. Resultado: mais backtracking e maior dependência de busca externa para concluir tarefas.",
+          "Navigation prioritizes broad areas (Company, Partnering, etc.) over recurring user needs. Result: more backtracking and external search dependency.",
       },
     ],
   },
   {
     key: "new",
-    label: "Nova arquitetura",
+    label: "New Architecture",
     badge: 3,
     tone: "success",
     imageSrc: "/sitemap_novoA.jpg",
-    imageAlt: "",
+    imageAlt: "New sitemap",
     cards: [
       {
-        title: "Destinos canônicos",
-        highlight: "Rótulos específicos reduzem ambiguidade.",
+        title: "Canonical destinations",
+        highlight: "Specific labels reduce ambiguity.",
         body:
-          "Termos genéricos viraram destinos claros (ex.: separar Press Releases de SEC Filings e explicitar Quarterly Results). Isso reduz “tentativa e erro” e aumenta previsibilidade.",
+          "Generic terms became clear destinations (e.g., separating Press Releases from SEC Filings, naming Quarterly Results). Reduces trial-and-error and increases predictability.",
       },
       {
-        title: "Investor Hub dedicado",
-        highlight: "De dropdown a ambiente próprio.",
+        title: "Dedicated Investor Hub",
+        highlight: "From dropdown to standalone environment.",
         body:
-          "A área de investidores ganhou URL e menu próprios, com agrupamentos por intenção (Financials, Stock, Governance, Resources). No site institucional, o acesso vira um entry point explícito.",
+          "The investors area got its own URL and menu, grouped by intent (Financials, Stock, Governance, Resources). On the main site, access becomes an explicit entry point.",
       },
       {
-        title: "Divisão por perfil e necessidade do usuário",
-        highlight: "Pontos de entrada por público, não por departamento.",
+        title: "Segmented by user profile & need",
+        highlight: "Entry points by audience, not by department.",
         body:
-          "O site principal foca em produto e ciência; o Investor Hub concentra tarefas de investidores (financeiro e governança). Cada público ganha um caminho natural, com menos backtracking e mais previsibilidade.",
+          "The main site focuses on product and science; the Investor Hub concentrates investor tasks (financial and governance). Each audience gets a natural path — less backtracking, more predictability.",
       },
     ],
   },
 ];
 
-// --- PADRÃO DO SITE (OBRIGATÓRIO) ---
+// --- LAYOUT CONSTANTS ---
 const SITE_CONTAINER =
   "mx-auto w-full max-w-[1400px] px-4 sm:px-4 md:px-8 lg:px-12";
 const GRID_12 = "grid grid-cols-4 gap-6 lg:grid-cols-12";
 const TEXT_10 = "col-span-4 lg:col-span-10 lg:col-start-2";
 const CONTENT_12 = "col-span-4 lg:col-span-12";
 
-// --- CORES (não alterar) ---
-// ✅ Cards
+// --- COLORS ---
 const RED_ACCENT = "#F10000";
 const GREEN_ACCENT = "#00A83A";
-// ✅ Tabs (sempre laranja no active)
 const TAB_ACTIVE_ACCENT = "#FF4C2C";
 
-// --- HELPERS: MASKS / CORNERS ---
+// --- MASKS ---
 type CornerSize = "sm" | "md" | "lg";
 
 function cornerClamp(size: CornerSize) {
@@ -190,7 +193,6 @@ function mask4CornersHalfHeight(size: CornerSize): CSSProperties {
   };
 }
 
-// ✅ máscara “inset” para alinhar o corner do conteúdo ao stroke
 function mask4CornersInset(size: CornerSize, insetPx: number): CSSProperties {
   const c = cornerClamp(size);
   const ci = `calc(${c} - ${insetPx}px)`;
@@ -256,7 +258,7 @@ function InsightCard({ tone, data }: { tone: CardTone; data: InsightCardData }) 
         className="flex h-full flex-col overflow-hidden bg-white"
         style={mask4CornersInset("md", INSET_PX)}
       >
-        {/* Header colorido */}
+        {/* Colored header */}
         <div
           className="px-4 py-2.5 flex items-center justify-center text-center"
           style={{
@@ -269,7 +271,7 @@ function InsightCard({ tone, data }: { tone: CardTone; data: InsightCardData }) 
           </div>
         </div>
 
-        {/* Body neutro — preenche até o final */}
+        {/* Neutral body */}
         <div className="bg-white p-6 flex flex-1 flex-col gap-5">
           <div className="flex items-center gap-3">
             <div className="relative shrink-0 w-6 h-6 md:w-7 md:h-7 lg:w-8 lg:h-8">
@@ -310,21 +312,62 @@ export function ArchitectureTabs({
 
   const activeTab = tabs.find((t) => t.key === active) ?? tabs[0];
 
-  // Cards invadem a área de cima — reduz a altura do “fundo branco/imagem”
   const CARDS_OVERLAP: CSSProperties = {
     marginTop: "calc(-1 * clamp(64px, 7vw, 120px))",
   };
 
+  const containerRef = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    if (!containerRef.current) return;
+
+    const ctx = gsap.context(() => {
+      const mm = gsap.matchMedia();
+      mm.add("(prefers-reduced-motion: no-preference)", () => {
+        gsap.utils.toArray<HTMLElement>("[data-fade]").forEach((el) => {
+          gsap.fromTo(
+            el,
+            { autoAlpha: 0, y: 28 },
+            {
+              autoAlpha: 1,
+              y: 0,
+              duration: 0.8,
+              ease: "power3.out",
+              scrollTrigger: { trigger: el, start: "top 88%", once: true },
+            }
+          );
+        });
+
+        gsap.utils.toArray<HTMLElement>("[data-stagger]").forEach((group) => {
+          const items = group.querySelectorAll<HTMLElement>("[data-stagger-item]");
+          if (!items.length) return;
+          gsap.fromTo(
+            items,
+            { autoAlpha: 0, y: 20 },
+            {
+              autoAlpha: 1,
+              y: 0,
+              duration: 0.65,
+              stagger: 0.1,
+              ease: "power3.out",
+              scrollTrigger: { trigger: group, start: "top 85%", once: true },
+            }
+          );
+        });
+      });
+    }, containerRef);
+
+    return () => ctx.revert();
+  }, []);
+
   return (
-    <section className={["w-full py-16 sm:py-20 lg:py-24", className].join(" ")}>
+    <section ref={containerRef} className={["w-full py-16 sm:py-20 lg:py-24", className].join(" ")}>
       <div className={SITE_CONTAINER}>
         <div className={GRID_12}>
-          {/* ✅ Shell branco (largura grande) permanece em CONTENT_12 */}
           <div className={CONTENT_12}>
-            <div className="relative">
-              {/* Tabs flutuantes */}
+            <div data-fade className="relative">
+              {/* Floating tabs */}
               <div className="absolute left-1/2 top-0 z-30 -translate-x-1/2 -translate-y-1/2">
-                {/* wrapper ao redor do grupo */}
                 <div
                   className="p-3"
                   style={{
@@ -333,7 +376,6 @@ export function ArchitectureTabs({
                     boxShadow: "0 10px 30px rgba(0,0,0,0.08)",
                   }}
                 >
-                  {/* ✅ grupo “pílula” (botões grudados) */}
                   <div className="w-full" style={mask4CornersHalfHeight("sm")}>
                     <div className="flex w-full overflow-hidden bg-white">
                       {tabs.map((t) => {
@@ -373,7 +415,7 @@ export function ArchitectureTabs({
                                   : "rgba(0,0,0,0.06)",
                                 color: isActive ? "#fff" : "#9A9A9A",
                               }}
-                              aria-label={`Total de itens: ${t.badge}`}
+                              aria-label={`Total items: ${t.badge}`}
                             >
                               {t.badge}
                             </span>
@@ -385,7 +427,7 @@ export function ArchitectureTabs({
                 </div>
               </div>
 
-              {/* Fundo branco (vai virar imagem): largura/altura mantidas */}
+              {/* Image area */}
               <div
                 className="relative z-10 bg-white px-6 pt-8 pb-10 md:px-10"
                 style={{
@@ -393,7 +435,6 @@ export function ArchitectureTabs({
                   boxShadow: "0 20px 60px rgba(0,0,0,0.06)",
                 }}
               >
-                {/* Área da imagem */}
                 <div className="bg-white/30 p-4 sm:p-6" style={mask4Corners("md")}>
                   <div className="relative w-full">
                     <div className="relative w-full aspect-[16/9] md:aspect-[14/9]">
@@ -410,19 +451,20 @@ export function ArchitectureTabs({
                 </div>
               </div>
 
-              {/* ✅ Cards dentro do limite do conteúdo (TEXT_10), mantendo o overlap */}
+              {/* Cards (overlap) */}
               <div className="relative z-20" style={CARDS_OVERLAP}>
                 <div className={GRID_12}>
                   <div className={TEXT_10}>
-                    <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
+                    <div data-stagger className="grid grid-cols-1 gap-6 md:grid-cols-3">
                       {activeTab.cards.map((c, idx) => (
-                        <InsightCard key={idx} tone={activeTab.tone} data={c} />
+                        <div key={idx} data-stagger-item>
+                          <InsightCard tone={activeTab.tone} data={c} />
+                        </div>
                       ))}
                     </div>
                   </div>
                 </div>
               </div>
-              {/* /cards */}
             </div>
           </div>
         </div>

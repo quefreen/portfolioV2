@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
 import { Bricolage_Grotesque, Schibsted_Grotesk } from "next/font/google";
 import "./globals.css";
+import { SmoothScrollProvider } from "./components/SmoothScrollProvider";
+import { CustomCursor } from "./components/CustomCursor";
+import { Navbar } from "./components/Navbar";
 
 const schibsted = Schibsted_Grotesk({
   subsets: ["latin"],
@@ -23,7 +26,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="pt-BR" className={`${schibsted.variable} ${bricolage.variable}`}>
       <body className="bg-background text-foreground font-sans antialiased">
-        {children}
+        <CustomCursor />
+        <Navbar />
+        <SmoothScrollProvider>
+          <div className="pt-16">
+            {children}
+          </div>
+        </SmoothScrollProvider>
       </body>
     </html>
   );

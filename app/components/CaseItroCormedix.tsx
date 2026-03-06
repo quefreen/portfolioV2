@@ -1,7 +1,12 @@
 // src/components/cormedix_case_intro.tsx
+"use client"
 
 import type { CSSProperties } from "react";
-import React from "react";
+import React, { useEffect, useRef } from "react";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+gsap.registerPlugin(ScrollTrigger);
 
 type MetaItemProps = {
   label: string;
@@ -10,18 +15,17 @@ type MetaItemProps = {
 };
 
 type TeamMember = {
-  initials: string; // ex: "RB"
-  name: string; // ex: "Ricardo Brandão"
-  role: string; // ex: "Product Manager"
+  initials: string;
+  name: string;
+  role: string;
 };
 
 const TEAM: TeamMember[] = [
-  { initials: "RB", name: "Ricardo Brandão", role: "Gerente de Projetos" },
-  { initials: "AM", name: "Ana Mahfuz", role: "Gerente de Contas" },
+  { initials: "RB", name: "Ricardo Brandão", role: "Project Manager" },
+  { initials: "AM", name: "Ana Mahfuz", role: "Account Manager" },
   { initials: "DM", name: "Diego Muniz", role: "Full Stack" },
   { initials: "IA", name: "Igor Alvarez", role: "Tech Lead" },
   { initials: "LO", name: "Leticia Oliveira", role: "QA" },
-
 ];
 
 function MetaItem({ label, value, align = "left" }: MetaItemProps) {
@@ -40,29 +44,26 @@ function MetaItem({ label, value, align = "left" }: MetaItemProps) {
   );
 }
 
-// --- CONSTANTES DO LAYOUT (MESMAS DO BENTO) ---
+// --- LAYOUT CONSTANTS ---
 const SITE_CONTAINER =
   "mx-auto w-full max-w-[1400px] px-4 sm:px-4 md:px-8 lg:px-12";
 const GRID_12 = "grid grid-cols-4 gap-6 lg:grid-cols-12";
 const TEXT_10 = "col-span-4 lg:col-span-10 lg:col-start-2";
 const CONTENT_12 = "col-span-4 lg:col-span-12";
 
-// Bleed até iPad (lg). No desktop (xl+) NÃO encosta no viewport.
 const SHAPE_BLEED = "-mx-4 md:-mx-8 lg:-mx-12 xl:mx-0";
-// padding interno: reaplica enquanto bleed está ativo; no xl+ vira 0 para não duplicar
 const SHAPE_INNER_PAD = "px-4 sm:px-4 md:px-8 lg:px-12 xl:px-0";
 
-// ✅ SISTEMA DE ESPAÇAMENTO (tokens)
-const SECTION_Y = "py-16 sm:py-20 lg:py-24"; // 64 / 80 / 96 (top e bottom)
-const STACK_24 = "gap-6"; // 24
-const STACK_48 = "gap-12"; // 48
-const REL_P_TO_P = "gap-3"; // 12 (metade)
-const REL_H_TO_BODY = "gap-6"; // 24
+// ✅ SPACING TOKENS
+const SECTION_Y = "py-16 sm:py-20 lg:py-24"; // 64 / 80 / 96
+const STACK_24 = "gap-6"; // 24px
+const STACK_48 = "gap-12"; // 48px
+const REL_P_TO_P = "gap-3"; // 12px (related paragraphs)
+const REL_H_TO_BODY = "gap-6"; // 24px
 
-// ✅ Overlap para matar 1px seam
 const OVERLAP_PX = 12;
 
-// --- MÁSCARAS (variações por “largura”/peso visual) ---
+// --- MASKS ---
 function cornerClamp(size: "sm" | "md" | "lg") {
   if (size === "sm") return "clamp(24px, 4.5vw, 56px)";
   if (size === "md") return "clamp(32px, 6vw, 80px)";
@@ -99,7 +100,6 @@ function cardMask4Corners(size: "sm" | "md" | "lg"): CSSProperties {
   };
 }
 
-// Apenas cantos de baixo (para shapes que “encaixam” com o bloco de cima)
 function edgeMaskBottom(size: "sm" | "md" | "lg"): CSSProperties {
   const c = cornerClamp(size);
   return {
@@ -112,7 +112,6 @@ function edgeMaskBottom(size: "sm" | "md" | "lg"): CSSProperties {
   };
 }
 
-// Apenas cantos de cima (para base branca de encaixe)
 function edgeMaskTop(size: "sm" | "md" | "lg"): CSSProperties {
   const c = cornerClamp(size);
   return {
@@ -125,7 +124,6 @@ function edgeMaskTop(size: "sm" | "md" | "lg"): CSSProperties {
   };
 }
 
-// --- Impact card helper ---
 function ImpactCard({
   children,
   size = "sm",
@@ -137,7 +135,7 @@ function ImpactCard({
 }) {
   return (
     <div
-      className={`flex flex-col gap-2.5 bg-white p-10 ${className}`}
+      className={`h-full flex flex-col gap-2.5 bg-white p-8 sm:p-10 ${className}`}
       style={cardMask4Corners(size)}
     >
       {children}
@@ -145,9 +143,103 @@ function ImpactCard({
   );
 }
 
-export default function CorMedixCaseIntro() {
+// --- ANIMATED COUNTER ---
+function AnimatedCounter({
+  prefix = "",
+  value,
+  suffix = "",
+  className = "",
+}: {
+  prefix?: string;
+  value: number;
+  suffix?: string;
+  className?: string;
+}) {
+  const ref = useRef<HTMLParagraphElement>(null);
+
+  useEffect(() => {
+    if (!ref.current) return;
+    const el = ref.current;
+
+    gsap.set(el, { autoAlpha: 0 });
+
+    const obj = { val: 0 };
+    const trigger = ScrollTrigger.create({
+      trigger: el,
+      start: "top 85%",
+      once: true,
+      onEnter: () => {
+        gsap.to(el, { autoAlpha: 1, duration: 0.3 });
+        gsap.to(obj, {
+          val: Math.abs(value),
+          duration: 1.6,
+          ease: "power2.out",
+          onUpdate() {
+            el.textContent = prefix + Math.round(obj.val) + suffix;
+          },
+        });
+      },
+    });
+
+    return () => trigger.kill();
+  }, [prefix, value, suffix]);
+
   return (
-    <section className="w-full">
+    <p ref={ref} className={className}>
+      {prefix}0{suffix}
+    </p>
+  );
+}
+
+export default function CorMedixCaseIntro() {
+  const containerRef = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    if (!containerRef.current) return;
+
+    const ctx = gsap.context(() => {
+      const mm = gsap.matchMedia();
+      mm.add("(prefers-reduced-motion: no-preference)", () => {
+        // Fade-up individual elements
+        gsap.utils.toArray<HTMLElement>("[data-fade]").forEach((el) => {
+          gsap.fromTo(
+            el,
+            { autoAlpha: 0, y: 28 },
+            {
+              autoAlpha: 1,
+              y: 0,
+              duration: 0.8,
+              ease: "power3.out",
+              scrollTrigger: { trigger: el, start: "top 88%", once: true },
+            }
+          );
+        });
+
+        // Stagger groups
+        gsap.utils.toArray<HTMLElement>("[data-stagger]").forEach((group) => {
+          const items = group.querySelectorAll<HTMLElement>("[data-stagger-item]");
+          if (!items.length) return;
+          gsap.fromTo(
+            items,
+            { autoAlpha: 0, y: 20 },
+            {
+              autoAlpha: 1,
+              y: 0,
+              duration: 0.65,
+              stagger: 0.1,
+              ease: "power3.out",
+              scrollTrigger: { trigger: group, start: "top 85%", once: true },
+            }
+          );
+        });
+      });
+    }, containerRef);
+
+    return () => ctx.revert();
+  }, []);
+
+  return (
+    <section ref={containerRef} className="w-full">
       {/* =========================
           1) HERO / TITLE HEADER
          ========================= */}
@@ -160,55 +252,56 @@ export default function CorMedixCaseIntro() {
       >
         <div className={SITE_CONTAINER}>
           <div className={GRID_12}>
-            {/* TEXTO (10 col) */}
             <div className={TEXT_10}>
               <div className={`${SECTION_Y} flex w-full items-start`}>
                 <div className="flex w-full flex-col gap-12">
-                  <div className="flex flex-col gap-4">
-                    <p className="text-sm font-semibold tracking-wide text-neutral-400">
+                  <div data-fade className="flex flex-col gap-4">
+                    <p className="text-xs font-semibold tracking-widest text-neutral-400 uppercase">
                       CORMEDIX
                     </p>
 
                     <div className="flex flex-wrap gap-2">
-                      <span className="inline-flex items-center rounded-full bg-white px-6 py-3 text-sm leading-none text-black">
-                        Saúde
+                      <span className="inline-flex items-center rounded-full bg-white px-5 py-2.5 text-sm leading-none text-black">
+                        Healthcare
                       </span>
-                      <span className="inline-flex items-center rounded-full bg-white px-6 py-3 text-sm leading-none text-black">
+                      <span className="inline-flex items-center rounded-full bg-white px-5 py-2.5 text-sm leading-none text-black">
                         B2B
                       </span>
-                      <span className="inline-flex items-center rounded-full bg-white px-6 py-3 text-sm leading-none text-black">
-                        Investidores & Mídia
+                      <span className="inline-flex items-center rounded-full bg-white px-5 py-2.5 text-sm leading-none text-black">
+                        Investors & Media
                       </span>
                     </div>
 
                     <h1 className="font-display text-[44px] font-semibold leading-[1.15] text-black sm:text-[52px] lg:text-[56px] lg:leading-[1.2]">
-                      Prescrevendo dados para decisões.
+                      Prescribing data for confident decisions.
                     </h1>
 
-                    {/* ✅ azul só aqui */}
                     <p className="text-lg font-semibold leading-[1.35] text-black sm:text-xl">
-                      Uma nova arquitetura para{" "}
+                      A new architecture to{" "}
                       <span className="text-[#028FBE]">
-                        reduzir a incerteza de investidores e jornalistas.
+                        reduce uncertainty for investors and journalists.
                       </span>
                     </p>
                   </div>
-                  
+
                   {/* meta */}
-                  <div className="grid w-full grid-cols-1 gap-x-6 gap-y-6 sm:grid-cols-2 lg:grid-cols-4 lg:gap-y-0">
-                    <MetaItem label="FUNÇÃO" value="Designer de Produto" />
-                    <MetaItem label="DURAÇÃO" value="3 meses" />
-                    <MetaItem label="TECNOLOGIAS" value="Wordpress, Spline, CMS" />
-                    <MetaItem label="ENTREGAS" value="Nova arquitetura" />
+                  <div
+                    data-fade
+                    className="grid w-full grid-cols-1 gap-x-6 gap-y-6 sm:grid-cols-2 lg:grid-cols-4 lg:gap-y-0"
+                  >
+                    <MetaItem label="ROLE" value="Product Designer" />
+                    <MetaItem label="DURATION" value="3 months" />
+                    <MetaItem label="TECHNOLOGIES" value="WordPress, Spline, CMS" />
+                    <MetaItem label="DELIVERABLES" value="Information Architecture" />
                   </div>
                 </div>
               </div>
             </div>
 
-            {/* MÍDIA (col-12) */}
+            {/* MEDIA (col-12) */}
             <div className={CONTENT_12}>
               <div className="relative -mt-6 h-[620px] w-full sm:mt-0">
-                {/* BASE BRANCA com MÁSCARA TOP (encaixe) */}
+                {/* WHITE BASE with TOP MASK (connector) */}
                 <div className="pointer-events-none absolute bottom-0 left-0 right-0 z-10">
                   <div
                     className={`relative h-[128px] bg-white ${SHAPE_BLEED}`}
@@ -230,7 +323,6 @@ export default function CorMedixCaseIntro() {
                         preload="metadata"
                       />
 
-                      {/* SVGs nos cantos do Vídeo (top) */}
                       <img
                         src="/esqtb.svg"
                         alt=""
@@ -249,25 +341,21 @@ export default function CorMedixCaseIntro() {
                   </div>
                 </div>
               </div>
-              {/* /thumb */}
             </div>
           </div>
         </div>
       </div>
 
       {/* =========================
-          2) ONE MINUTE / RESUMO
-          - grudado no hero
-          - gradient invertido
-          - overlap 12px pra eliminar seam
+          2) PROJECT SUMMARY
          ========================= */}
       <div
         className="relative z-10 w-full"
         style={{
           background:
             "linear-gradient(0deg, rgba(225, 225, 225, 0) 0%, rgba(0, 143, 190 , 0.2) 100%), #F7F7F7",
-          marginTop: `-${OVERLAP_PX}px`, // ✅ overlap real
-          paddingTop: `${OVERLAP_PX}px`, // ✅ compensa pra não “subir” conteúdo
+          marginTop: `-${OVERLAP_PX}px`,
+          paddingTop: `${OVERLAP_PX}px`,
         }}
       >
         <div className={`${SITE_CONTAINER} py-0`}>
@@ -279,84 +367,81 @@ export default function CorMedixCaseIntro() {
                     <div className={GRID_12}>
                       <div className={TEXT_10}>
                         <div className={`${SECTION_Y} flex flex-col gap-12`}>
-                          <div className="flex flex-col gap-6">
+                          <div data-fade className="flex flex-col gap-4">
                             <p className="text-2xl font-semibold leading-[1.2] text-[#131415]">
-                              Resumo do projeto
+                              Project Summary
                             </p>
                           </div>
 
                           <div className="grid grid-cols-1 gap-10 lg:grid-cols-12">
-                            {/* Conteúdo */}
+                            {/* Main content */}
                             <div className="lg:col-span-8">
-                              {/* ✅ Setores separados (48px) */}
                               <div className={`flex flex-col ${STACK_48}`}>
-                                {/* Contexto */}
-                                <div className={`flex flex-col ${REL_H_TO_BODY}`}>
+                                {/* Context */}
+                                <div data-fade className={`flex flex-col ${REL_H_TO_BODY}`}>
                                   <p className="text-xl font-semibold leading-none text-[#131415]">
-                                    Contexto
+                                    Context
                                   </p>
 
-                                  {/* ✅ Relacionados (P->P = 12px) */}
                                   <div className={`flex flex-col ${REL_P_TO_P}`}>
                                     <p className="text-lg leading-[1.45] text-[#131415]">
-                                      Em 2023, durante a aplicação do seu primeiro produto (DefenCath)
-                                      ao orgão regulatório Norte Americano (FDA) o site (legado mais de
-                                      10 anos) passou a representar um risco:
+                                      In 2023, during CorMedix's FDA application for its
+                                      first product (DefenCath), the legacy site — over
+                                      10 years old — became a liability:
                                     </p>
 
                                     <p className="text-lg leading-[1.45] text-[#131415]">
-                                      <b>Investidores</b> tinham dificuldade para encontrar documentos
-                                      oficiais e relatórios com confiança.
+                                      <b>Investors</b> struggled to find official
+                                      documents and reports with confidence.
                                     </p>
 
                                     <p className="text-lg leading-[1.45] text-[#131415]">
-                                      <b>Mídia e comunidade científica</b> precisavam vasculhar PDFs
-                                      para validar as evidências clínicas.
+                                      <b>Media and the scientific community</b> had to
+                                      dig through PDFs to validate clinical evidence.
                                     </p>
                                   </div>
                                 </div>
 
-                                {/* Resultados */}
-                                <div className={`flex flex-col ${REL_H_TO_BODY}`}>
+                                {/* Results */}
+                                <div data-fade className={`flex flex-col ${REL_H_TO_BODY}`}>
                                   <p className="text-xl font-semibold leading-none text-[#131415]">
-                                    Resultados
+                                    Results
                                   </p>
 
                                   <div className="flex flex-col gap-8">
-                                    {/* Item 1 */}
                                     <div className={`flex flex-col ${REL_P_TO_P}`}>
                                       <p className="text-lg font-semibold leading-none text-[#F54900]">
-                                        Investors-first - Nova arquitetura
+                                        Investors-first — New Architecture
                                       </p>
                                       <p className="text-lg leading-[1.45] text-[#131415]">
-                                        <b>Reorganizei e testei</b> o acesso a informações críticas
-                                        (SEC filings, resultados, stock e apresentações) em hubs por
-                                        tarefa, reduzindo atrito e{" "}
-                                        <b>aumentando a previsibilidade da navegação</b>.
+                                        <b>Restructured and tested</b> access to critical
+                                        information (SEC filings, financials, stock and
+                                        presentations) into task-based hubs — reducing
+                                        friction and{" "}
+                                        <b>increasing navigation predictability</b>.
                                       </p>
                                     </div>
 
-                                    {/* Item 2 */}
                                     <div className={`flex flex-col ${REL_P_TO_P}`}>
                                       <p className="text-lg font-semibold leading-none text-[#F54900]">
-                                        Credibilidade e governança
+                                        Credibility & Governance
                                       </p>
                                       <p className="text-lg leading-[1.45] text-[#131415]">
-                                        <b>Separei e medi</b> os conteúdos regulatórios vs. notícias,
-                                        melhorando a sinalização de conteúdo (information scent) e{" "}
-                                        <b>reduzindo erros de navegação</b>.
+                                        <b>Separated and measured</b> regulatory content
+                                        vs. news — improving information scent and{" "}
+                                        <b>reducing navigation errors</b>.
                                       </p>
                                     </div>
 
-                                    {/* Item 3 */}
                                     <div className={`flex flex-col ${REL_P_TO_P}`}>
                                       <p className="text-lg font-semibold leading-none text-[#F54900]">
-                                        Escalabilidade
+                                        Scalability
                                       </p>
                                       <p className="text-lg leading-[1.45] text-[#131415]">
-                                        Entreguei a estrutura em WordPress, com handoff + treinamento
-                                        para garantir autonomia do time interno incluindo regras de
-                                        conteúdo e bases para evolução do hub sem perda de consistência.
+                                        Delivered in WordPress with a full handoff and
+                                        training — ensuring internal team autonomy,
+                                        content governance rules, and a foundation for
+                                        hub evolution without losing consistency.
                                       </p>
                                     </div>
                                   </div>
@@ -369,61 +454,61 @@ export default function CorMedixCaseIntro() {
                               <div className="flex flex-col gap-8">
                                 <div className="flex flex-col gap-3">
                                   <div>
-  <p className="text-base font-semibold leading-none text-[#747474]">Time</p>
+                                    <p className="text-base font-semibold leading-none text-[#747474]">
+                                      Team
+                                    </p>
 
-  <div className="mt-3 flex items-center -space-x-2">
-    {TEAM.map((m) => (
-      <div key={m.initials} className="relative">
-        {/* Trigger */}
-        <div
-          className={[
-            "group",
-            "relative flex h-12 w-12 items-center justify-center",
-            "rounded-full border-2 border-white bg-[#D9D9D9]",
-            "text-[14px] font-semibold leading-none text-[#131415]",
-            "select-none",
-            "focus:outline-none focus-visible:ring-2 focus-visible:ring-[#FF4C2C]/30",
-          ].join(" ")}
-          tabIndex={0}
-          aria-label={`${m.name} - ${m.role}`}
-        >
-          {m.initials}
+                                    <div className="mt-3 flex items-center -space-x-2">
+                                      {TEAM.map((m) => (
+                                        <div key={m.initials} className="relative">
+                                          <div
+                                            className={[
+                                              "group",
+                                              "relative flex h-12 w-12 items-center justify-center",
+                                              "rounded-full border-2 border-white bg-[#D9D9D9]",
+                                              "text-[14px] font-semibold leading-none text-[#131415]",
+                                              "select-none",
+                                              "focus:outline-none focus-visible:ring-2 focus-visible:ring-[#FF4C2C]/30",
+                                            ].join(" ")}
+                                            tabIndex={0}
+                                            aria-label={`${m.name} - ${m.role}`}
+                                          >
+                                            {m.initials}
 
-          {/* Tooltip (centralizado + preto) */}
-          <div
-            className={[
-              "pointer-events-none absolute left-1/2 top-0 z-50",
-              "-translate-x-1/2 -translate-y-[calc(100%+10px)]",
-              "opacity-0 scale-95",
-              "group-hover:opacity-100 group-hover:scale-100",
-              "group-focus-visible:opacity-100 group-focus-visible:scale-100",
-              "transition-all duration-150",
-            ].join(" ")}
-            role="tooltip"
-            aria-hidden="true"
-          >
-            <div
-              className={[
-                "w-[240px] bg-[#131415] px-4 py-3",
-                "shadow-[0_12px_30px_rgba(0,0,0,0.25)]",
-              ].join(" ")}
-            >
-              <div className="flex flex-col gap-1">
-                <p className="text-[14px] font-semibold leading-[1.2] text-white">
-                  {m.name}
-                </p>
-                <p className="text-[13px] font-medium leading-[1.2] text-white/75">
-                  {m.role}
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    ))}
-  </div>
-</div>
-                                  <div className="h-1 w-full bg-black/10" />
+                                            <div
+                                              className={[
+                                                "pointer-events-none absolute left-1/2 top-0 z-50",
+                                                "-translate-x-1/2 -translate-y-[calc(100%+10px)]",
+                                                "opacity-0 scale-95",
+                                                "group-hover:opacity-100 group-hover:scale-100",
+                                                "group-focus-visible:opacity-100 group-focus-visible:scale-100",
+                                                "transition-all duration-150",
+                                              ].join(" ")}
+                                              role="tooltip"
+                                              aria-hidden="true"
+                                            >
+                                              <div
+                                                className={[
+                                                  "w-[240px] bg-[#131415] px-4 py-3",
+                                                  "shadow-[0_12px_30px_rgba(0,0,0,0.25)]",
+                                                ].join(" ")}
+                                              >
+                                                <div className="flex flex-col gap-1">
+                                                  <p className="text-[14px] font-semibold leading-[1.2] text-white">
+                                                    {m.name}
+                                                  </p>
+                                                  <p className="text-[13px] font-medium leading-[1.2] text-white/75">
+                                                    {m.role}
+                                                  </p>
+                                                </div>
+                                              </div>
+                                            </div>
+                                          </div>
+                                        </div>
+                                      ))}
+                                    </div>
+                                  </div>
+                                  <div className="h-px w-full bg-black/10" />
                                 </div>
 
                                 <div className="flex flex-col gap-3">
@@ -433,7 +518,7 @@ export default function CorMedixCaseIntro() {
                                   <p className="text-base leading-[1.45] text-[#131415]">
                                     CorMedix (NASDAQ: CRMD)
                                   </p>
-                                  <div className="h-1 w-full bg-black/10" />
+                                  <div className="h-px w-full bg-black/10" />
                                 </div>
 
                                 <div className="flex flex-col gap-3">
@@ -441,33 +526,27 @@ export default function CorMedixCaseIntro() {
                                     Responsibilities
                                   </p>
                                   <p className="text-base leading-[1.45] text-[#131415]">
-                                    Estratégia de UX • Arquitetura da Informação • Alinhamento com
-                                    stakeholders (Jurídico/RI) • Suporte à implementação (QA + handoff)
+                                    UX Strategy • Information Architecture •
+                                    Stakeholder Alignment (Legal/IR) •
+                                    Implementation Support (QA + handoff)
                                   </p>
                                 </div>
                               </div>
                             </div>
                           </div>
-                          {/* /layout */}
-                          <div className="h-4"></div>
                         </div>
                       </div>
                     </div>
                   </div>
-                  {/* /inner pad */}
                 </div>
               </div>
-              {/* /bleed */}
             </div>
           </div>
         </div>
       </div>
 
       {/* =========================
-          3) IMPACTO
-          - SECTION_Y simétrico
-          - fill azul mantido
-          - máscara bottom para encaixe do shape
+          3) IMPACT
          ========================= */}
       <div className="w-full">
         <div className={SITE_CONTAINER}>
@@ -483,86 +562,100 @@ export default function CorMedixCaseIntro() {
                       <div className={TEXT_10}>
                         <div className={`${SECTION_Y} flex flex-col ${STACK_24}`}>
                           {/* Header */}
-                          <div className="flex flex-col gap-4">
+                          <div data-fade className="flex flex-col gap-4">
                             <p className="text-lg font-semibold leading-none text-[#131415]">
-                              Impacto
+                              Impact
                             </p>
                             <p className="text-[32px] font-semibold leading-[1.2] text-[#131415] sm:text-[40px]">
-                              Melhoria mensurável nas jornadas críticas.
+                              Measurable gains across critical journeys.
                             </p>
                           </div>
 
                           {/* Cards (3) */}
-                          <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
-                            <ImpactCard size="sm" className="border-2 border-white">
-                              <p className="text-[56px] font-semibold leading-[1.1] text-[#131415]">
-                                −61%
-                              </p>
-                              <p className="text-lg font-semibold leading-[1.4] text-[#131415]">
-                                no tempo médio para concluir em 6 tarefas (64s → 24,2s).
-                              </p>
-                            </ImpactCard>
+                          <div data-stagger className="grid grid-cols-1 gap-4 lg:grid-cols-3">
+                            <div data-stagger-item>
+                              <ImpactCard size="sm" className="border-2 border-white">
+                                <AnimatedCounter
+                                  prefix="−"
+                                  value={61}
+                                  suffix="%"
+                                  className="text-[56px] font-semibold leading-[1.1] text-[#131415]"
+                                />
+                                <p className="text-lg font-semibold leading-[1.4] text-[#131415]">
+                                  avg. completion time across 6 tasks (64s → 24s).
+                                </p>
+                              </ImpactCard>
+                            </div>
 
-                            <ImpactCard size="sm">
-                              <p className="text-[56px] font-semibold leading-[1.1] text-[#131415]">
-                                +30pp
-                              </p>
-                              <p className="text-lg font-semibold leading-[1.4] text-[#131415]">
-                                de sucesso na conclusão das tarefas (63% → 93%).
-                              </p>
-                            </ImpactCard>
+                            <div data-stagger-item>
+                              <ImpactCard size="sm">
+                                <AnimatedCounter
+                                  prefix="+"
+                                  value={30}
+                                  suffix="pp"
+                                  className="text-[56px] font-semibold leading-[1.1] text-[#131415]"
+                                />
+                                <p className="text-lg font-semibold leading-[1.4] text-[#131415]">
+                                  task success rate (63% → 93%).
+                                </p>
+                              </ImpactCard>
+                            </div>
 
-                            <ImpactCard size="sm">
-                              <p className="text-[56px] font-semibold leading-[1.1] text-[#131415]">
-                                −82%
-                              </p>
-                              <p className="text-lg font-semibold leading-[1.4] text-[#131415]">
-                                de misclicks (0,56 → 0,10), reduzindo tentativa e erro.
-                              </p>
-                            </ImpactCard>
+                            <div data-stagger-item>
+                              <ImpactCard size="sm">
+                                <AnimatedCounter
+                                  prefix="−"
+                                  value={82}
+                                  suffix="%"
+                                  className="text-[56px] font-semibold leading-[1.1] text-[#131415]"
+                                />
+                                <p className="text-lg font-semibold leading-[1.4] text-[#131415]">
+                                  misclick rate (0.56 → 0.10) — reducing trial and error.
+                                </p>
+                              </ImpactCard>
+                            </div>
                           </div>
 
-                          {/* Espaço “controlado” */}
-                          <div className="h-4 sm:h-8" />
-
-                          {/* Parte 2 */}
-                          <div className="flex flex-col gap-4">
-                            <p className="text-[32px] font-semibold leading-[1.2] text-[#131415] sm:text-[40px]">
-                              Entrega sustentável para o time interno.
-                            </p>
+                          {/* Divider group */}
+                          <div data-fade className="pt-8">
+                            <div className="flex flex-col gap-4">
+                              <p className="text-[32px] font-semibold leading-[1.2] text-[#131415] sm:text-[40px]">
+                                Sustainable delivery for the internal team.
+                              </p>
+                            </div>
                           </div>
 
                           {/* Cards (2) */}
-                          <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
-                            <ImpactCard size="md">
-                              <p className="text-[28px] font-semibold leading-[1.2] text-[#131415] sm:text-[32px]">
-                                WordPress + documentação
-                              </p>
-                              <p className="text-lg font-medium leading-[1.4] text-[#131415] sm:text-xl">
-                                permitindo que o time publique/atualize conteúdo e escale páginas
-                                sem depender de design/dev a cada ajuste.
-                              </p>
-                            </ImpactCard>
+                          <div data-stagger className="grid grid-cols-1 gap-4 lg:grid-cols-2">
+                            <div data-stagger-item>
+                              <ImpactCard size="md">
+                                <p className="text-[28px] font-semibold leading-[1.2] text-[#131415] sm:text-[32px]">
+                                  WordPress + documentation
+                                </p>
+                                <p className="text-lg font-medium leading-[1.4] text-[#131415] sm:text-xl">
+                                  enabling the team to publish, update, and scale pages
+                                  independently — no design or dev dependency per update.
+                                </p>
+                              </ImpactCard>
+                            </div>
 
-                            <ImpactCard size="md">
-                              <p className="whitespace-pre-line text-[28px] font-semibold leading-[1.2] text-[#131415] sm:text-[32px]">
-                                Roadmap{"\n"}pós-lançamento
-                              </p>
-                              <p className="text-lg font-medium leading-[1.4] text-[#131415] sm:text-xl">
-                                Entregamos um backlog priorizado para a fase pós-DefenCath e expansão
-                                do hub científico.
-                              </p>
-                            </ImpactCard>
+                            <div data-stagger-item>
+                              <ImpactCard size="md">
+                                <p className="whitespace-pre-line text-[28px] font-semibold leading-[1.2] text-[#131415] sm:text-[32px]">
+                                  Post-launch{"\n"}Roadmap
+                                </p>
+                                <p className="text-lg font-medium leading-[1.4] text-[#131415] sm:text-xl">
+                                  A prioritized backlog for the post-DefenCath phase and
+                                  scientific hub expansion.
+                                </p>
+                              </ImpactCard>
+                            </div>
                           </div>
-                          <div className="h-2"></div>
                         </div>
-                        {/* /SECTION_Y */}
                       </div>
                     </div>
                   </div>
-                  {/* /inner pad */}
                 </div>
-                {/* /shape */}
               </div>
             </div>
           </div>

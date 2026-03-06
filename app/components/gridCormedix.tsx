@@ -1,11 +1,16 @@
 "use client";
 
 import * as React from "react";
+import { useEffect, useRef } from "react";
 import Image from "next/image";
 import type { CSSProperties } from "react";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+gsap.registerPlugin(ScrollTrigger);
 
 // ==============================
-// Grid e containers (obrigatório)
+// Grid and containers
 // ==============================
 const SITE_CONTAINER =
   "mx-auto w-full max-w-[1400px] px-4 sm:px-4 md:px-8 lg:px-12";
@@ -13,25 +18,13 @@ const GRID_12 = "grid grid-cols-4 gap-6 lg:grid-cols-12";
 const TEXT_10 = "col-span-4 lg:col-span-10 lg:col-start-2";
 
 // ==============================
-// Espaçamento vertical padrão (64/80/96)
+// Spacing
 // ==============================
 const SECTION_Y = "py-16 sm:py-20 lg:py-24";
-
-// ==============================
-// Spacing tokens
-// ==============================
-const STACK_12 = "gap-3"; // 12px
-const STACK_24 = "gap-6"; // 24px
-const STACK_32 = "gap-8"; // 32px
+const STACK_12 = "gap-3";  // 12px
+const STACK_24 = "gap-6";  // 24px
 const STACK_40 = "gap-10"; // 40px
 const STACK_48 = "gap-12"; // 48px
-
-// ==============================
-// Fonte (seu padrão: Sora via variável)
-// ==============================
-const FONT_SORA: CSSProperties = {
-  fontFamily: "var(--font-sora), ui-sans-serif, system-ui, sans-serif",
-};
 
 // ==============================
 // Masks / corners helpers
@@ -87,80 +80,79 @@ function maskFourCorners(corner: CornerSize, extra?: CSSProperties): CSSProperti
 }
 
 // ==============================
-// Tipos
+// Types
 // ==============================
 type TaskPublic = {
   id: string;
   tag: string;
   title: string;
-  highlightLabel: string; // ex: "Tempo" / "Sucesso" / "SEQ (1–7)"
+  highlightLabel: string;
   why: string;
 };
 
 type Metric = {
-  highlightValue: string; // ex: "−61%"
-  highlightDetail: string; // ex: "102s → 39s"
+  highlightValue: string;
+  highlightDetail: string;
 };
 
 type MetricsMap = Record<string, Metric>;
 
 // ==============================
-// Conteúdo público
+// Task data
 // ==============================
 const tasks: TaskPublic[] = [
   {
     id: "t1",
-    tag: "Tarefa 1 — Investor",
-    title: "Encontrar Q3’22 e Q3’21 (comparar caixa).",
-    highlightLabel: "Tempo",
+    tag: "Task 1 — Investor",
+    title: "Find Q3'22 and Q3'21 (compare cash position).",
+    highlightLabel: "Time",
     why:
-      "Filtros por tipo/ano + agrupamento por “Financials/Quarterly” reduziu scroll e troca de abas.",
+      "Type/year filters + 'Financials/Quarterly' grouping reduced scrolling and tab-switching.",
   },
   {
     id: "t2",
-    tag: "Tarefa 2 — Researcher / Scientific community",
-    title: "Validar evidência “Phase 3 / DefenCath” antes de baixar.",
+    tag: "Task 2 — Researcher / Scientific Community",
+    title: "Validate 'Phase 3 / DefenCath' evidence before downloading.",
     highlightLabel: "SEQ (1–7)",
     why:
-      "Cards com resumo/abstract + filtro “Phase 3” eliminaram tentativa-e-erro de PDFs.",
+      "Cards with summary/abstract + 'Phase 3' filter eliminated PDF trial-and-error.",
   },
   {
     id: "t3",
-    tag: "Tarefa 3 — Journalist",
-    title: "Baixar logo oficial / Media Kit (hi-res).",
-    highlightLabel: "Sucesso",
+    tag: "Task 3 — Journalist",
+    title: "Download the official logo / Media Kit (hi-res).",
+    highlightLabel: "Success",
     why:
-      "“Media Assets Library” virou destino claro no menu/hub (sem depender de Google).",
+      "'Media Assets Library' became a clear destination in the hub menu — no Google needed.",
   },
   {
     id: "t4",
-    tag: "Tarefa 4 — Investor / Top-down quick check",
-    title: "Ver preço da ação e variação do dia (rápido).",
-    highlightLabel: "Tempo",
+    tag: "Task 4 — Investor / Top-down quick check",
+    title: "Check stock price and daily change (quick).",
+    highlightLabel: "Time",
     why:
-      "Preço/ticker virou informação “passiva” (widget/atalho), reduzindo cliques e navegação.",
+      "Price/ticker became passive information (widget/shortcut), reducing clicks and navigation.",
   },
   {
     id: "t5",
-    tag: "Tarefa 5 — Investor (Top-down do board)",
-    title: "Assinar Email Alerts (Results/SEC/News).",
-    highlightLabel: "Sucesso",
+    tag: "Task 5 — Investor (Top-down from board)",
+    title: "Subscribe to Email Alerts (Results/SEC/News).",
+    highlightLabel: "Success",
     why:
-      "CTA e destino previsíveis + linguagem direta (“Email Alerts”) reduziram busca por formulário escondido.",
+      "Predictable CTA + direct label ('Email Alerts') eliminated the search for a hidden form.",
   },
   {
     id: "t6",
-    tag: "Tarefa 6 — Journalist / Media & Publications (Top-down do board)",
-    title: "Encontrar press release mais recente sobre DefenCath.",
-    highlightLabel: "Tempo",
+    tag: "Task 6 — Journalist / Media & Publications (Top-down from board)",
+    title: "Find the most recent DefenCath press release.",
+    highlightLabel: "Time",
     why:
-      "Separação clara entre Press Releases vs SEC Filings + rotas de “Newsroom” evitaram confusão de taxonomia.",
+      "Clear separation between Press Releases vs SEC Filings + 'Newsroom' paths prevented taxonomy confusion.",
   },
 ];
 
 // ==============================
-// Demo metrics (só para preview local)
-// - Ative em dev com: NEXT_PUBLIC_TASK_RESULTS_DEV_UNLOCK=true
+// Demo metrics (dev preview only)
 // ==============================
 const DEMO_METRICS: MetricsMap = {
   t1: { highlightValue: "−61%", highlightDetail: "102s → 39s" },
@@ -172,7 +164,7 @@ const DEMO_METRICS: MetricsMap = {
 };
 
 // ==============================
-// UI: Card
+// UI: Task card
 // ==============================
 function TaskCardUI({
   t,
@@ -187,21 +179,18 @@ function TaskCardUI({
 
   return (
     <div
-      className="bg-white p-8 sm:p-10 overflow-hidden"
-      style={maskFourCorners("md", FONT_SORA)}
+      className="h-full bg-white p-8 sm:p-10 overflow-hidden"
+      style={maskFourCorners("md")}
     >
       <div className={`flex w-full flex-col ${STACK_24}`}>
-        {/* Tag (laranja 16px) */}
         <p className="text-[16px] font-semibold leading-none text-[#FF4C2C]">
           {t.tag}
         </p>
 
-        {/* Título */}
         <p className="text-[20px] font-medium leading-[1.35] text-black">
           {t.title}
         </p>
 
-        {/* Highlight */}
         <div className={`flex flex-col ${STACK_12}`}>
           <p className="text-[14px] font-semibold leading-none text-[#6B6B6B]">
             {t.highlightLabel}
@@ -214,12 +203,11 @@ function TaskCardUI({
             ].join(" ")}
           >
             {locked ? (
-              // ✅ Locked state: Ícone de cadeado (sem o texto da direita)
               <div className="flex items-center">
                 <div className="relative h-[44px] w-[44px] sm:h-[52px] sm:w-[52px]">
                   <Image
                     src="/cadeado.svg"
-                    alt="Dados protegidos"
+                    alt="Protected data"
                     fill
                     className="object-contain"
                     sizes="52px"
@@ -232,8 +220,6 @@ function TaskCardUI({
                 <p className="text-[44px] font-semibold leading-none text-[#131415] sm:text-[52px]">
                   {m?.highlightValue ?? "—"}
                 </p>
-
-                {/* ✅ Só aparece quando desbloqueado */}
                 <p className="text-[14px] font-semibold leading-none text-black">
                   {m?.highlightDetail ?? ""}
                 </p>
@@ -244,10 +230,9 @@ function TaskCardUI({
 
         <div className="h-px w-full bg-black/10" />
 
-        {/* Por que melhorou */}
         <div className={`flex flex-col ${STACK_12}`}>
           <p className="text-[16px] font-semibold leading-none text-black/80">
-            Por que melhorou
+            Why it improved
           </p>
           <p className="text-[16px] leading-[1.45] text-black/80">{t.why}</p>
         </div>
@@ -257,9 +242,7 @@ function TaskCardUI({
 }
 
 // ==============================
-// UI: Painel NDA (layout apenas)
-// - Remove shadow
-// - Aplica corners mask SVG
+// UI: NDA Unlock Panel
 // ==============================
 function NDAUnlockPanel({
   unlocked,
@@ -278,20 +261,19 @@ function NDAUnlockPanel({
     <div
       className="bg-white p-6 sm:p-7 overflow-hidden"
       style={maskFourCorners("md", {
-        ...FONT_SORA,
         outline: "1px solid rgba(0,0,0,0.08)",
       })}
     >
       <div className={`flex flex-col ${STACK_24}`}>
         <p className="text-[16px] leading-[1.35] text-black/80">
-          Para visualizar os números, adicione a senha ou{" "}
+          To view the data, enter the password or{" "}
           <a
             href="https://www.linkedin.com/in/quefreen/"
             target="_blank"
             rel="noopener noreferrer"
             className="font-semibold underline underline-offset-2 hover:text-[#FF4C2C] transition-colors"
           >
-            solicite aqui
+            request access here
           </a>
           .
         </p>
@@ -301,7 +283,7 @@ function NDAUnlockPanel({
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            placeholder={unlocked ? "Números liberados" : "Digite a senha"}
+            placeholder={unlocked ? "Access granted" : "Enter password"}
             disabled={unlocked || loading}
             className={[
               "w-full px-4 py-3 text-[16px] text-[#131415]",
@@ -312,7 +294,6 @@ function NDAUnlockPanel({
               "focus:ring-2 focus:ring-[#FF4C2C]/30",
               unlocked ? "opacity-60" : "",
             ].join(" ")}
-            style={FONT_SORA}
           />
 
           <button
@@ -329,9 +310,8 @@ function NDAUnlockPanel({
                 : "bg-[#131415] text-white hover:bg-black",
               loading ? "opacity-70" : "",
             ].join(" ")}
-            style={FONT_SORA}
           >
-            {unlocked ? "Acesso liberado" : loading ? "Validando..." : "Liberar números"}
+            {unlocked ? "Access granted" : loading ? "Validating..." : "Unlock data"}
           </button>
 
           {error ? (
@@ -344,7 +324,7 @@ function NDAUnlockPanel({
 }
 
 // ==============================
-// Componente final (layout pronto)
+// Main component
 // ==============================
 export default function TaskResultsGrid() {
   const DEV_AUTO_UNLOCK =
@@ -358,17 +338,57 @@ export default function TaskResultsGrid() {
   const [loading, setLoading] = React.useState(false);
   const [error, setError] = React.useState<string | null>(null);
 
-  // (opcional) mantém o hook, mas silencioso (não quebra layout)
+  const containerRef = useRef<HTMLElement>(null);
+
   React.useEffect(() => {
-    // Se você ainda não criou as rotas, não tenta buscar nada.
-    // Quando criar, pode remover este guard.
     return;
+  }, []);
+
+  useEffect(() => {
+    if (!containerRef.current) return;
+
+    const ctx = gsap.context(() => {
+      const mm = gsap.matchMedia();
+      mm.add("(prefers-reduced-motion: no-preference)", () => {
+        gsap.utils.toArray<HTMLElement>("[data-fade]").forEach((el) => {
+          gsap.fromTo(
+            el,
+            { autoAlpha: 0, y: 28 },
+            {
+              autoAlpha: 1,
+              y: 0,
+              duration: 0.8,
+              ease: "power3.out",
+              scrollTrigger: { trigger: el, start: "top 88%", once: true },
+            }
+          );
+        });
+
+        gsap.utils.toArray<HTMLElement>("[data-stagger]").forEach((group) => {
+          const items = group.querySelectorAll<HTMLElement>("[data-stagger-item]");
+          if (!items.length) return;
+          gsap.fromTo(
+            items,
+            { autoAlpha: 0, y: 20 },
+            {
+              autoAlpha: 1,
+              y: 0,
+              duration: 0.65,
+              stagger: 0.1,
+              ease: "power3.out",
+              scrollTrigger: { trigger: group, start: "top 85%", once: true },
+            }
+          );
+        });
+      });
+    }, containerRef);
+
+    return () => ctx.revert();
   }, []);
 
   async function handleUnlock(password: string) {
     setError(null);
 
-    // ✅ Dev-only: para você conseguir visualizar sem perder tempo agora
     if (process.env.NODE_ENV === "development") {
       setLoading(true);
       setTimeout(() => {
@@ -379,7 +399,6 @@ export default function TaskResultsGrid() {
       return;
     }
 
-    // Produção (quando você criar as rotas)
     setLoading(true);
     try {
       const res = await fetch("/api/task-results/unlock", {
@@ -392,7 +411,7 @@ export default function TaskResultsGrid() {
       if (!res.ok) {
         setUnlocked(false);
         setMetrics({});
-        setError("Senha inválida. Se preferir, solicite via LinkedIn.");
+        setError("Invalid password. Feel free to request access via LinkedIn.");
         return;
       }
 
@@ -400,42 +419,39 @@ export default function TaskResultsGrid() {
       setMetrics(data.metrics ?? {});
       setUnlocked(true);
     } catch {
-      setError("Erro ao validar. Tente novamente.");
+      setError("Validation error. Please try again.");
     } finally {
       setLoading(false);
     }
   }
 
   return (
-    <section className={`w-full ${SECTION_Y}`}>
+    <section ref={containerRef} className={`w-full ${SECTION_Y}`}>
       <div className={SITE_CONTAINER}>
         <div className={GRID_12}>
           <div className={TEXT_10}>
             <div className={`flex w-full flex-col ${STACK_40}`}>
-              {/* Header: título + texto apoio + NDA panel */}
-              <div className="grid grid-cols-1 gap-6 lg:grid-cols-12 lg:items-start">
+              {/* Header */}
+              <div data-fade className="grid grid-cols-1 gap-6 lg:grid-cols-12 lg:items-start">
                 <div className="lg:col-span-8">
                   <div className={`flex flex-col ${STACK_24}`}>
                     <div className="flex">
                       <span className="inline-flex items-center gap-4 rounded-[32px] bg-white px-3 py-2">
                         <span className="h-1.5 w-1.5 rounded-full bg-[#FF4C2C]" />
                         <span className="text-lg font-semibold leading-none text-[#131415]">
-                          Resultados por tarefa
+                          Results by Task
                         </span>
                       </span>
                     </div>
 
                     <p className="text-[32px] font-medium leading-[1.2] text-black sm:text-[40px]">
-                      Evidência quantitativa na prática.
+                      Quantitative evidence in practice.
                     </p>
 
-                    <p
-                      className="text-[18px] leading-[1.45] text-black/70"
-                      style={FONT_SORA}
-                    >
-                      Seis tarefas representativas comparando a experiência do legado vs.
-                      a nova arquitetura — medindo eficiência e previsibilidade em
-                      jornadas reais.
+                    <p className="text-[18px] leading-[1.45] text-black/70">
+                      Six representative tasks comparing the legacy experience vs.
+                      the new architecture — measuring efficiency and predictability
+                      across real user journeys.
                     </p>
                   </div>
                 </div>
@@ -451,19 +467,19 @@ export default function TaskResultsGrid() {
               </div>
 
               {/* Grid 2 col / 3 rows */}
-              <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
+              <div data-stagger className="grid grid-cols-1 gap-6 lg:grid-cols-2">
                 {tasks.map((t) => (
-                  <TaskCardUI
-                    key={t.id}
-                    t={t}
-                    locked={!unlocked}
-                    metric={metrics[t.id]}
-                  />
+                  <div key={t.id} data-stagger-item>
+                    <TaskCardUI
+                      t={t}
+                      locked={!unlocked}
+                      metric={metrics[t.id]}
+                    />
+                  </div>
                 ))}
               </div>
             </div>
           </div>
-          {/* /TEXT_10 */}
         </div>
       </div>
     </section>

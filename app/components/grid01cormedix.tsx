@@ -120,7 +120,7 @@ function ImageCompare({
       onPointerUp={onPointerUp}
       onPointerCancel={onPointerUp}
       role="group"
-      aria-label="Comparação before/after"
+      aria-label="Before/after comparison"
     >
       {/* AFTER (base) */}
       <Image
@@ -175,7 +175,7 @@ function ImageCompare({
         className="absolute inset-0 z-30 cursor-ew-resize"
         tabIndex={0}
         role="slider"
-        aria-label="Arraste para comparar before/after"
+        aria-label="Drag to compare before/after"
         aria-valuemin={0}
         aria-valuemax={100}
         aria-valuenow={Math.round(value)}
@@ -261,10 +261,10 @@ export function ImageAssetsGrid({
               <div className={SHAPE_INNER_PAD}>
                 <div className={GRID_12}>
                   <div className="col-span-4 lg:col-span-8">
-                    <ImageBlock src={leftImage} alt="Imagem 2/3" />
+                    <ImageBlock src={leftImage} alt="Design detail — wide view" />
                   </div>
                   <div className="col-span-4 lg:col-span-4">
-                    <ImageBlock src={rightImage} alt="Imagem 1/3" />
+                    <ImageBlock src={rightImage} alt="Design detail — close up" />
                   </div>
                 </div>
               </div>

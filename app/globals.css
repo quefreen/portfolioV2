@@ -28,6 +28,13 @@ body {
   color: var(--foreground);
 }
 
+/* Custom cursor — hide native cursor only on mouse devices */
+@media (hover: hover) and (pointer: fine) {
+  *, *::before, *::after {
+    cursor: none !important;
+  }
+}
+
 /* utilitário pra usar em títulos */
 @layer utilities {
   .font-display {
