@@ -14,7 +14,7 @@ export function Hero2026() {
 
         {/* Spline background */}
         <div className="absolute inset-0 z-0">
-          <Spline scene="https://prod.spline.design/AIfe4jRcveYWT6HX/scene.splinecode" />
+          <Spline scene="" />
         </div>
 
         {/* Text overlay */}
