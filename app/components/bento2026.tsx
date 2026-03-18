@@ -200,7 +200,7 @@ export default function BentoHome2026() {
               <BentoCard className="group h-[240px] lg:h-[240px]">
                 <Link href="/hepatite" className="block h-full">
                   <div className="corner-mask relative h-full w-full overflow-hidden bg-white shadow-sm">
-                    <img src="/hepatite_thumb.jpg" alt="Hepatite C case study" className="pointer-events-none absolute inset-0 h-full w-full object-cover transition-transform duration-700 ease-out will-change-transform group-hover:scale-[1.14] group-hover:translate-y-[2px]" />
+                    <Image src="/hepatite_thumb.jpg" alt="Hepatite C case study" fill sizes="(max-width: 1024px) 100vw, 33vw" className="pointer-events-none object-cover transition-transform duration-700 ease-out will-change-transform group-hover:scale-[1.14] group-hover:translate-y-[2px]" />
                   </div>
                 </Link>
               </BentoCard>
