@@ -32,19 +32,6 @@ function BentoCard({
   return <div className={base} style={style}>{children}</div>;
 }
 
-function playVideo(id: string) {
-  const v = document.getElementById(id) as HTMLVideoElement | null;
-  if (!v) return;
-  v.currentTime = 0;
-  v.play().catch(() => {});
-}
-
-function pauseVideo(id: string) {
-  const v = document.getElementById(id) as HTMLVideoElement | null;
-  if (!v) return;
-  v.pause();
-  v.currentTime = 0;
-}
 
 function StatCard30pp() {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -152,25 +139,15 @@ export default function BentoHome2026() {
               {/* Card 1 — Cormedix */}
               <div className="h-[300px] sm:h-[360px] lg:h-[480px]">
                 <Link href="/cormedix" className="block h-full">
-                  <div
-                    className="corner-mask group relative h-full w-full overflow-hidden bg-[#0B1220]"
-                    onMouseEnter={() => playVideo("video-cormedix")}
-                    onMouseLeave={() => pauseVideo("video-cormedix")}
-                    onFocus={() => playVideo("video-cormedix")}
-                    onBlur={() => pauseVideo("video-cormedix")}
-                  >
-                    <video id="video-cormedix" className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.04] group-focus-within:scale-[1.04]" muted playsInline preload="none" aria-hidden="true">
-                      <source src="/CormedixHero.mp4" type="video/mp4" />
-                    </video>
-                    <div className="absolute inset-0 bg-gradient-to-b from-black/0 opacity-70 transition-opacity duration-500 ease-out group-hover:opacity-45 group-focus-within:opacity-45" aria-hidden="true" />
+                  <div className="corner-mask group relative h-full w-full overflow-hidden bg-[#B0EAFF]">
                     <div className="relative z-10 flex h-full flex-col justify-center p-8 sm:p-10 md:p-12 lg:justify-start lg:p-12 xl:p-16">
                       <div className="flex items-center justify-between gap-6">
-                        <p className="font-bricolageGrotesque text-sm font-semibold text-white">CORMEDIX</p>
+                        <p className="font-bricolageGrotesque text-sm font-semibold text-[#131415]">CORMEDIX</p>
                         <div className="relative h-[22px] w-[22px] transition-transform duration-300 ease-out group-hover:translate-x-[2px] group-hover:-translate-y-[2px] group-hover:rotate-45 group-focus-within:translate-x-[2px] group-focus-within:-translate-y-[2px] group-focus-within:rotate-45">
-                          <Image src="/arrow.svg" alt="" fill className="object-contain" draggable={false} />
+                          <Image src="/blackarrow.svg" alt="" fill className="object-contain" draggable={false} />
                         </div>
                       </div>
-                      <p className="font-bricolageGrotesque mt-2 text-3xl font-semibold leading-[1.15] text-white text-left">
+                      <p className="font-bricolageGrotesque mt-2 text-3xl font-semibold leading-[1.15] text-[#131415] text-left">
                         Prescribing data for confident decisions.
                       </p>
                       <div className="hidden lg:block relative mt-auto flex-1 lg:min-h-[240px]">
