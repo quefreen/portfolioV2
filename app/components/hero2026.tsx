@@ -25,14 +25,18 @@ export function Hero2026() {
           {isDesktop ? (
             <Spline scene="https://prod.spline.design/AIfe4jRcveYWT6HX/scene.splinecode" />
           ) : (
-            <Image
-              src="/quef3d.png"
-              alt=""
-              fill
-              priority
-              className="object-cover"
-              aria-hidden="true"
-            />
+            <div className="flex h-full w-full items-center justify-center">
+              <div className="relative h-2/3 w-2/3">
+                <Image
+                  src="/quef3d.png"
+                  alt=""
+                  fill
+                  priority
+                  className="object-contain"
+                  aria-hidden="true"
+                />
+              </div>
+            </div>
           )}
         </div>
 
