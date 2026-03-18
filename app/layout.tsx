@@ -35,6 +35,10 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="pt-BR" className={`${schibsted.variable} ${bricolage.variable} ${sora.variable}`}>
+      <head>
+        <link rel="preconnect" href="https://prod.spline.design" />
+        <link rel="dns-prefetch" href="https://prod.spline.design" />
+      </head>
       <body className="bg-background text-foreground font-sans antialiased">
         <CustomCursor />
         <Navbar />
