@@ -159,7 +159,7 @@ export default function BentoHome2026() {
                     onFocus={() => playVideo("video-cormedix")}
                     onBlur={() => pauseVideo("video-cormedix")}
                   >
-                    <video id="video-cormedix" className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.04] group-focus-within:scale-[1.04]" muted playsInline preload="metadata" aria-hidden="true">
+                    <video id="video-cormedix" className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.04] group-focus-within:scale-[1.04]" muted playsInline preload="none" aria-hidden="true">
                       <source src="/CormedixHero.mp4" type="video/mp4" />
                     </video>
                     <div className="absolute inset-0 bg-gradient-to-b from-black/0 opacity-70 transition-opacity duration-500 ease-out group-hover:opacity-45 group-focus-within:opacity-45" aria-hidden="true" />
@@ -213,18 +213,8 @@ export default function BentoHome2026() {
               {/* Card 2 — Hepatite */}
               <div className="h-[300px] sm:h-[360px] lg:h-[480px]">
                 <Link href="/hepatite" className="block h-full">
-                  <div
-                    className="corner-mask group relative h-full w-full overflow-hidden bg-[#0B1220]"
-                    onMouseEnter={() => playVideo("video-hepatite")}
-                    onMouseLeave={() => pauseVideo("video-hepatite")}
-                    onFocus={() => playVideo("video-hepatite")}
-                    onBlur={() => pauseVideo("video-hepatite")}
-                  >
-                    <video id="video-hepatite" className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.04] group-focus-within:scale-[1.04]" muted playsInline preload="metadata" aria-hidden="true">
-                      <source src="/CormedixHero.mp4" type="video/mp4" />
-                    </video>
-                    <div className="absolute inset-0 bg-gradient-to-b from-black/0 opacity-70 transition-opacity duration-500 ease-out group-hover:opacity-45 group-focus-within:opacity-45" aria-hidden="true" />
-                    <div className="relative z-10 flex h-full flex-col justify-center p-8 sm:p-10 md:p-12 lg:justify-start lg:p-12 xl:p-16 bg-[#FFF8BD]">
+                  <div className="corner-mask group relative h-full w-full overflow-hidden bg-[#FFF8BD]">
+                    <div className="relative z-10 flex h-full flex-col justify-center p-8 sm:p-10 md:p-12 lg:justify-start lg:p-12 xl:p-16">
                       <div className="flex items-center justify-between gap-6">
                         <p className="font-bricolageGrotesque text-sm font-semibold text-[#131415]">GILEAD</p>
                         <div className="relative h-[22px] w-[22px] transition-transform duration-300 ease-out group-hover:translate-x-[2px] group-hover:-translate-y-[2px] group-hover:rotate-45 group-focus-within:translate-x-[2px] group-focus-within:-translate-y-[2px] group-focus-within:rotate-45">
@@ -279,18 +269,8 @@ export default function BentoHome2026() {
               {/* Card 9 — MSD */}
               <div className="h-[300px] sm:h-[360px] lg:h-[480px]">
                 <Link href="/msd" className="block h-full">
-                  <div
-                    className="corner-mask group relative h-full w-full overflow-hidden bg-[#0B1220]"
-                    onMouseEnter={() => playVideo("video-msd")}
-                    onMouseLeave={() => pauseVideo("video-msd")}
-                    onFocus={() => playVideo("video-msd")}
-                    onBlur={() => pauseVideo("video-msd")}
-                  >
-                    <video id="video-msd" className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.04] group-focus-within:scale-[1.04]" muted playsInline preload="metadata" aria-hidden="true">
-                      <source src="/CormedixHero.mp4" type="video/mp4" />
-                    </video>
-                    <div className="absolute inset-0 bg-gradient-to-b from-black/0 opacity-70 transition-opacity duration-500 ease-out group-hover:opacity-45 group-focus-within:opacity-45" aria-hidden="true" />
-                    <div className="relative z-10 flex h-full flex-col justify-center p-8 sm:p-10 md:p-12 lg:justify-start lg:p-12 xl:p-16 bg-[#E2FFBD]">
+                  <div className="corner-mask group relative h-full w-full overflow-hidden bg-[#E2FFBD]">
+                    <div className="relative z-10 flex h-full flex-col justify-center p-8 sm:p-10 md:p-12 lg:justify-start lg:p-12 xl:p-16">
                       <div className="flex items-center justify-between gap-6">
                         <p className="font-bricolageGrotesque text-sm font-semibold text-[#131415]">MSD</p>
                         <div className="relative h-[22px] w-[22px] transition-transform duration-300 ease-out group-hover:translate-x-[2px] group-hover:-translate-y-[2px] group-hover:rotate-45 group-focus-within:translate-x-[2px] group-focus-within:-translate-y-[2px] group-focus-within:rotate-45">
