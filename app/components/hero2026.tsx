@@ -1,42 +1,55 @@
 "use client"
 
-import { useEffect, useRef, useCallback } from "react"
-import Spline from "@splinetool/react-spline"
+import { useEffect, useRef, useCallback, useState } from "react"
+import dynamic from "next/dynamic"
 import { gsap } from "gsap"
+
+const Spline = dynamic(() => import("@splinetool/react-spline"), {
+  ssr: false,
+  loading: () => <div className="absolute inset-0 bg-[#F7F7F7]" />,
+})
+
+function useIsDesktop() {
+  const [isDesktop, setIsDesktop] = useState(false)
+  useEffect(() => {
+    const mq = window.matchMedia("(min-width: 1024px)")
+    setIsDesktop(mq.matches)
+    const handler = (e: MediaQueryListEvent) => setIsDesktop(e.matches)
+    mq.addEventListener("change", handler)
+    return () => mq.removeEventListener("change", handler)
+  }, [])
+  return isDesktop
+}
 
 export function Hero2026() {
   const leftRef   = useRef<HTMLParagraphElement>(null)
   const rightRef  = useRef<HTMLParagraphElement>(null)
   const splineRef = useRef<HTMLDivElement>(null)
   const tlRef     = useRef<gsap.core.Timeline | null>(null)
+  const isDesktop = useIsDesktop()
 
   useEffect(() => {
     const mm = gsap.matchMedia()
 
     mm.add("(prefers-reduced-motion: no-preference)", () => {
-      // Set everything invisible before paint
       gsap.set(splineRef.current, { autoAlpha: 0 })
       gsap.set(leftRef.current,   { autoAlpha: 0 })
       gsap.set(rightRef.current,  { autoAlpha: 0 })
 
-      // Build timeline, paused — triggered by Spline onLoad
       const tl = gsap.timeline({ paused: true })
 
       tl
-        // 1. Spline fades in — slow, barely-there
         .to(splineRef.current, {
           autoAlpha: 1,
           duration: 1.6,
           ease: "power2.inOut",
         })
-        // 2. Orange title — slides up with slight blur feel
         .fromTo(
           leftRef.current,
           { autoAlpha: 0, y: 40 },
           { autoAlpha: 1, y: 0, duration: 1.1, ease: "power3.out" },
           "-=0.9"
         )
-        // 3. Support text — softer, after title
         .fromTo(
           rightRef.current,
           { autoAlpha: 0, y: 24 },
@@ -46,7 +59,6 @@ export function Hero2026() {
 
       tlRef.current = tl
 
-      // Safety fallback: play after 4s if Spline never fires onLoad
       const fallback = window.setTimeout(() => {
         if (tlRef.current && tlRef.current.progress() === 0) {
           tlRef.current.play()
@@ -71,12 +83,16 @@ export function Hero2026() {
     <div className="w-full bg-[#F7F7F7] pb-10 md:pb-10 lg:pb-0 lg:-mt-12">
       <section className="relative w-full overflow-hidden bg-[#F7F7F7] pt-10 h-[500px] sm:h-[620px] md:h-[700px] lg:h-[800px]">
 
-        {/* Spline background */}
+        {/* Spline background — desktop only */}
         <div ref={splineRef} className="absolute inset-0 z-0">
-          <Spline
-            scene="https://prod.spline.design/AIfe4jRcveYWT6HX/scene.splinecode"
-            onLoad={handleSplineLoad}
-          />
+          {isDesktop ? (
+            <Spline
+              scene="https://prod.spline.design/AIfe4jRcveYWT6HX/scene.splinecode"
+              onLoad={handleSplineLoad}
+            />
+          ) : (
+            <div className="absolute inset-0 bg-[#F7F7F7]" />
+          )}
         </div>
 
         {/* Text overlay */}

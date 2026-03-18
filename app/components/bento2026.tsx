@@ -6,7 +6,9 @@ import type { ReactNode } from "react";
 import * as React from "react";
 import { useEffect, useRef, useCallback } from "react";
 import { gsap } from "gsap";
-import Lottie from "lottie-react";
+import dynamic from "next/dynamic";
+
+const Lottie = dynamic(() => import("lottie-react"), { ssr: false });
 import lottie30Data from "../../public/graph.json";
 
 const EMAIL = "quefreen.almeida@gmail.com";
