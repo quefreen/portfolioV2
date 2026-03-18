@@ -6,11 +6,8 @@ import type { ReactNode } from "react";
 import * as React from "react";
 import { useEffect, useRef, useCallback } from "react";
 import { gsap } from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Lottie from "lottie-react";
 import lottie30Data from "../../public/graph.json";
-
-gsap.registerPlugin(ScrollTrigger);
 
 const EMAIL = "quefreen.almeida@gmail.com";
 
@@ -229,46 +226,6 @@ export default function BentoHome2026() {
     };
   }, []);
 
-  useEffect(() => {
-    if (!containerRef.current) return;
-    const ctx = gsap.context(() => {
-      const mm = gsap.matchMedia();
-      mm.add("(prefers-reduced-motion: no-preference)", () => {
-        gsap.utils.toArray<HTMLElement>("[data-fade]").forEach((el) => {
-          gsap.fromTo(
-            el,
-            { autoAlpha: 0, y: 28 },
-            {
-              autoAlpha: 1,
-              y: 0,
-              duration: 0.8,
-              ease: "power3.out",
-              scrollTrigger: { trigger: el, start: "top 88%", once: true },
-            }
-          );
-        });
-
-        gsap.utils.toArray<HTMLElement>("[data-stagger]").forEach((group) => {
-          const items = (group as HTMLElement).querySelectorAll<HTMLElement>("[data-stagger-item]");
-          if (!items.length) return;
-          gsap.fromTo(
-            items,
-            { autoAlpha: 0, y: 20 },
-            {
-              autoAlpha: 1,
-              y: 0,
-              duration: 0.65,
-              stagger: 0.12,
-              ease: "power3.out",
-              scrollTrigger: { trigger: group, start: "top 85%", once: true },
-            }
-          );
-        });
-      });
-    }, containerRef);
-
-    return () => ctx.revert();
-  }, []);
 
   const handleCopyEmail = React.useCallback(async () => {
     let ok = true;

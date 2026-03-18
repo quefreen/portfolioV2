@@ -25,8 +25,11 @@ const sora = Sora({
 });
 
 export const metadata: Metadata = {
-  title: "Portfolio",
+  title: "Quefreen Almeida — Product Designer",
   description: "Quéfreen — Portfolio v2",
+  icons: {
+    icon: "/fav.svg",
+  },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
