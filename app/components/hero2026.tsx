@@ -2,6 +2,7 @@
 
 import Image from "next/image"
 import dynamic from "next/dynamic"
+import { useEffect, useState } from "react"
 
 const Spline = dynamic(() => import("@splinetool/react-spline"), {
   ssr: false,
@@ -9,13 +10,21 @@ const Spline = dynamic(() => import("@splinetool/react-spline"), {
 })
 
 export function Hero2026() {
+  const [isDesktop, setIsDesktop] = useState(false)
+
+  useEffect(() => {
+    setIsDesktop(window.innerWidth >= 1024)
+  }, [])
+
   return (
     <div className="w-full bg-[#F7F7F7] pb-10 md:pb-10 lg:pb-0 lg:-mt-12">
       <section className="relative w-full overflow-hidden bg-[#F7F7F7] pt-10 h-[500px] sm:h-[620px] md:h-[700px] lg:h-[800px]">
 
-        {/* Background — static image on sm/md, Spline on lg+ */}
+        {/* Background — static image on sm/md, Spline only rendered on desktop */}
         <div className="absolute inset-0 z-0">
-          <div className="block lg:hidden h-full w-full">
+          {isDesktop ? (
+            <Spline scene="https://prod.spline.design/AIfe4jRcveYWT6HX/scene.splinecode" />
+          ) : (
             <Image
               src="/quef3d.png"
               alt=""
@@ -24,10 +33,7 @@ export function Hero2026() {
               className="object-cover"
               aria-hidden="true"
             />
-          </div>
-          <div className="hidden lg:block h-full w-full">
-            <Spline scene="https://prod.spline.design/AIfe4jRcveYWT6HX/scene.splinecode" />
-          </div>
+          )}
         </div>
 
         {/* Text overlay */}
