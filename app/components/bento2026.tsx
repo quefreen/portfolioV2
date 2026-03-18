@@ -150,10 +150,10 @@ export default function BentoHome2026() {
                       <p className="font-bricolageGrotesque mt-2 text-3xl font-semibold leading-[1.15] text-[#131415] text-left">
                         Prescribing data for confident decisions.
                       </p>
-                      <div className="hidden lg:block relative mt-auto flex-1 lg:min-h-[240px]">
-                        <div className="absolute left-1/2 bottom-[-110px] h-full w-[170%] -translate-x-1/2 transition-transform duration-500 ease-out group-hover:-translate-y-[2px] group-focus-within:-translate-y-[2px]">
-                          <div className="relative h-full w-full">
-                            <Image src="/aftercormedixF.png" alt="Preview" fill className="object-contain object-bottom transition-transform duration-700 ease-out group-hover:scale-[1.26] group-focus-within:scale-[1.06]" draggable={false} />
+                      <div className="hidden lg:block relative mt-auto lg:h-[240px]">
+                        <div className="absolute left-1/2 bottom-[-110px] h-full w-[250%] -translate-x-1/2 transition-transform duration-500 ease-out group-hover:-translate-y-[2px] group-focus-within:-translate-y-[2px]">
+                          <div className="relative h-full w-full scale-[1.3] origin-bottom">
+                            <Image src="/aftercormedixF.png" alt="Preview" fill className="object-contain object-bottom transition-transform duration-700 ease-out group-hover:scale-[1.16] group-focus-within:scale-[1.06]" draggable={false} />
                           </div>
                         </div>
                       </div>

@@ -1,9 +1,34 @@
 "use client"
 
+import Image from "next/image"
+import dynamic from "next/dynamic"
+
+const Spline = dynamic(() => import("@splinetool/react-spline"), {
+  ssr: false,
+  loading: () => <div className="absolute inset-0 bg-[#F7F7F7]" />,
+})
+
 export function Hero2026() {
   return (
     <div className="w-full bg-[#F7F7F7] pb-10 md:pb-10 lg:pb-0 lg:-mt-12">
       <section className="relative w-full overflow-hidden bg-[#F7F7F7] pt-10 h-[500px] sm:h-[620px] md:h-[700px] lg:h-[800px]">
+
+        {/* Background — static image on sm/md, Spline on lg+ */}
+        <div className="absolute inset-0 z-0">
+          <div className="block lg:hidden h-full w-full">
+            <Image
+              src="/quef3d.png"
+              alt=""
+              fill
+              priority
+              className="object-cover"
+              aria-hidden="true"
+            />
+          </div>
+          <div className="hidden lg:block h-full w-full">
+            <Spline scene="https://prod.spline.design/AIfe4jRcveYWT6HX/scene.splinecode" />
+          </div>
+        </div>
 
         {/* Text overlay */}
         <div className="pointer-events-none relative z-10 mx-auto h-full w-full max-w-[1400px] px-4 sm:px-4 md:px-8 lg:px-12">
