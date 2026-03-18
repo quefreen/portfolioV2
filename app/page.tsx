@@ -1,10 +1,9 @@
 // page.tsx
-import dynamic from "next/dynamic";
-import { Hero2026 } from "./components/hero2026";
 
-const BentoHome2026   = dynamic(() => import("./components/bento2026"),  { ssr: false });
-const FooterCornerCap = dynamic(() => import("./components/footercap"),  { ssr: false });
-const FooterBase      = dynamic(() => import("./components/footer2026").then(m => ({ default: m.FooterBase })), { ssr: false });
+import BentoHome2026 from "./components/bento2026";
+import { Hero2026 } from "./components/hero2026";
+import FooterCornerCap from "./components/footercap";
+import { FooterBase } from "./components/footer2026";
 
 export default function Home() {
   return (
