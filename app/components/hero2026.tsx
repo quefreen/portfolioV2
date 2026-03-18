@@ -68,7 +68,7 @@ export function Hero2026() {
   }, [])
 
   return (
-    <div className="w-full pb-10 md:pb-10 lg:pb-0 lg:-mt-12">
+    <div className="w-full bg-[#F7F7F7] pb-10 md:pb-10 lg:pb-0 lg:-mt-12">
       <section className="relative w-full overflow-hidden bg-[#F7F7F7] pt-10 h-[500px] sm:h-[620px] md:h-[700px] lg:h-[800px]">
 
         {/* Spline background */}

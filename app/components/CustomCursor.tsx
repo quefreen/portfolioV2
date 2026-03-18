@@ -49,7 +49,7 @@ export function CustomCursor() {
   return (
     <div
       ref={dotRef}
-      className="pointer-events-none fixed left-0 top-0 z-[9999] h-2.5 w-2.5 rounded-full bg-[#FF4C2C]"
+      className="pointer-events-none fixed left-0 top-0 z-[9999] h-2.5 w-2.5 rounded-full bg-[#FF4C2C] hidden lg:block"
       style={{ willChange: "transform" }}
       aria-hidden="true"
     />
