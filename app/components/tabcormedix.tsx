@@ -34,7 +34,7 @@ const DEFAULT_TABS: TabData[] = [
     label: "Legacy Architecture",
     badge: 3,
     tone: "danger",
-    imageSrc: "/sitemap_legado.jpg",
+    imageSrc: "/sitemap_legadoB.jpg",
     imageAlt: "Legacy sitemap",
     cards: [
       {

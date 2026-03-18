@@ -177,7 +177,7 @@ export function HeroAbout() {
 
                     <p
                       className="font-semibold leading-[1.15] text-[#131415]"
-                      style={{ fontSize: "clamp(28px, 4vw, 52px)" }}
+                      style={{ fontSize: "clamp(28px, 4vw, 52px)", maxWidth: "12ch" }}
                     >
                       Product designer with a creative background and a passion for what's next.
                     </p>
@@ -207,7 +207,7 @@ export function HeroAbout() {
 
                 <div data-fade className={`flex flex-col ${STACK_24}`}>
                   <p className="text-[13px] font-semibold uppercase tracking-[0.1em] text-[#999]">
-                    Quéfreen Almeida
+                    Quefreen Almeida
                   </p>
                   <p className="text-[20px] leading-[1.55] text-black/80">
                     I'm a versatile professional with a repertoire spanning 3D to front-end.{" "}

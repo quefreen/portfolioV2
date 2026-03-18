@@ -83,7 +83,7 @@ function maskFourCorners(corner: CornerSize, extra?: CSSProperties): CSSProperti
 
 export default function Protecao({
   linkedinHref = "https://www.linkedin.com/in/quefreen/",
-  nextHref = "#",
+  nextHref = "/cormedix",
 }: {
   linkedinHref?: string;
   nextHref?: string;
@@ -101,31 +101,31 @@ export default function Protecao({
               <div className={`flex flex-col ${STACK_24}`}>
                 <div className={`flex flex-col ${STACK_12}`}>
                   <p className="text-[20px] font-semibold leading-[1.2] text-black sm:text-[22px]">
-                    Projeto protegido.
+                    Confidential Case Study
                   </p>
 
                   <p className="text-[18px] leading-[1.45] text-black/75 sm:text-[20px]">
-                    Me chama no{" "}
-                    <a
-                      href={linkedinHref}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="font-semibold text-black underline underline-offset-2 transition-colors hover:text-[#FF4C2C]"
-                    >
-                      LinkedIn
-                    </a>{" "}
-                    para receber a senha.
+                    Due to the sensitive nature of this project, I walk through the full strategic deck exclusively during live interviews.
                   </p>
                 </div>
 
                 <div className="h-px w-full bg-black/10" />
 
-                <div>
+                <div className={`flex flex-col sm:flex-row items-start sm:items-center ${STACK_24}`}>
+                  <a
+                    href={linkedinHref}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 text-[18px] font-semibold leading-none text-black transition-colors hover:text-[#FF4C2C]"
+                  >
+                    Let&apos;s connect on LinkedIn
+                  </a>
+
                   <Link
                     href={nextHref}
                     className="inline-flex items-center gap-2 text-[18px] font-semibold leading-none text-[#747474] transition-colors hover:text-[#FF4C2C]"
                   >
-                    Ver próximo projeto <span aria-hidden="true">→</span>
+                    View next project <span aria-hidden="true">→</span>
                   </Link>
                 </div>
               </div>

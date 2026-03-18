@@ -90,8 +90,8 @@ export default function InsightsCormedix() {
               {/* Imagem grande */}
               <div className="relative h-[360px] w-full overflow-hidden bg-white sm:h-[480px] lg:h-[603px]">
                 <Image
-                  src="/analise.jpg"
-                  alt="image 37"
+                  src="/cor.jpg"
+                  alt="Competitor Analyses"
                   fill
                   className="object-cover"
                   sizes="(min-width: 1024px) 1022px, 100vw"

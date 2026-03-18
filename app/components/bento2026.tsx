@@ -7,6 +7,8 @@ import * as React from "react";
 import { useEffect, useRef, useCallback } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import Lottie from "lottie-react";
+import lottie30Data from "../../public/graph.json";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -106,6 +108,106 @@ function pauseVideo(id: string) {
   if (!v) return;
   v.pause();
   v.currentTime = 0;
+}
+
+// ============================================================
+// StatCard30pp — Lottie background card
+// ============================================================
+function StatCard30pp() {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const lottieRef = useRef<any>(null);
+  const [isHovered, setIsHovered] = React.useState(false);
+  const [displayValue, setDisplayValue] = React.useState(63);
+  const rafRef = useRef<number | null>(null);
+
+  useEffect(() => {
+    lottieRef.current?.goToAndStop(0, true);
+  }, []);
+
+  const animateCount = (from: number, to: number, duration: number) => {
+    if (rafRef.current) cancelAnimationFrame(rafRef.current);
+    const start = performance.now();
+    const step = (now: number) => {
+      const progress = Math.min((now - start) / duration, 1);
+      // ease out cubic
+      const eased = 1 - Math.pow(1 - progress, 3);
+      setDisplayValue(Math.round(from + (to - from) * eased));
+      if (progress < 1) rafRef.current = requestAnimationFrame(step);
+    };
+    rafRef.current = requestAnimationFrame(step);
+  };
+
+  const handleMouseEnter = () => {
+    setIsHovered(true);
+    lottieRef.current?.setSpeed(2.5);
+    lottieRef.current?.playSegments([56, 96], true);
+    animateCount(63, 93, 600);
+  };
+
+  const handleMouseLeave = () => {
+    setIsHovered(false);
+    lottieRef.current?.goToAndStop(0, true);
+    animateCount(93, 63, 400);
+  };
+
+  return (
+    <BentoCard className="group h-[240px] lg:h-[240px]">
+      <Link
+        href="/cormedix"
+        className="block h-full"
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
+      >
+        <div className="corner-mask corner-mask-sm relative h-full w-full overflow-hidden bg-white shadow-sm">
+          {/* Lottie background */}
+          <div className="pointer-events-none absolute inset-0 z-0">
+            <Lottie
+              lottieRef={lottieRef}
+              animationData={lottie30Data}
+              autoplay={false}
+              loop={false}
+              style={{ width: "100%", height: "100%" }}
+              rendererSettings={{ preserveAspectRatio: "xMidYMid slice" }}
+            />
+          </div>
+          {/* Text content */}
+          <div className="absolute bottom-6 left-1/2 z-10 -translate-x-1/2">
+              <div className="flex items-center gap-4">
+                {/* Arrow icon */}
+                <div className="relative h-6 w-6 shrink-0">
+                  <img
+                    src="/down_arrow.svg"
+                    alt=""
+                    className="absolute inset-0 h-full w-full transition-opacity duration-300"
+                    style={{ opacity: isHovered ? 0 : 1 }}
+                  />
+                  <img
+                    src="/up_arrow.svg"
+                    alt=""
+                    className="absolute inset-0 h-full w-full transition-opacity duration-300"
+                    style={{ opacity: isHovered ? 1 : 0 }}
+                  />
+                </div>
+                {/* Number */}
+                <span
+                  className="shrink-0 text-[3.5rem] font-semibold leading-none tracking-tighter text-[#131415] lg:text-[4rem] tabular-nums"
+                  style={{ fontFamily: "var(--font-sora), sans-serif" }}
+                >
+                  {displayValue}%
+                </span>
+                {/* Label — 1 word per line */}
+                <p
+                  className="text-[0.75rem] font-semibold uppercase leading-snug tracking-wide text-[#131415] [word-spacing:9999px]"
+                  style={{ fontFamily: "var(--font-sora), sans-serif" }}
+                >
+                  Task success rate
+                </p>
+              </div>
+          </div>
+        </div>
+      </Link>
+    </BentoCard>
+  );
 }
 
 // ============================================================
@@ -217,14 +319,17 @@ export default function BentoHome2026() {
       />
 
       <div className="mx-auto w-full max-w-[1400px] px-4 sm:px-4 md:px-8 lg:px-12">
-        <h4
-          data-fade
-          className="mb-8 px-4 text-[1rem] font-semibold leading-[100%] text-[#999] sm:px-4 md:px-4 lg:px-16"
-          style={{ fontFamily: "var(--font-schibstedGrotesk), sans-serif" }}
-        >
-          WORK
-        </h4>
+        <div className="grid grid-cols-4 gap-6 lg:grid-cols-12 mb-8">
+          <h4
+            data-fade
+            className="col-span-4 lg:col-span-10 lg:col-start-2 text-[1rem] font-semibold leading-[100%] text-[#999]"
+            style={{ fontFamily: "var(--font-schibstedGrotesk), sans-serif" }}
+          >
+            WORK
+          </h4>
+        </div>
 
+        <div className="lg:pl-12">
         <div data-stagger className="grid grid-cols-1 gap-6 lg:grid-cols-12">
           {/* ========== COLUMN 1 ========== */}
           <div data-stagger-item className="flex flex-col gap-6 lg:col-span-4">
@@ -268,7 +373,7 @@ export default function BentoHome2026() {
                     aria-hidden="true"
                   />
 
-                  <div className="relative z-10 flex h-full flex-col p-8 sm:p-10 md:p-12 lg:p-12 xl:p-16">
+                  <div className="relative z-10 flex h-full flex-col justify-center p-8 sm:p-10 md:p-12 lg:justify-start lg:p-12 xl:p-16">
                     <div className="flex items-center justify-between gap-6">
                       <p className="font-bricolageGrotesque text-sm font-semibold text-white transition-transform duration-300 ease-out group-hover:-translate-y-[1px] group-focus-within:-translate-y-[1px]">
                         CORMEDIX
@@ -277,17 +382,17 @@ export default function BentoHome2026() {
                         <Image src="/arrow.svg" alt="" fill className="object-contain" draggable={false} priority={false} />
                       </div>
                     </div>
-                    <p className="font-bricolageGrotesque mt-2 text-3xl font-semibold leading-[1.15] text-white transition-transform duration-300 ease-out group-hover:-translate-y-[1px] group-focus-within:-translate-y-[1px]">
+                    <p className="font-bricolageGrotesque mt-2 text-3xl font-semibold leading-[1.15] text-white text-left transition-transform duration-300 ease-out group-hover:-translate-y-[1px] group-focus-within:-translate-y-[1px]">
                       Prescribing data for confident decisions.
                     </p>
-                    <div className="relative mt-auto flex-1 min-h-[140px] sm:min-h-[180px] lg:min-h-[240px]">
+                    <div className="hidden lg:block relative mt-auto flex-1 lg:min-h-[240px]">
                       <div className="absolute left-1/2 bottom-[-110px] h-full w-[170%] -translate-x-1/2 transition-transform duration-500 ease-out group-hover:-translate-y-[2px] group-focus-within:-translate-y-[2px]">
                         <div className="relative h-full w-full">
                           <Image
                             src="/aftercormedixF.png"
                             alt="Preview"
                             fill
-                            className="object-contain object-bottom transition-transform duration-700 ease-out group-hover:scale-[1.26] group-focus-within:scale-[1.06]"
+                            className="object-contain object-bottom transition-transform duration-700 ease-out lg:scale-100 group-hover:scale-[1.26] group-focus-within:scale-[1.06]"
                             draggable={false}
                             priority={false}
                           />
@@ -301,7 +406,7 @@ export default function BentoHome2026() {
 
             {/* Card 4 — About */}
             <BentoCard className="h-[200px] lg:h-[120px]">
-              <Link href="/sobre" className="block h-full">
+              <Link href="/about" className="block h-full">
                 <div className="corner-mask corner-mask-sm relative flex h-full flex-col justify-center overflow-hidden bg-white shadow-sm">
                   <div className="relative z-10 flex h-full flex-col items-center justify-center px-8 text-center">
                     <p
@@ -368,7 +473,7 @@ export default function BentoHome2026() {
                     preload="metadata"
                     aria-hidden="true"
                   >
-                    <source src="/hepatite_hero.mp4" type="video/mp4" />
+                    <source src="/CormedixHero.mp4" type="video/mp4" />
                   </video>
 
                   <div
@@ -376,26 +481,26 @@ export default function BentoHome2026() {
                     aria-hidden="true"
                   />
 
-                  <div className="relative z-10 flex h-full flex-col p-8 sm:p-10 md:p-12 lg:p-12 xl:p-16">
+                  <div className="relative z-10 flex h-full flex-col justify-center p-8 sm:p-10 md:p-12 lg:justify-start lg:p-12 xl:p-16 bg-[#FFF8BD]">
                     <div className="flex items-center justify-between gap-6">
-                      <p className="font-bricolageGrotesque text-sm font-semibold text-white transition-transform duration-300 ease-out group-hover:-translate-y-[1px] group-focus-within:-translate-y-[1px]">
+                      <p className="font-bricolageGrotesque text-sm font-semibold text-[#131415] transition-transform duration-300 ease-out group-hover:-translate-y-[1px] group-focus-within:-translate-y-[1px]">
                         GILEAD
                       </p>
                       <div className="relative h-[22px] w-[22px] transition-transform duration-300 ease-out group-hover:translate-x-[2px] group-hover:-translate-y-[2px] group-hover:rotate-45 group-focus-within:translate-x-[2px] group-focus-within:-translate-y-[2px] group-focus-within:rotate-45">
-                        <Image src="/arrow.svg" alt="" fill className="object-contain" draggable={false} priority={false} />
+                        <Image src="/blackarrow.svg" alt="" fill className="object-contain" draggable={false} priority={false} />
                       </div>
                     </div>
-                    <p className="font-bricolageGrotesque mt-2 text-3xl font-semibold leading-[1.15] text-white transition-transform duration-300 ease-out group-hover:-translate-y-[1px] group-focus-within:-translate-y-[1px]">
+                    <p className="font-bricolageGrotesque mt-2 text-3xl font-semibold leading-[1.15] text-[#131415] text-left transition-transform duration-300 ease-out group-hover:-translate-y-[1px] group-focus-within:-translate-y-[1px]">
                       Fighting the epidemic of myths about Hepatitis C.
                     </p>
-                    <div className="relative mt-auto flex-1 min-h-[140px] sm:min-h-[180px] lg:min-h-[240px]">
+                    <div className="hidden lg:block relative mt-auto flex-1 lg:min-h-[240px]">
                       <div className="absolute left-1/2 bottom-[-110px] h-full w-[170%] -translate-x-1/2 transition-transform duration-500 ease-out group-hover:-translate-y-[2px] group-focus-within:-translate-y-[2px]">
                         <div className="relative h-full w-full">
                           <Image
-                            src="/hepatite_thumbB.png"
+                            src="/hepatite.png"
                             alt="Preview"
                             fill
-                            className="object-contain object-bottom transition-transform duration-700 ease-out group-hover:scale-[1.06] group-focus-within:scale-[1.06]"
+                            className="object-contain object-bottom transition-transform duration-700 ease-out group-hover:scale-[1.16] group-focus-within:scale-[1.06]"
                             draggable={false}
                             priority={false}
                           />
@@ -409,7 +514,7 @@ export default function BentoHome2026() {
 
             {/* Card 5 — About (wave/emotional) */}
             <BentoCard className="h-[240px] lg:h-[240px]">
-              <Link href="/sobre" className="block h-full">
+              <Link href="/msd" className="block h-full">
                 <div className="corner-mask group relative h-full w-full overflow-hidden bg-white shadow-sm">
                   <div className="absolute inset-0 bg-gradient-to-b from-white to-[#F7F7F7]" />
                   <img
@@ -460,78 +565,22 @@ export default function BentoHome2026() {
           <div data-stagger-item className="flex flex-col gap-6 lg:col-span-4">
 
             {/* Card 3 — Stats (Cormedix) */}
-            <BentoCard className="group h-[240px] lg:h-[240px]">
-              <Link href="/cormedix" className="block h-full">
-                <div className="corner-mask corner-mask-sm relative h-full w-full overflow-hidden bg-white shadow-sm transition-colors duration-300">
-                  <div
-                    className={[
-                      "pointer-events-none absolute inset-0 z-0 opacity-80",
-                      "transition-transform duration-700 ease-out",
-                      "group-hover:scale-[1.02]",
-                    ].join(" ")}
-                    style={{
-                      backgroundImage: "url(/dashs.svg)",
-                      backgroundSize: "cover",
-                      backgroundPosition: "center",
-                    }}
-                  />
-                  <img
-                    src="/graph.svg"
-                    alt=""
-                    className={[
-                      "pointer-events-none absolute bottom-0 left-[-5%] z-[1] w-[110%] max-w-none",
-                      "object-contain object-bottom mix-blend-multiply opacity-30",
-                      "transition-transform duration-700 ease-out will-change-transform",
-                      "group-hover:scale-[1.08] group-hover:translate-y-[6px] group-hover:opacity-40",
-                    ].join(" ")}
-                  />
-                  <div
-                    className={[
-                      "relative z-10 flex h-full flex-col items-center justify-center px-6 text-center",
-                      "transition-transform duration-300 ease-out",
-                      "group-hover:-translate-y-[2px]",
-                    ].join(" ")}
-                  >
-                    <span
-                      className="text-[3.5rem] font-semibold leading-none tracking-tighter text-[#131415] lg:text-[4rem] transition-transform duration-300 ease-out group-hover:scale-[1.01]"
-                      style={{ fontFamily: "var(--font-schibstedGrotesk), sans-serif" }}
-                    >
-                      +30pp
-                    </span>
+            <StatCard30pp />
+
+            {/* Card 6 — Hepatite */}
+            <BentoCard className="h-[200px] lg:h-[120px]">
+              <Link href="/hepatite" className="block h-full">
+                <div className="corner-mask corner-mask-sm relative flex h-full flex-col justify-center overflow-hidden bg-white shadow-sm">
+                  <div className="relative z-10 flex h-full flex-col items-center justify-center px-8 text-center">
                     <p
-                      className="max-w-[220px] text-[1.2rem] font-medium leading-tight text-[#131415] mt-2 transition-opacity duration-300 ease-out group-hover:opacity-95"
+                      className="text-[1.25rem] font-medium leading-tight lg:text-[1.5rem] text-[#131415]"
                       style={{ fontFamily: "var(--font-schibstedGrotesk), sans-serif" }}
                     >
-                      task success rate
+                      0→1 discovery
                     </p>
                   </div>
                 </div>
               </Link>
-            </BentoCard>
-
-            {/* Card 6 — Copy email */}
-            <BentoCard className="h-[200px] lg:h-[120px]">
-              <button
-                type="button"
-                onClick={handleCopyEmail}
-                className="block h-full w-full text-left"
-                aria-label={`Copy email ${EMAIL}`}
-              >
-                <div className="corner-mask corner-mask-sm relative flex h-full flex-col justify-center overflow-hidden bg-white shadow-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-[#FF4C2C]/30">
-                  <div className="relative z-10 flex h-full flex-col items-center justify-center px-8 text-center">
-                    <p
-                      className={cn(
-                        "text-[1.25rem] font-medium leading-tight lg:text-[1.5rem]",
-                        "transition-colors duration-300",
-                        emailCopied ? "text-[#FF4C2C]" : "text-[#131415]"
-                      )}
-                      style={{ fontFamily: "var(--font-schibstedGrotesk), sans-serif" }}
-                    >
-                      {emailCopied ? "email copied" : "copy email"}
-                    </p>
-                  </div>
-                </div>
-              </button>
             </BentoCard>
 
             {/* Card 9 — MSD (tilt) */}
@@ -565,7 +614,7 @@ export default function BentoHome2026() {
                     preload="metadata"
                     aria-hidden="true"
                   >
-                    <source src="/msd_hero.mp4" type="video/mp4" />
+                    <source src="/CormedixHero.mp4" type="video/mp4" />
                   </video>
 
                   <div
@@ -573,23 +622,23 @@ export default function BentoHome2026() {
                     aria-hidden="true"
                   />
 
-                  <div className="relative z-10 flex h-full flex-col p-8 sm:p-10 md:p-12 lg:p-12 xl:p-16">
+                  <div className="relative z-10 flex h-full flex-col justify-center p-8 sm:p-10 md:p-12 lg:justify-start lg:p-12 xl:p-16 bg-[#E2FFBD]">
                     <div className="flex items-center justify-between gap-6">
-                      <p className="font-bricolageGrotesque text-sm font-semibold text-white transition-transform duration-300 ease-out group-hover:-translate-y-[1px] group-focus-within:-translate-y-[1px]">
+                      <p className="font-bricolageGrotesque text-sm font-semibold text-[#131415] transition-transform duration-300 ease-out group-hover:-translate-y-[1px] group-focus-within:-translate-y-[1px]">
                         MSD
                       </p>
                       <div className="relative h-[22px] w-[22px] transition-transform duration-300 ease-out group-hover:translate-x-[2px] group-hover:-translate-y-[2px] group-hover:rotate-45 group-focus-within:translate-x-[2px] group-focus-within:-translate-y-[2px] group-focus-within:rotate-45">
-                        <Image src="/arrow.svg" alt="" fill className="object-contain" draggable={false} priority={false} />
+                        <Image src="/blackarrow.svg" alt="" fill className="object-contain" draggable={false} priority={false} />
                       </div>
                     </div>
-                    <p className="font-bricolageGrotesque mt-2 text-3xl font-semibold leading-[1.15] text-white transition-transform duration-300 ease-out group-hover:-translate-y-[1px] group-focus-within:-translate-y-[1px]">
+                    <p className="font-bricolageGrotesque mt-2 text-3xl font-semibold leading-[1.15] text-[#131415] text-left transition-transform duration-300 ease-out group-hover:-translate-y-[1px] group-focus-within:-translate-y-[1px]">
                       Stabilizing the clinical exam journey.
                     </p>
-                    <div className="relative mt-auto flex-1 min-h-[140px] sm:min-h-[180px] lg:min-h-[240px]">
-                      <div className="absolute left-1/2 bottom-[-50px] h-full w-[170%] -translate-x-1/2 transition-transform duration-500 ease-out group-hover:-translate-y-[2px] group-focus-within:-translate-y-[2px]">
+                    <div className="hidden lg:block relative mt-auto flex-1 lg:min-h-[240px]">
+                      <div className="absolute left-1/2 bottom-[-110px] h-full w-[170%] -translate-x-1/2 transition-transform duration-500 ease-out group-hover:-translate-y-[2px] group-focus-within:-translate-y-[2px]">
                         <div className="relative h-full w-full">
                           <Image
-                            src="/msd_thumb.jpg"
+                            src="/msd.png"
                             alt="Preview"
                             fill
                             className="object-contain object-bottom transition-transform duration-700 ease-out group-hover:scale-[1.16] group-focus-within:scale-[1.06]"
@@ -604,6 +653,7 @@ export default function BentoHome2026() {
               </Link>
             </div>
           </div>
+        </div>
         </div>
       </div>
     </section>

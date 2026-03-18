@@ -230,8 +230,8 @@ function ImageBlock({
 // ==============================
 export function ImageAssetsGrid({
   before = "/beforecormedixC.jpg",
-  after = "/aftercormedixC.jpg",
-  leftImage = "/leftcormedixB.jpg",
+  after = "/cormedix-home.jpg",
+  leftImage = "/leftcormedixC.jpg",
   rightImage = "/rightcormedixB.jpg",
   className = "",
 }: {

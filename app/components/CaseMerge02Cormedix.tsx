@@ -486,7 +486,7 @@ export default function ProblemDiscoveryCormedix() {
                       style={maskFourCorners("md")}
                     >
                       <Image
-                        src="/analise.jpg"
+                        src="/cor.jpg"
                         alt="Competitive analysis"
                         fill
                         className="object-cover"

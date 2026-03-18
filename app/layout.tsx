@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Bricolage_Grotesque, Schibsted_Grotesk } from "next/font/google";
+import { Bricolage_Grotesque, Schibsted_Grotesk, Sora } from "next/font/google";
 import "./globals.css";
 import { SmoothScrollProvider } from "./components/SmoothScrollProvider";
 import { CustomCursor } from "./components/CustomCursor";
@@ -17,6 +17,13 @@ const bricolage = Bricolage_Grotesque({
   display: "swap",
 });
 
+const sora = Sora({
+  subsets: ["latin"],
+  weight: ["600"],
+  variable: "--font-sora",
+  display: "swap",
+});
+
 export const metadata: Metadata = {
   title: "Portfolio",
   description: "Quéfreen — Portfolio v2",
@@ -24,7 +31,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="pt-BR" className={`${schibsted.variable} ${bricolage.variable}`}>
+    <html lang="pt-BR" className={`${schibsted.variable} ${bricolage.variable} ${sora.variable}`}>
       <body className="bg-background text-foreground font-sans antialiased">
         <CustomCursor />
         <Navbar />
